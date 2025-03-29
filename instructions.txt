@@ -1,0 +1,3 @@
+Before you do anything, make sure to import "import_this.sql" by navigating to [wamp install path]/bin/mysql/mysql9.1.0/bin and copying it there.
+Then, run the command [cmd.exe /c "mysql -u [username] cop4710project < import_this.sql"] (minus the brackets).
+You may have to add -p [password] if you set a password for your mySQL. If you didn't set a username, try using root as the username.
