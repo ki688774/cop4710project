@@ -24,31 +24,6 @@ CREATE DATABASE /*!32312 IF NOT EXISTS*/ `cop4710project` /*!40100 DEFAULT CHARA
 USE `cop4710project`;
 
 --
--- Table structure for table `admins`
---
-
-DROP TABLE IF EXISTS `admins`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `admins` (
-  `admin_id` int NOT NULL AUTO_INCREMENT,
-  `uid` int NOT NULL,
-  PRIMARY KEY (`admin_id`),
-  KEY `uid` (`uid`),
-  CONSTRAINT `admins_ibfk_1` FOREIGN KEY (`uid`) REFERENCES `users` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `admins`
---
-
-LOCK TABLES `admins` WRITE;
-/*!40000 ALTER TABLE `admins` DISABLE KEYS */;
-/*!40000 ALTER TABLE `admins` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `comments`
 --
 
@@ -90,10 +65,10 @@ CREATE TABLE `events` (
   `endTime` datetime NOT NULL,
   `eventName` varchar(50) NOT NULL,
   `eventDescription` varchar(1024) DEFAULT NULL,
-  `lname` varchar(200) NOT NULL,
+  `location_id` int NOT NULL,
   PRIMARY KEY (`event_id`),
-  KEY `lname` (`lname`),
-  CONSTRAINT `events_ibfk_1` FOREIGN KEY (`lname`) REFERENCES `locations` (`lname`) ON DELETE CASCADE ON UPDATE CASCADE,
+  KEY `location_id` (`location_id`),
+  CONSTRAINT `events_ibfk_1` FOREIGN KEY (`location_id`) REFERENCES `locations` (`location_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `EventStartsBeforeEnd` CHECK ((`startTime` < `endTime`))
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -104,7 +79,7 @@ CREATE TABLE `events` (
 
 LOCK TABLES `events` WRITE;
 /*!40000 ALTER TABLE `events` DISABLE KEYS */;
-INSERT INTO `events` VALUES (2,'2000-01-01 00:00:00','2001-01-01 00:00:00','Null Island Party','Party like it\'s 2000! Because it is!','Null Island'),(3,'2001-01-01 00:00:01','2002-01-01 00:00:00','Null Island Party 2','Party like it\'s 2001! Because it is!','Null Island'),(5,'2000-01-01 00:00:00','2001-01-01 00:00:00','Reindeer Party','Thi- this isn\'t an actual party, we\'re trying to get a union for the reindeer.','North Pole');
+INSERT INTO `events` VALUES (2,'2000-01-01 00:00:00','2001-01-01 00:00:00','Null Island Party','Party like it\'s 2000! Because it is!',2),(3,'2001-01-01 00:00:01','2002-01-01 00:00:00','Null Island Party 2','Party like it\'s 2001! Because it is!',2),(5,'2000-01-01 00:00:00','2001-01-01 00:00:00','Reindeer Party','Thi- this isn\'t an actual party, we\'re trying to get a union for the reindeer.',1);
 /*!40000 ALTER TABLE `events` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -120,7 +95,7 @@ DELIMITER ;;
 if (exists (
 select *
 from events E2
-where new.lname=E2.lname AND ((new.startTime >= E2.startTime AND new.startTime <= E2.endTime) OR (new.endTime >= E2.startTime AND new.endTime <= E2.endTime)))) then
+where new.location_id=E2.location_id AND ((new.startTime >= E2.startTime AND new.startTime <= E2.endTime) OR (new.endTime >= E2.startTime AND new.endTime <= E2.endTime)))) then
 SIGNAL SQLSTATE '45000'
 SET MESSAGE_TEXT = 'New event overlapped with another event at the same location.';
 end if;
@@ -139,11 +114,12 @@ DROP TABLE IF EXISTS `locations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `locations` (
-  `lname` varchar(200) NOT NULL,
-  `address` varchar(200) NOT NULL,
+  `location_id` int NOT NULL AUTO_INCREMENT,
+  `lname` varchar(256) NOT NULL,
+  `address` varchar(256) NOT NULL,
   `longitude` varchar(30) NOT NULL,
   `latitude` varchar(30) NOT NULL,
-  PRIMARY KEY (`lname`)
+  PRIMARY KEY (`location_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -153,7 +129,7 @@ CREATE TABLE `locations` (
 
 LOCK TABLES `locations` WRITE;
 /*!40000 ALTER TABLE `locations` DISABLE KEYS */;
-INSERT INTO `locations` VALUES ('North Pole','???','90.0 N','0'),('Null Island','???','0','0');
+INSERT INTO `locations` VALUES (1,'North Pole','???','90.0 N','0'),(2,'Null Island','???','0','0');
 /*!40000 ALTER TABLE `locations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -166,14 +142,14 @@ DROP TABLE IF EXISTS `private_events`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `private_events` (
   `event_id` int NOT NULL,
-  `admin_id` int NOT NULL,
-  `super_admin_id` int NOT NULL,
+  `rso_id` int NOT NULL,
+  `university_id` int NOT NULL,
   PRIMARY KEY (`event_id`),
-  KEY `admin_id` (`admin_id`),
-  KEY `super_admin_id` (`super_admin_id`),
+  KEY `rso_id` (`rso_id`),
+  KEY `university_id` (`university_id`),
   CONSTRAINT `private_events_ibfk_1` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `private_events_ibfk_2` FOREIGN KEY (`admin_id`) REFERENCES `admins` (`admin_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `private_events_ibfk_3` FOREIGN KEY (`super_admin_id`) REFERENCES `super_admins` (`super_admin_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `private_events_ibfk_2` FOREIGN KEY (`rso_id`) REFERENCES `rsos` (`rso_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `private_events_ibfk_3` FOREIGN KEY (`university_id`) REFERENCES `universities` (`university_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -195,11 +171,11 @@ DROP TABLE IF EXISTS `public_events`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `public_events` (
   `event_id` int NOT NULL,
-  `super_admin_id` int NOT NULL,
+  `university_id` int NOT NULL,
   PRIMARY KEY (`event_id`),
-  KEY `super_admin_id` (`super_admin_id`),
+  KEY `university_id` (`university_id`),
   CONSTRAINT `public_events_ibfk_1` FOREIGN KEY (`event_id`) REFERENCES `events` (`event_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `public_events_ibfk_2` FOREIGN KEY (`super_admin_id`) REFERENCES `super_admins` (`super_admin_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `public_events_ibfk_2` FOREIGN KEY (`university_id`) REFERENCES `universities` (`university_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -273,10 +249,11 @@ DROP TABLE IF EXISTS `rsos`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rsos` (
   `rso_id` int NOT NULL AUTO_INCREMENT,
+  `rso_name` varchar(256) NOT NULL,
   `admin_id` int NOT NULL,
   PRIMARY KEY (`rso_id`),
   KEY `admin_id` (`admin_id`),
-  CONSTRAINT `rsos_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `admins` (`admin_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `rsos_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `users` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -290,28 +267,33 @@ LOCK TABLES `rsos` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `super_admins`
+-- Table structure for table `universities`
 --
 
-DROP TABLE IF EXISTS `super_admins`;
+DROP TABLE IF EXISTS `universities`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `super_admins` (
-  `super_admin_id` int NOT NULL AUTO_INCREMENT,
-  `uid` int NOT NULL,
-  PRIMARY KEY (`super_admin_id`),
-  KEY `uid` (`uid`),
-  CONSTRAINT `super_admins_ibfk_1` FOREIGN KEY (`uid`) REFERENCES `users` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE
+CREATE TABLE `universities` (
+  `university_id` int NOT NULL AUTO_INCREMENT,
+  `university_name` varchar(256) NOT NULL,
+  `email_domain` varchar(256) NOT NULL,
+  `location_id` int NOT NULL,
+  `super_admin_id` int NOT NULL,
+  PRIMARY KEY (`university_id`),
+  KEY `super_admin_id` (`super_admin_id`),
+  KEY `location_id` (`location_id`),
+  CONSTRAINT `universities_ibfk_1` FOREIGN KEY (`super_admin_id`) REFERENCES `users` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `universities_ibfk_2` FOREIGN KEY (`location_id`) REFERENCES `locations` (`location_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `super_admins`
+-- Dumping data for table `universities`
 --
 
-LOCK TABLES `super_admins` WRITE;
-/*!40000 ALTER TABLE `super_admins` DISABLE KEYS */;
-/*!40000 ALTER TABLE `super_admins` ENABLE KEYS */;
+LOCK TABLES `universities` WRITE;
+/*!40000 ALTER TABLE `universities` DISABLE KEYS */;
+/*!40000 ALTER TABLE `universities` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -323,12 +305,16 @@ DROP TABLE IF EXISTS `users`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users` (
   `uid` int NOT NULL AUTO_INCREMENT,
+  `university_id` int,
   `firstName` varchar(50) NOT NULL,
   `lastName` varchar(50) NOT NULL,
+  `email` varchar(256) NOT NULL,
   `username` varchar(50) NOT NULL,
   `password` varchar(256) NOT NULL,
   PRIMARY KEY (`uid`),
-  UNIQUE KEY `username` (`username`)
+  UNIQUE KEY `username` (`username`),
+  UNIQUE KEY `email` (`email`),
+  CONSTRAINT `users_ibfk_1` FOREIGN KEY (`university_id`) REFERENCES `universities` (`university_id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
