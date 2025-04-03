@@ -16,20 +16,25 @@
 
     if (!$currentUser || !$startTime || !$endTime || !$eventName || !$eventDescription || !$contactPhone || !$locationID) {
         returnError("All fields must be filled.");
-        $stmt->close();
-        $conn->close();
         return;
     }
 
     if (!preg_match($phoneRegex, $contactPhone)) {
         returnError("Contact phone number is not in the proper format.");
-        $stmt->close();
-        $conn->close();
         return;
     }
 
     if (!filter_var($contactEmail, FILTER_VALIDATE_EMAIL)) {
         returnError("Contact email is not in the proper format.");
+        return;
+    }
+
+    // Create and check connection
+    try {
+        $conn = mysqli_connect("localhost", "root", "", "cop4710project");
+    } catch (Exception $e) {
+        returnError($e);
+        $conn->close();
         return;
     }
 
@@ -47,7 +52,7 @@
     }
 
     if (!$stmt->get_result()->fetch_assoc()) {
-        returnError("RSO not found or does not belong to current user");
+        returnError("RSO not found or does not belong to current user.");
         $stmt->close();
         $conn->close();
         return;
@@ -78,7 +83,7 @@
     }
 
 
-    
+
     $result = '{"result": "Private event added successfully."}';
     returnObject($result);
     return;

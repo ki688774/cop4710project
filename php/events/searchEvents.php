@@ -7,8 +7,6 @@
 
     if (!$currentUser) {
         returnError("You must be signed in to search events.");
-        $stmt->close();
-        $conn->close();
         return;
     }
 
@@ -17,14 +15,7 @@
         $conn = mysqli_connect("localhost", "root", "", "cop4710project");
     } catch (Exception $e) {
         returnError($e);
-        $stmt->close();
         $conn->close();
-        return;
-    }
-    
-
-    if (mysqli_connect_error()) {
-        returnError("Could not connect to the server.");
         return;
     }
 

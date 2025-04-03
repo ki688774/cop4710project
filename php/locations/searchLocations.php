@@ -5,12 +5,15 @@
     $searchTerm = "%" . $inData["search"] . "%";
 
     // Create and check connection
-    $conn = mysqli_connect("localhost", "root", "", "cop4710project");
-
-    if (!$conn) {
-        returnError("Could not connect to the server.");
+    try {
+        $conn = mysqli_connect("localhost", "root", "", "cop4710project");
+    } catch (Exception $e) {
+        returnError($e);
+        $conn->close();
         return;
     }
+
+
 
     // Add location
     $stmt = $conn->prepare("SELECT * FROM locations WHERE location_name LIKE ? OR address LIKE ?");

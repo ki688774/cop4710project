@@ -14,12 +14,15 @@
     }
 
     // Create and check connection
-    $conn = mysqli_connect("localhost", "root", "", "cop4710project");
-
-    if (!$conn) {
-        returnError("Could not connect to the server.");
+    try {
+        $conn = mysqli_connect("localhost", "root", "", "cop4710project");
+    } catch (Exception $e) {
+        returnError($e);
+        $conn->close();
         return;
     }
+
+
 
     // Check if location exists
     $stmt = $conn->prepare("SELECT * FROM locations WHERE location_id=?");

@@ -38,15 +38,16 @@
     $hashedPass = password_hash($password, PASSWORD_DEFAULT);
     $emailDomain = explode("@", $email, "2")[1];
 
-
-
     // Create and check connection
-    $conn = mysqli_connect("localhost", "root", "", "cop4710project");
-
-    if (!$conn) {
-        returnError("Could not connect to the server.");
+    try {
+        $conn = mysqli_connect("localhost", "root", "", "cop4710project");
+    } catch (Exception $e) {
+        returnError($e);
+        $conn->close();
         return;
     }
+
+
 
     // Find if new user's domain has an attached university
     $stmt = $conn->prepare("select count(*) as count from universities where university_domain=?");

@@ -16,20 +16,25 @@
 
     if (!$currentUser || !$startTime || !$endTime || !$eventName || !$eventDescription || !$contactPhone || !$locationID) {
         returnError("All fields must be filled.");
-        $stmt->close();
-        $conn->close();
         return;
     }
 
     if (!preg_match($phoneRegex, $contactPhone)) {
         returnError("Contact phone number is not in the proper format.");
-        $stmt->close();
-        $conn->close();
         return;
     }
 
     if (!filter_var($contactEmail, FILTER_VALIDATE_EMAIL)) {
         returnError("Contact email is not in the proper format.");
+        return;
+    }
+
+    // Create and check connection
+    try {
+        $conn = mysqli_connect("localhost", "root", "", "cop4710project");
+    } catch (Exception $e) {
+        returnError($e);
+        $conn->close();
         return;
     }
 
@@ -39,8 +44,10 @@
     $stmt = $conn->prepare("SELECT * FROM rsos WHERE admin_id=? AND rso_id=?");
     $stmt->bind_param("ii", $currentUser, $rsoID);
 
-    if (!$stmt->execute()) {
-        returnError($stmt->error);
+    try {
+        $stmt->execute();
+    } catch (Exception $e) {
+        returnError($e);
         $stmt->close();
         $conn->close();
         return;
@@ -59,8 +66,10 @@
     $stmt = $conn->prepare("INSERT INTO events (start_time, end_time, event_name, event_description, contact_phone, contact_email, location_id) VALUES (?,?,?,?,?,?,?)");
     $stmt->bind_param("ssssssi", $startTime, $endTime, $eventName, $eventDescription, $contactPhone, $contactEmail, $locationID);
 
-    if (!$stmt->execute()) {
-        returnError($stmt->error);
+    try {
+        $stmt->execute();
+    } catch (Exception $e) {
+        returnError($e);
         $stmt->close();
         $conn->close();
         return;
@@ -70,14 +79,16 @@
     $stmt = $conn->prepare("INSERT INTO rso_events (event_id, rso_id) VALUES (?,?)");
     $stmt->bind_param("ii", $eventID, $rsoID);
 
-    if (!$stmt->execute()) {
-        returnError($stmt->error);
+    try {
+        $stmt->execute();
+    } catch (Exception $e) {
+        returnError($e);
         $stmt->close();
         $conn->close();
         return;
     }
 
-    
+
 
     $result = '{"result": "RSO event added successfully."}';
     returnObject($result);

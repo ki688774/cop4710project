@@ -1,5 +1,6 @@
 <?php
     $inData = json_decode(file_get_contents('php://input'), true);
+    require __DIR__ . '/../global.php';
 
     // Proccess input
     $username = $inData["username"] ?? null;
@@ -10,13 +11,13 @@
         return;
     }
 
-
-
     // Create and check connection
-    $conn = mysqli_connect("localhost", "root", "", "cop4710project");
-
-    if (!$conn) {
-        returnError("Could not connect to the server.");
+    // Create and check connection
+    try {
+        $conn = mysqli_connect("localhost", "root", "", "cop4710project");
+    } catch (Exception $e) {
+        returnError($e);
+        $conn->close();
         return;
     }
 
@@ -45,16 +46,4 @@
     $result = '{"currentUser":' . $loginRow["uid"] . '}';
     returnObject($result);
     return;
-
-
-
-
-    function returnError ($error) {
-        returnObject('{"error": "' . $error . '"}');
-    }
-
-    function returnObject ($target) {
-        header('Content-type: application/json');
-        echo $target;
-    }
 ?>
