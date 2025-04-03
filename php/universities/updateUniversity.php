@@ -34,9 +34,7 @@
         return;
     }
 
-    $targetRow = $stmt->get_result()->fetch_assoc();
-
-    if (!$targetRow) {
+    if (!$stmt->get_result()->fetch_assoc()) {
         returnError("University not found.");
         $stmt->close();
         $conn->close();
