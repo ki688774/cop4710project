@@ -68,6 +68,26 @@
 
 
 
+    // Find if the new user's email is in use
+    $stmt = $conn->prepare("select count(*) as count from users where email=?");
+    $stmt->bind_param("s", $email);
+
+    if (!$stmt->execute()) {
+        returnError($stmt->error);
+        $stmt->close();
+        $conn->close();
+        return;
+    }
+
+    if ($stmt->get_result()->fetch_assoc()['count'] > 0) {
+        returnError("Email already belongs to a user.");
+        $stmt->close();
+        $conn->close();
+        return;
+    }
+
+
+
     // Add super-admin
     $stmt = $conn->prepare("INSERT INTO users (firstName, lastName, email, username, password) VALUES (?,?,?,?,?)");
     $stmt->bind_param("sssss", $firstName, $lastName, $email, $username, $hashedPass);

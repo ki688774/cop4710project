@@ -66,11 +66,55 @@
         return;
     }
 
-    if (!$stmt->get_result()->fetch_assoc()) {
+    $oldUserData = $stmt->get_result()->fetch_assoc();
+
+    if (!$oldUserData) {
         returnError("User not found.");
         $stmt->close();
         $conn->close();
         return;
+    }
+
+
+
+    /* If you're transferring between universities AND you're the admin of any RSO 
+       OR a super-admin of your old university, you can't change universities until
+       you pass off your duties.
+    */
+    if ($oldUserData["university_id"] != $universityRow["university_id"]) {
+        $stmt = $conn->prepare("SELECT * FROM universities WHERE super_admin_id=?");
+        $stmt->bind_param("i", $currentUser);
+
+        if (!$stmt->execute()) {
+            returnError($stmt->error);
+            $stmt->close();
+            $conn->close();
+            return;
+        }
+
+        if ($stmt->get_result()->fetch_assoc()) {
+            returnError("Attempted to change universities as the super-admin of the old university.");
+            $stmt->close();
+            $conn->close();
+            return;
+        }
+
+        $stmt = $conn->prepare("SELECT * FROM rsos WHERE admin_id=?");
+        $stmt->bind_param("i", $currentUser);
+
+        if (!$stmt->execute()) {
+            returnError($stmt->error);
+            $stmt->close();
+            $conn->close();
+            return;
+        }
+
+        if ($stmt->get_result()->fetch_assoc()) {
+            returnError("Attempted to change universities while still owning an RSO.");
+            $stmt->close();
+            $conn->close();
+            return;
+        }
     }
 
 

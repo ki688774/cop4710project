@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 9.1.0, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.41, for Linux (x86_64)
 --
 -- Host: localhost    Database: cop4710project
 -- ------------------------------------------------------
--- Server version	9.1.0
+-- Server version	8.0.41-0ubuntu0.22.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -14,6 +14,14 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Current Database: `cop4710project`
+--
+
+CREATE DATABASE /*!32312 IF NOT EXISTS*/ `cop4710project` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+
+USE `cop4710project`;
 
 --
 -- Table structure for table `comments`
@@ -54,15 +62,17 @@ DROP TABLE IF EXISTS `events`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `events` (
   `event_id` int NOT NULL AUTO_INCREMENT,
-  `startTime` datetime NOT NULL,
-  `endTime` datetime NOT NULL,
-  `eventName` varchar(50) NOT NULL,
-  `eventDescription` varchar(1024) DEFAULT NULL,
+  `start_time` datetime NOT NULL,
+  `end_time` datetime NOT NULL,
+  `event_name` varchar(50) NOT NULL,
+  `event_description` varchar(1024) NOT NULL,
+  `contact_phone` varchar(20) NOT NULL,
+  `contact_email`varchar(256) NOT NULL,
   `location_id` int NOT NULL,
   PRIMARY KEY (`event_id`),
   KEY `location_id` (`location_id`),
   CONSTRAINT `events_ibfk_1` FOREIGN KEY (`location_id`) REFERENCES `locations` (`location_id`) ON DELETE RESTRICT ON UPDATE CASCADE,
-  CONSTRAINT `EventStartsBeforeEnd` CHECK ((`startTime` < `endTime`))
+  CONSTRAINT `EventStartsBeforeEnd` CHECK ((`start_time` < `end_time`))
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -72,7 +82,7 @@ CREATE TABLE `events` (
 
 LOCK TABLES `events` WRITE;
 /*!40000 ALTER TABLE `events` DISABLE KEYS */;
-INSERT INTO `events` VALUES (2,'2000-01-01 00:00:00','2001-01-01 00:00:00','Null Island Party','Party like it\'s 2000! Because it is!',2),(3,'2001-01-01 00:00:01','2002-01-01 00:00:00','Null Island Party 2','Party like it\'s 2001! Because it is!',2),(5,'2000-01-01 00:00:00','2001-01-01 00:00:00','Reindeer Party','Thi- this isn\'t an actual party, we\'re trying to get a union for the reindeer.',1);
+INSERT INTO `events` VALUES (2,'2000-01-01 00:00:00','2001-01-01 00:00:00','Null Island Party','Party like it\'s 2000! Because it is!','(555) 123-4567','event@example.com',2),(3,'2001-01-01 00:00:01','2002-01-01 00:00:00','Null Island Party 2','Party like it\'s 2001! Because it is!','(555) 123-4567','event@example.com',2),(5,'2000-01-01 00:00:00','2001-01-01 00:00:00','Reindeer Party','Thi- this isn\'t an actual party, we\'re trying to get a union for the reindeer.','(555) 123-4567','event@example.com',1);
 /*!40000 ALTER TABLE `events` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -88,7 +98,7 @@ DELIMITER ;;
 if (exists (
 select *
 from events E2
-where new.location_id=E2.location_id AND ((new.startTime >= E2.startTime AND new.startTime <= E2.endTime) OR (new.endTime >= E2.startTime AND new.endTime <= E2.endTime)))) then
+where new.location_id=E2.location_id AND ((new.start_time >= E2.start_time AND new.start_time <= E2.end_time) OR (new.end_time >= E2.start_time AND new.end_time <= E2.end_time)))) then
 SIGNAL SQLSTATE '45000'
 SET MESSAGE_TEXT = 'New event overlapped with another event at the same location.';
 end if;
@@ -335,4 +345,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-02 22:38:45
+-- Dump completed on 2025-04-03 11:22:02
