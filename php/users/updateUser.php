@@ -2,7 +2,7 @@
     $inData = json_decode(file_get_contents('php://input'), true);
     require __DIR__ . '/../global.php';
 
-    // Proccess input
+    // Proccess input and pre-hash password
     $currentUser = $inData["current_user"] ?? null;
     $firstName = $inData["firstName"] ?? null;
     $lastName = $inData["lastName"] ?? null;

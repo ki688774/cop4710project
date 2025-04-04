@@ -2,6 +2,7 @@
     $inData = json_decode(file_get_contents('php://input'), true);
     require __DIR__ . '/../global.php';
 
+    // Proccess input
     $universityDomain = $inData["university_domain"] ?? null;
 
     if (!$universityDomain) {

@@ -2,6 +2,7 @@
     $inData = json_decode(file_get_contents('php://input'), true);
     require __DIR__ . '/../global.php';
 
+    // Proccess input
     $currentUser = $inData["current_user"] ?? null;
     $universityID = $inData["university_id"] ?? null;
 
@@ -32,23 +33,21 @@
 
 
 
-    // Remove university reference for super-admin
-    // Set super-admin's university domain
+    // Set the super-admin's university domain to null.
     $stmt = $conn->prepare("UPDATE users SET university_id=NULL where uid=?");
     $stmt->bind_param("i", $currentUser);
 
     if (!attemptExecute($stmt, $conn))
         return;
 
-    // Delete university
+    // Delete the university.
     $stmt = $conn->prepare("DELETE FROM universities WHERE university_id=? AND super_admin_id=?");
     $stmt->bind_param("ii", $universityID, $currentUser);
 
     if (!attemptExecute($stmt, $conn))
         return;
 
-    // Delete super-admin
-    // Delete user
+    // Delete the former super-admin.
     $stmt = $conn->prepare("DELETE FROM users WHERE uid=?");
     $stmt->bind_param("i", $currentUser);
 

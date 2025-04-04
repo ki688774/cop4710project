@@ -2,6 +2,7 @@
     $inData = json_decode(file_get_contents('php://input'), true);
     require __DIR__ . '/../global.php';
 
+    // Proccess input
     $currentUser = $inData["current_user"] ?? null;
     $universityID = $inData["university_id"] ?? null;
     $universityDomain = $inData["university_domain"] ?? null;
@@ -20,7 +21,7 @@
 
 
 
-    // Check if university is accessible
+    // Check if university belongs to the user
     $stmt = $conn->prepare("SELECT * FROM universities WHERE university_id=? AND super_admin_id=?");
     $stmt->bind_param("si", $universityID, $currentUser);
 
@@ -28,7 +29,7 @@
         return;
 
     if (!$stmt->get_result()->fetch_assoc()) {
-        returnErrorAndClose("University not found or not accessible.", $stmt, $conn);
+        returnErrorAndClose("University not found or does not belong to user.", $stmt, $conn);
         return;
     }
 
@@ -49,8 +50,8 @@
 
 
     // Update university
-    $stmt = $conn->prepare("UPDATE universities SET university_domain=?, university_name=?, location_id=?, super_admin_id=? WHERE university_id=? AND super_admin_id=?");
-    $stmt->bind_param("ssiiii", $universityDomain, $universityName, $locationID, $superAdminID, $universityID, $currentUser);
+    $stmt = $conn->prepare("UPDATE universities SET university_domain=?, university_name=?, location_id=?, super_admin_id=? WHERE university_id=?");
+    $stmt->bind_param("ssiii", $universityDomain, $universityName, $locationID, $superAdminID, $universityID);
 
     if (!attemptExecute($stmt, $conn))
         return;

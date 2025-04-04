@@ -4,12 +4,13 @@
     define("MYSQLPASSWORD", '');
     define("MYSQLDATABASE", 'cop4710project');
 
+    // Tries to connect to the mySQL server with the above credentials. Returns true on success, false on failure.
     function attemptConnect (&$conn) {
         try {
             $conn = mysqli_connect(MYSQLHOST, MYSQLUSER, MYSQLPASSWORD, MYSQLDATABASE);
             return true;
         } catch (Exception $e) {
-            returnError($e);
+            returnMYSQLError($e);
             return false;
         }
     
@@ -39,7 +40,7 @@
             $stmt->execute();
             return true;
         } catch (Exception $error) {
-            returnErrorAndClose($error, $stmt, $conn);
+            returnMYSQLErrorAndClose($error, $stmt, $conn);
             return false;
         }
     }
@@ -50,6 +51,16 @@
 
     function returnErrorAndClose ($error, &$stmt, &$conn) {
         returnError($error);
+        $stmt->close();
+        $conn->close();
+    }
+
+    function returnMYSQLError ($error) {
+        returnObject('{"error": "A mySQL error occurred.", "my_sql_error": "' . $error . '"}');
+    }
+
+    function returnMYSQLErrorAndClose ($error, &$stmt, &$conn) {
+        returnMYSQLError($error);
         $stmt->close();
         $conn->close();
     }

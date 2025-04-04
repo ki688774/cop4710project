@@ -33,7 +33,7 @@ DROP TABLE IF EXISTS `comments`;
 CREATE TABLE `comments` (
   `uid` int NOT NULL,
   `event_id` int NOT NULL,
-  `text` varchar(1024) DEFAULT NULL,
+  `text` varchar(4096) DEFAULT NULL,
   `rating` int NOT NULL,
   `timestamp` datetime NOT NULL,
   PRIMARY KEY (`uid`,`event_id`),
@@ -255,11 +255,13 @@ DROP TABLE IF EXISTS `rsos`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `rsos` (
   `rso_id` int NOT NULL AUTO_INCREMENT,
+  `university_id` int NOT NULL,
   `rso_name` varchar(256) NOT NULL,
   `admin_id` int NOT NULL,
   PRIMARY KEY (`rso_id`),
   KEY `admin_id` (`admin_id`),
-  CONSTRAINT `rsos_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `users` (`uid`) ON DELETE RESTRICT ON UPDATE CASCADE
+  CONSTRAINT `rsos_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `users` (`uid`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `rsos_ibfk_2` FOREIGN KEY (`university_id`) REFERENCES `universities` (`university_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
