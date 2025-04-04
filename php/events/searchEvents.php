@@ -1,5 +1,6 @@
 <?php
     $inData = json_decode(file_get_contents('php://input'), true);
+    require __DIR__ . '/../global.php';
 
     // Proccess input
     $currentUser = $inData["current_user"] ?? null;
@@ -11,13 +12,8 @@
     }
 
     // Create and check connection
-    try {
-        $conn = mysqli_connect("localhost", "root", "", "cop4710project");
-    } catch (Exception $e) {
-        returnError($e);
-        $conn->close();
+    if (!attemptConnect($conn))
         return;
-    }
 
 
 
@@ -25,14 +21,8 @@
     $stmt = $conn->prepare("SELECT * FROM users WHERE user_id=?");
     $stmt->bind_param("i", $currentUser);
 
-    try {
-        $stmt->execute();
-    } catch (Exception $e) {
-        returnError($e);
-        $stmt->close();
-        $conn->close();
+    if (!attemptExecute($stmt, $conn))
         return;
-    }
 
     $universityID = $stmt->get_result()->fetch_assoc()["university_id"];
 
@@ -46,50 +36,22 @@
         UNION SELECT * FROM E rso_events WHERE event_name LIKE ? AND EXISTS (SELECT * FROM R rso_joins WHERE E.rso_id=R.rso_id AND R.uid = ?)");
     $stmt->bind_param("ssisi", $searchTerm, $searchTerm, $universityID, $searchTerm, $currentUser);
 
-    try {
-        $stmt->execute();
-    } catch (Exception $e) {
-        returnError($e);
-        $stmt->close();
-        $conn->close();
+    if (!attemptExecute($stmt, $conn))
+        return;
+
+    $rows = "";
+
+    if (assembleJsonArrayFromQuery($stmt, $rows) == 0) {
+        returnErrorAndClose("No events found.", $stmt, $conn);
         return;
     }
 
-    $searchCount = 0;
-    $rows = "[";
-    $tempResult = $stmt->get_result();
 
-    while ($row = $tempResult->fetch_assoc()) {
-        if ($searchCount > 0)
-            $rows .= ", ";
 
-        $rows .= json_encode($row);
-        $searchCount++;
-    }
-
-    $rows .= "]";
-
-    if ($searchCount == 0) {
-        returnError("No events found.");
-        $stmt->close();
-        $conn->close();
-        return;
-    }
-
-    // Output locations
+    // Return events as result
     $result = '{"result": ' . $rows . '}';
     returnObject($result);
     $stmt->close();
     $conn->close();
     return;
-
-
-    function returnError ($error) {
-        returnObject('{"error": "' . $error . '"}');
-    }
-
-    function returnObject ($target) {
-        header('Content-type: application/json');
-        echo $target;
-    }
 ?>

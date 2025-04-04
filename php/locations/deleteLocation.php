@@ -1,17 +1,13 @@
 <?php
     $inData = json_decode(file_get_contents('php://input'), true);
+    require __DIR__ . '/../global.php';
 
     // Proccess input
     $locationID = $inData["location_id"] ?? null;
 
     // Create and check connection
-    try {
-        $conn = mysqli_connect("localhost", "root", "", "cop4710project");
-    } catch (Exception $e) {
-        returnError($e);
-        $conn->close();
+    if (!attemptConnect($conn))
         return;
-    }
 
 
 
@@ -19,17 +15,11 @@
     $stmt = $conn->prepare("SELECT * FROM locations WHERE location_id=?");
     $stmt->bind_param("i", $locationID);
 
-    if (!$stmt->execute()) {
-        returnError($stmt->error);
-        $stmt->close();
-        $conn->close();
+    if (!attemptExecute($stmt, $conn))
         return;
-    }
 
     if (!$stmt->get_result()->fetch_assoc()) {
-        returnError("Location not found.");
-        $stmt->close();
-        $conn->close();
+        returnErrorAndClose("Location not found.", $stmt, $conn);
         return;
     }
 
@@ -39,26 +29,13 @@
     $stmt = $conn->prepare("DELETE FROM locations WHERE location_id=?");
     $stmt->bind_param("i", $locationID);
 
-    if (!$stmt->execute()) {
-        returnError($stmt->error);
-        $stmt->close();
-        $conn->close();
+    if (!attemptExecute($stmt, $conn))
         return;
-    }
 
 
 
+    // Return successful result
     $result = '{"result": "Location deleted successfully."}';
     returnObject($result);
     return;
-
-
-    function returnError ($error) {
-        returnObject('{"error": "' . $error . '"}');
-    }
-
-    function returnObject ($target) {
-        header('Content-type: application/json');
-        echo $target;
-    }
 ?>

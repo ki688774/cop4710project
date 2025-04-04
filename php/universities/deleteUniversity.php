@@ -1,5 +1,6 @@
 <?php
     $inData = json_decode(file_get_contents('php://input'), true);
+    require __DIR__ . '/../global.php';
 
     $currentUser = $inData["current_user"] ?? null;
     $universityID = $inData["university_id"] ?? null;
@@ -10,13 +11,8 @@
     }
 
     // Create and check connection
-    try {
-        $conn = mysqli_connect("localhost", "root", "", "cop4710project");
-    } catch (Exception $e) {
-        returnError($e);
-        $conn->close();
+    if (!attemptConnect($conn))
         return;
-    }
 
 
 
@@ -24,47 +20,45 @@
     $stmt = $conn->prepare("SELECT * FROM universities WHERE university_id=? AND super_admin_id=?");
     $stmt->bind_param("ii", $universityID, $currentUser);
 
-    if (!$stmt->execute()) {
-        returnError($stmt->error);
-        $stmt->close();
-        $conn->close();
+    if (!attemptExecute($stmt, $conn))
         return;
-    }
 
     $targetRow = $stmt->get_result()->fetch_assoc();
 
     if (!$targetRow) {
-        returnError("University not found.");
-        $stmt->close();
-        $conn->close();
+        returnErrorAndClose("University not found.", $stmt, $conn);
         return;
     }
 
 
+
+    // Remove university reference for super-admin
+    // Set super-admin's university domain
+    $stmt = $conn->prepare("UPDATE users SET university_id=NULL where uid=?");
+    $stmt->bind_param("i", $currentUser);
+
+    if (!attemptExecute($stmt, $conn))
+        return;
 
     // Delete university
     $stmt = $conn->prepare("DELETE FROM universities WHERE university_id=? AND super_admin_id=?");
     $stmt->bind_param("ii", $universityID, $currentUser);
 
-    if (!$stmt->execute()) {
-        returnError($stmt->error);
-        $stmt->close();
-        $conn->close();
+    if (!attemptExecute($stmt, $conn))
         return;
-    }
+
+    // Delete super-admin
+    // Delete user
+    $stmt = $conn->prepare("DELETE FROM users WHERE uid=?");
+    $stmt->bind_param("i", $currentUser);
+
+    if (!attemptExecute($stmt, $conn))
+        return;
 
 
 
+    // Return successful result
     $result = '{"result": "University deleted successfully."}';
     returnObject($result);
     return;
-
-    function returnError ($error) {
-        returnObject('{"error": "' . $error . '"}');
-    }
-
-    function returnObject ($target) {
-        header('Content-type: application/json');
-        echo $target;
-    }
 ?>

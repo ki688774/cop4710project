@@ -1,6 +1,7 @@
 <?php
     $inData = json_decode(file_get_contents('php://input'), true);
     $phoneRegex = "/^\([0-9]{3}\) [0-9]{3}-[0-9]{4}$/";
+    require __DIR__ . '/../global.php';
 
     // Proccess input
     $currentUser = $inData["current_user"] ?? null;
@@ -10,7 +11,7 @@
     $eventName = $inData["event_name"] ?? null;
     $eventDescription = $inData["event_description"] ?? null;
     $contactPhone = $inData["contact_phone"] ?? null;
-    $contactEmail = $inData["contact_email"] ?? null;
+    $contactEmail = strtolower($inData["contact_email"]) ?? null;
     $locationID = $inData["location_id"] ?? null;
 
     if (!$currentUser || !$startTime || !$endTime || !$eventName || !$eventDescription || !$contactPhone || !$locationID) {
@@ -29,13 +30,8 @@
     }
 
     // Create and check connection
-    try {
-        $conn = mysqli_connect("localhost", "root", "", "cop4710project");
-    } catch (Exception $e) {
-        returnError($e);
-        $conn->close();
+    if (!attemptConnect($conn))
         return;
-    }
 
 
 
@@ -43,21 +39,13 @@
     $stmt = $conn->prepare("SELECT university_id FROM universities WHERE super_admin_id=?");
     $stmt->bind_param("i", $currentUser);
 
-    try {
-        $stmt->execute();
-    } catch (Exception $e) {
-        returnError($e);
-        $stmt->close();
-        $conn->close();
+    if (!attemptExecute($stmt, $conn))
         return;
-    }
 
     $universityID = $stmt->get_result()->fetch_assoc()["univeristy_id"];
 
     if (!$universityID) {
-        returnError("Attempted to create public event without being a super-admin.");
-        $stmt->close();
-        $conn->close();
+        returnErrorAndClose("Attempted to create public event without being a super-admin.", $stmt, $conn);
         return;
     }
 
@@ -67,30 +55,19 @@
     $stmt = $conn->prepare("INSERT INTO events (start_time, end_time, event_name, event_description, contact_phone, contact_email, location_id) VALUES (?,?,?,?,?,?,?)");
     $stmt->bind_param("ssssssi", $startTime, $endTime, $eventName, $eventDescription, $contactPhone, $contactEmail, $locationID);
 
-    try {
-        $stmt->execute();
-    } catch (Exception $e) {
-        returnError($e);
-        $stmt->close();
-        $conn->close();
+    if (!attemptExecute($stmt, $conn))
         return;
-    }
 
     $eventID = $conn->insert_id;
     $stmt = $conn->prepare("INSERT INTO public_events (event_id, university_id) VALUES (?,?)");
     $stmt->bind_param("ii", $eventID, $universityID);
 
-    try {
-        $stmt->execute();
-    } catch (Exception $e) {
-        returnError($e);
-        $stmt->close();
-        $conn->close();
+    if (!attemptExecute($stmt, $conn))
         return;
-    }
 
 
 
+    // Return successful result
     $result = '{"result": "Public event added successfully."}';
     returnObject($result);
     return;

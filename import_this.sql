@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.41, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 9.1.0, for Win64 (x86_64)
 --
 -- Host: localhost    Database: cop4710project
 -- ------------------------------------------------------
--- Server version	8.0.41-0ubuntu0.22.04.1
+-- Server version	9.1.0
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -67,7 +67,7 @@ CREATE TABLE `events` (
   `event_name` varchar(50) NOT NULL,
   `event_description` varchar(1024) NOT NULL,
   `contact_phone` varchar(20) NOT NULL,
-  `contact_email`varchar(256) NOT NULL,
+  `contact_email` varchar(256) NOT NULL,
   `location_id` int NOT NULL,
   PRIMARY KEY (`event_id`),
   KEY `location_id` (`location_id`),
@@ -125,7 +125,7 @@ CREATE TABLE `locations` (
   PRIMARY KEY (`location_id`),
   CONSTRAINT `LatitudeClamp` CHECK (((`latitude` >= -(90)) and (`latitude` <= 90))),
   CONSTRAINT `LongitudeClamp` CHECK (((`longitude` >= -(180)) and (`longitude` <= 180)))
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -134,7 +134,7 @@ CREATE TABLE `locations` (
 
 LOCK TABLES `locations` WRITE;
 /*!40000 ALTER TABLE `locations` DISABLE KEYS */;
-INSERT INTO `locations` VALUES (1,'North Pole','???',90.000000,0.000000),(2,'Null Island','???',0.000000,0.000000),(3,'Santa\'s Workshop','123 North Pole Rd.',0.000000,90.000000);
+INSERT INTO `locations` VALUES (1,'North Pole','???',90.000000,0.000000),(2,'Null Island','???',0.000000,0.000000),(3,'Santa\'s Workshop','123 North Pole Rd.',0.000000,90.000000),(4,'Krampus HQ','456 North Pole Rd.',0.000000,90.000000);
 /*!40000 ALTER TABLE `locations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -290,7 +290,7 @@ CREATE TABLE `universities` (
   KEY `location_id` (`location_id`),
   CONSTRAINT `universities_ibfk_1` FOREIGN KEY (`super_admin_id`) REFERENCES `users` (`uid`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `universities_ibfk_2` FOREIGN KEY (`location_id`) REFERENCES `locations` (`location_id`) ON DELETE RESTRICT ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -299,7 +299,7 @@ CREATE TABLE `universities` (
 
 LOCK TABLES `universities` WRITE;
 /*!40000 ALTER TABLE `universities` DISABLE KEYS */;
-INSERT INTO `universities` VALUES (1,'northpole.org','Santa\'s Workshop',3,1);
+INSERT INTO `universities` VALUES (1,'northpole.org','Santa\'s Workshop',3,1),(2,'coal.org','The Coal Bringers',4,6);
 /*!40000 ALTER TABLE `universities` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -323,7 +323,7 @@ CREATE TABLE `users` (
   UNIQUE KEY `email` (`email`),
   KEY `users_ibfk_1` (`university_id`),
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`university_id`) REFERENCES `universities` (`university_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -332,7 +332,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,1,'Rudolph','Reindeer','rednose@northpole.org','RedNose1939','$2y$10$DP.R71h2M7O6NJ/M/foMjOU2gWu837wdvkx5MPOHz4kDd0uCzg1ua'),(2,1,'Prancer','Reindeer','prancer@northpole.org','xXPrancerXx','$2y$10$2jSW1yPWAMi4mTsmnv12keBqcTjg6W.e0v.sGYgAxY95IQjWsF.4G');
+INSERT INTO `users` VALUES (1,1,'Rudolph','Reindeer','rednose@northpole.org','RedNose1939','$2y$10$DP.R71h2M7O6NJ/M/foMjOU2gWu837wdvkx5MPOHz4kDd0uCzg1ua'),(2,1,'Prancer','Reindeer','prancer@northpole.org','xXPrancerXx','$2y$10$2jSW1yPWAMi4mTsmnv12keBqcTjg6W.e0v.sGYgAxY95IQjWsF.4G'),(4,1,'Donner','Reindeer','donner@northpole.org','KingCaribou','$2y$10$qHMYrANcpdUmicI3RFXpT.VckOmSb/vw5FWfgGI7tMLJFnw/GXntK'),(6,2,'Krampus','Goat','krampus@coal.org','CoalBringer','$2y$10$gjeBqspfJuLnv9afK13l0.sg.a1CvMijP0Uge5hA73lsTkCCTdGG6'),(7,2,'Yule','Cat','yuleeee@coal.org','ClothesCat','$2y$10$8gPK52VVVJnqGMbBG8ybHOMHJSLHjArHAFOwElGrfwWzpBUsdMrG2');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -345,4 +345,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-03 11:22:02
+-- Dump completed on 2025-04-03 20:38:24

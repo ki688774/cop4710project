@@ -1,5 +1,6 @@
 <?php
     $inData = json_decode(file_get_contents('php://input'), true);
+    require __DIR__ . '/../global.php';
 
     $currentUser = $inData["current_user"] ?? null;
     $universityID = $inData["university_id"] ?? null;
@@ -14,13 +15,8 @@
     }
 
     // Create and check connection
-    try {
-        $conn = mysqli_connect("localhost", "root", "", "cop4710project");
-    } catch (Exception $e) {
-        returnError($e);
-        $conn->close();
+    if (!attemptConnect($conn))
         return;
-    }
 
 
 
@@ -28,37 +24,25 @@
     $stmt = $conn->prepare("SELECT * FROM universities WHERE university_id=? AND super_admin_id=?");
     $stmt->bind_param("si", $universityID, $currentUser);
 
-    if (!$stmt->execute()) {
-        returnError($stmt->error);
-        $stmt->close();
-        $conn->close();
+    if (!attemptExecute($stmt, $conn))
         return;
-    }
 
     if (!$stmt->get_result()->fetch_assoc()) {
-        returnError("University not found.");
-        $stmt->close();
-        $conn->close();
+        returnErrorAndClose("University not found or not accessible.", $stmt, $conn);
         return;
     }
 
 
 
     // Check if the new super-admin actually exists
-    $stmt = $conn->prepare("SELECT * FROM users WHERE uid=?");
-    $stmt->bind_param("i", $superAdminID);
+    $stmt = $conn->prepare("SELECT * FROM users WHERE uid=? AND university_id=?");
+    $stmt->bind_param("ii", $superAdminID, $universityID);
 
-    if (!$stmt->execute()) {
-        returnError($stmt->error);
-        $stmt->close();
-        $conn->close();
+    if (!attemptExecute($stmt, $conn))
         return;
-    }
 
     if (!$stmt->get_result()->fetch_assoc()) {
-        returnError("New super-admin not found.");
-        $stmt->close();
-        $conn->close();
+        returnErrorAndClose("New super-admin not found or belongs to another university.", $stmt, $conn);
         return;
     }
 
@@ -68,25 +52,13 @@
     $stmt = $conn->prepare("UPDATE universities SET university_domain=?, university_name=?, location_id=?, super_admin_id=? WHERE university_id=? AND super_admin_id=?");
     $stmt->bind_param("ssiiii", $universityDomain, $universityName, $locationID, $superAdminID, $universityID, $currentUser);
 
-    if (!$stmt->execute()) {
-        returnError($stmt->error);
-        $stmt->close();
-        $conn->close();
+    if (!attemptExecute($stmt, $conn))
         return;
-    }
 
 
 
+    // Return successful result
     $result = '{"result": "University updated successfully."}';
     returnObject($result);
     return;
-
-    function returnError ($error) {
-        returnObject('{"error": "' . $error . '"}');
-    }
-
-    function returnObject ($target) {
-        header('Content-type: application/json');
-        echo $target;
-    }
 ?>

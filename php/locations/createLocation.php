@@ -1,5 +1,6 @@
 <?php
     $inData = json_decode(file_get_contents('php://input'), true);
+    require __DIR__ . '/../global.php';
 
     // Proccess input
     $locationName = $inData["location_name"] ?? null;
@@ -13,13 +14,8 @@
     }
 
     // Create and check connection
-    try {
-        $conn = mysqli_connect("localhost", "root", "", "cop4710project");
-    } catch (Exception $e) {
-        returnError($e);
-        $conn->close();
+    if (!attemptConnect($conn))
         return;
-    }
 
 
 
@@ -27,24 +23,13 @@
     $stmt = $conn->prepare("INSERT INTO locations (location_name, address, longitude, latitude) VALUES (?,?,?,?)");
     $stmt->bind_param("ssdd", $locationName, $address, $longitude, $latitude);
 
-    if (!$stmt->execute()) {
-        returnError($stmt->error);
-        $stmt->close();
-        $conn->close();
+    if (!attemptExecute($stmt, $conn))
         return;
-    }
 
+
+
+    // Return successful result
     $result = '{"result": "Location added successfully."}';
     returnObject($result);
     return;
-
-
-    function returnError ($error) {
-        returnObject('{"error": "' . $error . '"}');
-    }
-
-    function returnObject ($target) {
-        header('Content-type: application/json');
-        echo $target;
-    }
 ?>

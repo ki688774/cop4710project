@@ -1,11 +1,12 @@
 <?php
     $inData = json_decode(file_get_contents('php://input'), true);
+    require __DIR__ . '/../global.php';
 
     // Proccess input
     $currentUser = $inData["current_user"] ?? null;
     $firstName = $inData["firstName"] ?? null;
     $lastName = $inData["lastName"] ?? null;
-    $email = $inData["email"] ?? null;
+    $email = strtolower($inData["email"]) ?? null;
     $username = $inData["username"] ?? null;
     $password = $inData["password"] ?? null;
 
@@ -23,13 +24,8 @@
     $emailDomain = explode("@", $email, "2")[1];
 
     // Create and check connection
-    try {
-        $conn = mysqli_connect("localhost", "root", "", "cop4710project");
-    } catch (Exception $e) {
-        returnError($e);
-        $conn->close();
+    if (!attemptConnect($conn))
         return;
-    }
 
 
 
@@ -37,19 +33,13 @@
     $stmt = $conn->prepare("SELECT * FROM universities WHERE university_domain=?");
     $stmt->bind_param("s", $emailDomain);
 
-    if (!$stmt->execute()) {
-        returnError($stmt->error);
-        $stmt->close();
-        $conn->close();
+    if (!attemptExecute($stmt, $conn))
         return;
-    }
 
     $universityRow = $stmt->get_result()->fetch_assoc();
 
     if (!$universityRow) {
-        returnError("New user's email domain has no associated university.");
-        $stmt->close();
-        $conn->close();
+        returnErrorAndClose("New user's email domain has no associated university.", $stmt, $conn);
         return;
     }
 
@@ -59,19 +49,13 @@
     $stmt = $conn->prepare("SELECT * FROM users WHERE uid=?");
     $stmt->bind_param("i", $currentUser);
 
-    if (!$stmt->execute()) {
-        returnError($stmt->error);
-        $stmt->close();
-        $conn->close();
+    if (!attemptExecute($stmt, $conn))
         return;
-    }
 
     $oldUserData = $stmt->get_result()->fetch_assoc();
 
     if (!$oldUserData) {
-        returnError("User not found.");
-        $stmt->close();
-        $conn->close();
+        returnErrorAndClose("User not found.", $stmt, $conn);
         return;
     }
 
@@ -85,34 +69,22 @@
         $stmt = $conn->prepare("SELECT * FROM universities WHERE super_admin_id=?");
         $stmt->bind_param("i", $currentUser);
 
-        if (!$stmt->execute()) {
-            returnError($stmt->error);
-            $stmt->close();
-            $conn->close();
+        if (!attemptExecute($stmt, $conn))
             return;
-        }
 
         if ($stmt->get_result()->fetch_assoc()) {
-            returnError("Attempted to change universities as the super-admin of the old university.");
-            $stmt->close();
-            $conn->close();
+            returnErrorAndClose("Attempted to change universities as the super-admin of the old university.", $stmt, $conn);
             return;
         }
 
         $stmt = $conn->prepare("SELECT * FROM rsos WHERE admin_id=?");
         $stmt->bind_param("i", $currentUser);
 
-        if (!$stmt->execute()) {
-            returnError($stmt->error);
-            $stmt->close();
-            $conn->close();
+        if (!attemptExecute($stmt, $conn))
             return;
-        }
 
         if ($stmt->get_result()->fetch_assoc()) {
-            returnError("Attempted to change universities while still owning an RSO.");
-            $stmt->close();
-            $conn->close();
+            returnErrorAndClose("Attempted to change universities while still owning an RSO.", $stmt, $conn);
             return;
         }
     }
@@ -123,25 +95,13 @@
     $stmt = $conn->prepare("UPDATE users SET university_id=?, firstName=?, lastName=?, email=?, username=?, password=? WHERE uid=?");
     $stmt->bind_param("isssssi", $universityRow["university_id"], $firstName, $lastName, $email, $username, $hashedPass, $currentUser);
 
-    if (!$stmt->execute()) {
-        returnError($stmt->error);
-        $stmt->close();
-        $conn->close();
+    if (!attemptExecute($stmt, $conn))
         return;
-    }
 
 
 
+    // Return successful result
     $result = '{"result": "User updated successfully."}';
     returnObject($result);
     return;
-
-    function returnError ($error) {
-        returnObject('{"error": "' . $error . '"}');
-    }
-
-    function returnObject ($target) {
-        header('Content-type: application/json');
-        echo $target;
-    }
 ?>

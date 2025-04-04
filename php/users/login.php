@@ -10,16 +10,10 @@
         returnError("All fields must be filled.");
         return;
     }
-
+    
     // Create and check connection
-    // Create and check connection
-    try {
-        $conn = mysqli_connect("localhost", "root", "", "cop4710project");
-    } catch (Exception $e) {
-        returnError($e);
-        $conn->close();
+    if (!attemptConnect($conn))
         return;
-    }
 
 
 
@@ -27,22 +21,19 @@
     $stmt = $conn->prepare("SELECT * FROM users WHERE username=?");
     $stmt->bind_param("s", $username);
 
-    if (!$stmt->execute()) {
-        returnError($stmt->error);
-        $stmt->close();
-        $conn->close();
+    if (!attemptExecute($stmt, $conn))
         return;
-    }
 
     $loginRow = $stmt->get_result()->fetch_assoc();
 
     if (!$loginRow || !password_verify($password, $loginRow["password"])) {
-        returnError("User and password combination not found.");
-        $stmt->close();
-        $conn->close();
+        returnErrorAndClose("User and password combination not found.", $stmt, $conn);
         return;
     }
 
+
+
+    // Return successful result
     $result = '{"currentUser":' . $loginRow["uid"] . '}';
     returnObject($result);
     return;
