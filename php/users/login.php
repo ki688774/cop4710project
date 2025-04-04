@@ -34,7 +34,7 @@
 
 
     // Return successful result
-    $result = '{"currentUser":' . $loginRow["uid"] . '}';
+    $result = '{"result":' . $loginRow["uid"] . '}';
     returnObject($result);
     return;
 ?>

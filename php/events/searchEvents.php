@@ -18,7 +18,7 @@
 
 
     // Find user's university (which must exist)
-    $stmt = $conn->prepare("SELECT * FROM users WHERE user_id=?");
+    $stmt = $conn->prepare("SELECT * FROM users WHERE uid=?");
     $stmt->bind_param("i", $currentUser);
 
     if (!attemptExecute($stmt, $conn))
@@ -31,10 +31,11 @@
 
 
     // Search events
-    $stmt = $conn->prepare("SELECT * FROM public_events WHERE event_name LIKE ?
-        UNION SELECT * FROM P private_events WHERE event_name LIKE ? AND university_id = ?
-        UNION SELECT * FROM E rso_events WHERE event_name LIKE ? AND EXISTS (SELECT * FROM R rso_joins WHERE E.rso_id=R.rso_id AND R.uid = ?)");
-    $stmt->bind_param("ssisi", $searchTerm, $searchTerm, $universityID, $searchTerm, $currentUser);
+    $stmt = $conn->prepare("SELECT * FROM events E WHERE event_name LIKE ? AND (
+	    EXISTS (SELECT * FROM public_events P WHERE P.event_id=E.event_id) OR
+	    EXISTS (SELECT * FROM private_events P WHERE P.event_id=E.event_id AND university_id=?) OR
+	    EXISTS (SELECT * FROM rso_events R WHERE R.event_id=E.event_id AND EXISTS (SELECT * FROM rso_joins J WHERE R.rso_id=J.rso_id AND J.uid=?)))");
+    $stmt->bind_param("sii", $searchTerm, $universityID, $currentUser);
 
     if (!attemptExecute($stmt, $conn))
         return;

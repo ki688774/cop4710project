@@ -42,7 +42,7 @@
     if (!attemptExecute($stmt, $conn))
         return;
 
-    $universityID = $stmt->get_result()->fetch_assoc()["univeristy_id"];
+    $universityID = $stmt->get_result()->fetch_assoc()["university_id"];
 
     if (!$universityID) {
         returnErrorAndClose("Attempted to create public event without being a super-admin.", $stmt, $conn);

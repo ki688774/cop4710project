@@ -32,6 +32,6 @@
 
 
     // Return successful result
-    returnObject(json_encode($targetRow));
+    returnObject('{"result": ' . json_encode($targetRow) . '}');
     return;
 ?>
