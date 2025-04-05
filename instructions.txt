@@ -1,8 +1,0 @@
-Before you do anything, make sure to import "import_this.sql". First, open up mySQL.
-Then, run the command "source [path to import_this.sql]".
-If you can't get into mySQL, try using "root" as the username and "" as the password (without the quotation marks).
-
-Extra notes: Students are allowed to be linked to no university (if their email domain is not recognized), but cannot sign up when there is no university.
-This is because when creating a university and super-admin, the super-admin needs to be created first, then their university, then the two can be linked.
-
-Currently, student accounts get deleted when their corresponding university goes down. If the university's email domain changes, each student stays linked to the university and their emails do not change. Only new students are affected.

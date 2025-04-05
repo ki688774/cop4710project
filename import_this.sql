@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 9.1.0, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.41, for Linux (x86_64)
 --
 -- Host: localhost    Database: cop4710project
 -- ------------------------------------------------------
--- Server version	9.1.0
+-- Server version	8.0.41-0ubuntu0.22.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -50,8 +50,72 @@ CREATE TABLE `comments` (
 
 LOCK TABLES `comments` WRITE;
 /*!40000 ALTER TABLE `comments` DISABLE KEYS */;
+INSERT INTO `comments` VALUES (1,8,'Hopefully y\'all are able to come. I brought moss for everyone!',5,'2025-04-04 15:21:13');
 /*!40000 ALTER TABLE `comments` ENABLE KEYS */;
 UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `update_total_rating_insert` AFTER INSERT ON `comments` FOR EACH ROW UPDATE events E
+SET E.total_rating = (
+    SELECT AVG(rating)
+    FROM comments C
+    WHERE C.event_id=E.event_id
+)
+WHERE E.event_id=new.event_id */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `update_total_rating_update` AFTER UPDATE ON `comments` FOR EACH ROW UPDATE events E
+SET E.total_rating = (
+    SELECT AVG(rating)
+    FROM comments C
+    WHERE C.event_id=E.event_id
+)
+WHERE E.event_id=new.event_id */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `update_total_rating_delete` AFTER DELETE ON `comments` FOR EACH ROW UPDATE events E
+SET E.total_rating = (
+    SELECT AVG(rating)
+    FROM comments C
+    WHERE C.event_id=E.event_id
+)
+WHERE E.event_id=old.event_id */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Table structure for table `events`
@@ -68,6 +132,7 @@ CREATE TABLE `events` (
   `event_description` varchar(1024) NOT NULL,
   `contact_phone` varchar(20) NOT NULL,
   `contact_email` varchar(256) NOT NULL,
+  `total_rating` decimal(3,2) DEFAULT NULL,
   `location_id` int NOT NULL,
   PRIMARY KEY (`event_id`),
   KEY `location_id` (`location_id`),
@@ -82,7 +147,7 @@ CREATE TABLE `events` (
 
 LOCK TABLES `events` WRITE;
 /*!40000 ALTER TABLE `events` DISABLE KEYS */;
-INSERT INTO `events` VALUES (8,'2025-12-23 00:00:00','2026-01-01 00:00:00','Reindeer Strike and Unionization','No more will Santa hold out on our moss and dental benefits! We organize for a better workshop, now and forevermore!','(555) 123-4567','rudolph.reindeer@proton.me',3);
+INSERT INTO `events` VALUES (8,'2025-12-23 00:00:00','2026-01-01 00:00:00','Reindeer Strike and Unionization','No more will Santa hold out on our moss and dental benefits! We organize for a better workshop, now and forevermore!','(555) 123-4567','rudolph.reindeer@proton.me',NULL,3);
 /*!40000 ALTER TABLE `events` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -260,6 +325,7 @@ CREATE TABLE `rsos` (
   `admin_id` int NOT NULL,
   PRIMARY KEY (`rso_id`),
   KEY `admin_id` (`admin_id`),
+  KEY `rsos_ibfk_2` (`university_id`),
   CONSTRAINT `rsos_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `users` (`uid`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `rsos_ibfk_2` FOREIGN KEY (`university_id`) REFERENCES `universities` (`university_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -348,4 +414,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-03 22:05:02
+-- Dump completed on 2025-04-04 19:29:44

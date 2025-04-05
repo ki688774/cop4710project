@@ -37,10 +37,7 @@
     if (!attemptExecute($stmt, $conn))
         return;
 
-    if (assembleJsonArrayFromQuery($stmt, $rows) == 0) {
-        returnErrorAndClose("No joinable RSOs found.", $stmt, $conn);
-        return;
-    }
+    assembleJsonArrayFromQuery($stmt, $rows);
 
 
 

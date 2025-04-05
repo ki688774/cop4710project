@@ -4,10 +4,15 @@
 
     // Proccess input
     $currentUser = $inData["current_user"] ?? null;
+    $search = $inData["search"] ?? null;
+    $minRating = $inData["minimum_rating"] ?? 1;
+    $maxRating = $inData["maximum_rating"] ?? 5;
+    $minTime = $inData["minimum_time"] ?? "1000-01-01 00:00:00";
+    $maxTime = $inData["maximum_time"] ?? "9999-12-31 23:59:59";
     $eventID = $inData["event_id"] ?? null;
 
-    if (!$currentUser || $eventID) {
-        returnError("All fields must be filled.");
+    if (!$currentUser || !$eventID) {
+        returnError("All critical fields must be filled.");
         return;
     }
 
@@ -44,18 +49,13 @@
 
 
     // Search for comments.
-    $stmt = $conn->prepare("SELECT * FROM comments WHERE event_id=?");
-    $stmt->bind_param("i", $eventID);
+    $stmt = $conn->prepare("SELECT * FROM comments WHERE event_id=? AND rating>=? AND rating<=? AND timestamp>=? AND timestamp<=?");
+    $stmt->bind_param("iiiss", $eventID, $minRating, $maxRating, $minTime, $maxTime);
 
     if (!attemptExecute($stmt, $conn))
         return;
 
-    $rows = "";
-
-    if (assembleJsonArrayFromQuery($stmt, $rows) == 0) {
-        returnErrorAndClose("No comments found.", $stmt, $conn);
-        return;
-    }
+    assembleJsonArrayFromQuery($stmt, $rows);
     
     
     

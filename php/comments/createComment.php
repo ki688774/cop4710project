@@ -8,8 +8,13 @@
     $rating = $inData["rating"] ?? null;
     $text = $inData["text"] ?? null;
 
-    if (!$currentUser || $eventID || $rating) {
+    if (!$currentUser || !$eventID || !$rating) {
         returnError("All fields must be filled.");
+        return;
+    }
+
+    if ($rating < 1 || $rating > 5) {
+        returnError("Rating must be from 1 to 5.");
         return;
     }
 
@@ -47,7 +52,7 @@
 
     // Add the comment.
     $stmt = $conn->prepare("INSERT INTO comments (uid, event_id, text, rating, timestamp) VALUES (?,?,?,?,?)");
-    $stmt->bind_param("iisis", $currentUser, $eventID, $text, $rating, time("Y-m-d H:i:s"));
+    $stmt->bind_param("iisis", $currentUser, $eventID, $text, $rating, date("Y-m-d H:i:s"));
 
     if (!attemptExecute($stmt, $conn))
         return;

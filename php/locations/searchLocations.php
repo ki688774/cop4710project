@@ -18,12 +18,7 @@
     if (!attemptExecute($stmt, $conn))
         return;
 
-    $rows = "";
-
-    if (assembleJsonArrayFromQuery($stmt, $rows) == 0) {
-        returnErrorAndClose("No locations found.", $stmt, $conn);
-        return;
-    }
+    assembleJsonArrayFromQuery($stmt, $rows);
 
 
 
