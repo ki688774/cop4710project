@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.41, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 9.1.0, for Win64 (x86_64)
 --
 -- Host: localhost    Database: cop4710project
 -- ------------------------------------------------------
--- Server version	8.0.41-0ubuntu0.22.04.1
+-- Server version	9.1.0
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -138,7 +138,7 @@ CREATE TABLE `events` (
   KEY `location_id` (`location_id`),
   CONSTRAINT `events_ibfk_1` FOREIGN KEY (`location_id`) REFERENCES `locations` (`location_id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `EventStartsBeforeEnd` CHECK ((`start_time` < `end_time`))
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -147,7 +147,7 @@ CREATE TABLE `events` (
 
 LOCK TABLES `events` WRITE;
 /*!40000 ALTER TABLE `events` DISABLE KEYS */;
-INSERT INTO `events` VALUES (8,'2025-12-23 00:00:00','2026-01-01 00:00:00','Reindeer Strike and Unionization','No more will Santa hold out on our moss and dental benefits! We organize for a better workshop, now and forevermore!','(555) 123-4567','rudolph.reindeer@proton.me',5.00,3);
+INSERT INTO `events` VALUES (8,'2025-12-23 00:00:00','2026-01-01 00:00:00','Reindeer Strike and Unionization','No more will Santa hold out on our moss and dental benefits! We organize for a better workshop, now and forevermore!','(555) 123-4567','rudolph.reindeer@proton.me',5.00,3),(9,'2025-02-01 20:00:00','2026-02-02 00:00:00','Party To Celebrate Us Getting Dental Benefits','WE GOT THE DENTAL LET\'S GOOOOOOOOOO\r\nWE\'VE GOT MOSS. WE\'VE GOT VIDEO GAMES. LET\'S MAKE THIS THE BEST NIGHT OF OUR LIVES.','(555) 123-4567','rudolph.reindeer@proton.me',NULL,6);
 /*!40000 ALTER TABLE `events` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -190,7 +190,7 @@ CREATE TABLE `locations` (
   PRIMARY KEY (`location_id`),
   CONSTRAINT `LatitudeClamp` CHECK (((`latitude` >= -(90)) and (`latitude` <= 90))),
   CONSTRAINT `LongitudeClamp` CHECK (((`longitude` >= -(180)) and (`longitude` <= 180)))
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -199,7 +199,7 @@ CREATE TABLE `locations` (
 
 LOCK TABLES `locations` WRITE;
 /*!40000 ALTER TABLE `locations` DISABLE KEYS */;
-INSERT INTO `locations` VALUES (1,'North Pole','???',90.000000,0.000000),(2,'Null Island','???',0.000000,0.000000),(3,'Santa\'s Workshop','123 North Pole Rd.',0.000000,90.000000),(4,'Krampus HQ','456 North Pole Rd.',0.000000,90.000000);
+INSERT INTO `locations` VALUES (3,'Santa\'s Workshop','123 North Pole Rd.',0.000000,90.000000),(6,'Rudolph\'s House','1009 North Pole Rd.',0.000000,90.000000);
 /*!40000 ALTER TABLE `locations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -255,7 +255,7 @@ CREATE TABLE `public_events` (
 
 LOCK TABLES `public_events` WRITE;
 /*!40000 ALTER TABLE `public_events` DISABLE KEYS */;
-INSERT INTO `public_events` VALUES (8,1);
+INSERT INTO `public_events` VALUES (8,1),(9,1);
 /*!40000 ALTER TABLE `public_events` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -455,4 +455,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-05  1:00:21
+-- Dump completed on 2025-04-05 14:51:30

@@ -17,7 +17,7 @@
     }
 
     // Returns json array size, and stores the json array corresponding to what's in $stmt in $rows.
-    function assembleJsonArrayFromQuery (&$stmt, &$rows) {
+    function assembleJsonArrayFromQuery (&$stmt, &$conn, &$rows) {
         $searchCount = 0;
         $rows = "[";
         $tempResult = $stmt->get_result();
@@ -26,7 +26,7 @@
             if ($searchCount > 0)
                 $rows .= ", ";
 
-            $rows .= json_encode($row);
+            $rows .= json_encode(expandLocationID($row, $stmt, $conn));
             $searchCount++;
         }
 
@@ -44,6 +44,32 @@
             return false;
         }
     }
+
+    // Given an array that contains a location_id field, it returns an array where the field with the actual location data.
+    function expandLocationId ($targetArray, &$stmt, &$conn) {
+        if (!array_key_exists("location_id", $targetArray))
+            return $targetArray;
+
+        // Get the location data.
+        $stmt = $conn->prepare("SELECT * FROM locations WHERE location_id=?");
+        $stmt->bind_param("i", $targetArray["location_id"]);
+
+        $backupConn = $conn;
+
+        if (!attemptExecute($stmt, $conn)) {
+            $conn = $backupConn;
+            return $targetArray;
+        }
+
+        $locationRow = $stmt->get_result()->fetch_assoc();
+
+
+
+        // Return the combined array.
+        return array_diff_key(array_merge($targetArray, $locationRow), ["location_id" => "a"]);
+    }
+
+
 
     function returnError ($error) {
         returnObject('{"error": "' . $error . '"}');

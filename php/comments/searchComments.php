@@ -55,7 +55,7 @@
     if (!attemptExecute($stmt, $conn))
         return;
 
-    assembleJsonArrayFromQuery($stmt, $rows);
+    assembleJsonArrayFromQuery($stmt, $conn, $rows);
     
     
     

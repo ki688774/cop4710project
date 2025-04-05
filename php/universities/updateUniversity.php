@@ -1,17 +1,26 @@
 <?php
     $inData = json_decode(file_get_contents('php://input'), true);
-    require __DIR__ . '/../global.php';
+    require __DIR__ . '/../locations/updateLocation.php';
 
     // Proccess input
     $currentUser = $inData["current_user"] ?? null;
     $universityID = $inData["university_id"] ?? null;
     $universityDomain = $inData["university_domain"] ?? null;
-    $locationID = $inData["location_id"] ?? null;
     $superAdminID = $inData["super_admin_id"] ?? null;
     $universityName = $inData["university_name"] ?? null;
 
-    if (!$currentUser || !$universityID || !$universityDomain || !$locationID || !$superAdminID || !$universityName) {
-        returnError("All university address fields must be filled.");
+    $locationName = $inData["location_name"] ?? null;
+    $address = $inData["address"] ?? null;
+    $longitude = $inData["longitude"] ?? null; 
+    $latitude = $inData["latitude"] ?? null;
+
+    if (!$currentUser || !$universityID || !$universityDomain || !$superAdminID || !$universityName) {
+        returnError("All university fields must be filled.");
+        return;
+    }
+
+    if (!$locationName || !$address || is_null($longitude) || is_null($latitude)) {
+        returnError("All location fields must be filled.");
         return;
     }
 
@@ -28,10 +37,14 @@
     if (!attemptExecute($stmt, $conn))
         return;
 
-    if (!$stmt->get_result()->fetch_assoc()) {
+    $universityData = $stmt->get_result()->fetch_assoc();
+
+    if (!$universityData) {
         returnErrorAndClose("University not found or does not belong to user.", $stmt, $conn);
         return;
     }
+
+    $locationID = $universityData["location_id"];
 
 
 
@@ -49,9 +62,13 @@
 
 
 
+    // Update location
+    if (!updateLocation($locationID, $locationName, $address, $longitude, $latitude, $stmt, $conn))
+        return;
+
     // Update university
-    $stmt = $conn->prepare("UPDATE universities SET university_domain=?, university_name=?, location_id=?, super_admin_id=? WHERE university_id=?");
-    $stmt->bind_param("ssiii", $universityDomain, $universityName, $locationID, $superAdminID, $universityID);
+    $stmt = $conn->prepare("UPDATE universities SET university_domain=?, university_name=?, super_admin_id=? WHERE university_id=?");
+    $stmt->bind_param("ssiii", $universityDomain, $universityName, $superAdminID, $universityID);
 
     if (!attemptExecute($stmt, $conn))
         return;

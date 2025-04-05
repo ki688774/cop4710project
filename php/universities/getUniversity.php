@@ -16,16 +16,16 @@
 
 
 
-    // Get university
+    // Get the university data.
     $stmt = $conn->prepare("SELECT * FROM universities WHERE university_domain=?");
     $stmt->bind_param("s", $universityDomain);
 
     if (!attemptExecute($stmt, $conn))
         return;
 
-    $targetRow = $stmt->get_result()->fetch_assoc();
+    $universityRow = $stmt->get_result()->fetch_assoc();
 
-    if (!$targetRow) {
+    if (!$universityRow) {
         returnErrorAndClose("University not found.", $stmt, $conn);
         return;
     }
@@ -33,6 +33,6 @@
 
 
     // Return successful result
-    returnObject('{"result": ' . json_encode($targetRow) . '}');
+    returnObject('{"result": ' . json_encode(expandLocationId($universityRow, $stmt, $conn)) . '}');
     return;
 ?>

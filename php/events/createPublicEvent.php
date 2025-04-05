@@ -1,10 +1,15 @@
 <?php
     $inData = json_decode(file_get_contents('php://input'), true);
     $phoneRegex = "/^\([0-9]{3}\) [0-9]{3}-[0-9]{4}$/";
-    require __DIR__ . '/../global.php';
+    require __DIR__ . '/../locations/createLocation.php';
 
     // Proccess input
     $currentUser = $inData["current_user"] ?? null;
+
+    $locationName = $inData["location_name"] ?? null;
+    $address = $inData["address"] ?? null;
+    $longitude = $inData["longitude"] ?? null;
+    $latitude = $inData["latitude"] ?? null;
 
     $startTime = $inData["start_time"] ?? null;
     $endTime = $inData["end_time"] ?? null;
@@ -12,9 +17,8 @@
     $eventDescription = $inData["event_description"] ?? null;
     $contactPhone = $inData["contact_phone"] ?? null;
     $contactEmail = strtolower($inData["contact_email"]) ?? null;
-    $locationID = $inData["location_id"] ?? null;
 
-    if (!$currentUser || !$startTime || !$endTime || !$eventName || !$eventDescription || !$contactPhone || !$locationID) {
+    if (!$currentUser || !$startTime || !$endTime || !$eventName || !$eventDescription || !$contactPhone || !$locationName || !$address || is_null($longitude) || is_null($latitude)) {
         returnError("All fields must be filled.");
         return;
     }
@@ -50,6 +54,11 @@
     }
 
 
+
+    if (!createLocation($locationName, $address, $longitude, $latitude, $stmt, $conn))
+        return;
+
+    $locationID = $conn->insert_id;
 
     // Create the event in the events table and add its reference to the public_events table.
     $stmt = $conn->prepare("INSERT INTO events (start_time, end_time, event_name, event_description, contact_phone, contact_email, location_id) VALUES (?,?,?,?,?,?,?)");

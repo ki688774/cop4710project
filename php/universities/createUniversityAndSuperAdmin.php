@@ -1,6 +1,6 @@
 <?php
     $inData = json_decode(file_get_contents('php://input'), true);
-    require __DIR__ . '/../global.php';
+    require __DIR__ . '/../locations/createLocation.php';
 
     // Proccess input and pre-hash password
     $firstName = $inData["firstName"] ?? null;
@@ -9,12 +9,20 @@
     $username = $inData["username"] ?? null;
     $password = $inData["password"] ?? null;
 
-    $locationID = $inData["location_id"] ?? null;
+    $locationName = $inData["location_name"] ?? null;
+    $address = $inData["address"] ?? null;
+    $longitude = $inData["longitude"] ?? null;
+    $latitude = $inData["latitude"] ?? null;
 
     $universityName = $inData["university_name"] ?? null;
 
     if (!$firstName || !$lastName || !$username || !$password) {
         returnError("All super-admin fields must be filled.");
+        return;
+    }
+
+    if (!$locationName || !$address || is_null($longitude) || is_null($latitude)) {
+        returnError("All location fields must be filled.");
         return;
     }
 
@@ -74,6 +82,11 @@
     }
 
 
+    // Create location
+    if (!createLocation($locationName, $address, $longitude, $latitude, $stmt, $conn))
+        return;
+
+    $locationID = $conn->insert_id;
 
     // Add super-admin
     $stmt = $conn->prepare("INSERT INTO users (firstName, lastName, email, username, password) VALUES (?,?,?,?,?)");
@@ -93,7 +106,7 @@
 
     $universityID = $conn->insert_id;
 
-    // Set super-admin's university domain
+    // Set super-admin's university
     $stmt = $conn->prepare("UPDATE users SET university_id=? where uid=?");
     $stmt->bind_param("ii", $universityID, $superAdminID);
 
