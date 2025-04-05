@@ -37,7 +37,7 @@
 
 
     // Check if current user is the admin of the target RSO.
-    $stmt = $conn->prepare("SELECT * FROM rsos WHERE admin_id=? AND rso_id=?");
+    $stmt = $conn->prepare("SELECT * FROM rsos WHERE admin_id=? AND rso_id=? AND active=1");
     $stmt->bind_param("ii", $currentUser, $rsoID);
 
     if (!attemptExecute($stmt, $conn))

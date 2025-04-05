@@ -147,7 +147,7 @@ CREATE TABLE `events` (
 
 LOCK TABLES `events` WRITE;
 /*!40000 ALTER TABLE `events` DISABLE KEYS */;
-INSERT INTO `events` VALUES (8,'2025-12-23 00:00:00','2026-01-01 00:00:00','Reindeer Strike and Unionization','No more will Santa hold out on our moss and dental benefits! We organize for a better workshop, now and forevermore!','(555) 123-4567','rudolph.reindeer@proton.me',NULL,3);
+INSERT INTO `events` VALUES (8,'2025-12-23 00:00:00','2026-01-01 00:00:00','Reindeer Strike and Unionization','No more will Santa hold out on our moss and dental benefits! We organize for a better workshop, now and forevermore!','(555) 123-4567','rudolph.reindeer@proton.me',5.00,3);
 /*!40000 ALTER TABLE `events` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -310,6 +310,46 @@ LOCK TABLES `rso_joins` WRITE;
 /*!40000 ALTER TABLE `rso_joins` DISABLE KEYS */;
 /*!40000 ALTER TABLE `rso_joins` ENABLE KEYS */;
 UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `activate_rso` AFTER INSERT ON `rso_joins` FOR EACH ROW BEGIN
+    IF (5 <= (SELECT COUNT(*) FROM rso_joins J WHERE J.rso_id=new.rso_id))
+    THEN
+        UPDATE rsos R SET active=1 WHERE R.rso_id=new.rso_id;
+    END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `deactivate_rso` AFTER DELETE ON `rso_joins` FOR EACH ROW BEGIN
+    IF (5 > (SELECT COUNT(*) FROM rso_joins J WHERE J.rso_id=old.rso_id))
+    THEN
+        UPDATE rsos R SET active=0 WHERE R.rso_id=old.rso_id;
+    END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Table structure for table `rsos`
@@ -323,6 +363,7 @@ CREATE TABLE `rsos` (
   `university_id` int NOT NULL,
   `rso_name` varchar(256) NOT NULL,
   `admin_id` int NOT NULL,
+  `active` bit(1) NOT NULL,
   PRIMARY KEY (`rso_id`),
   KEY `admin_id` (`admin_id`),
   KEY `rsos_ibfk_2` (`university_id`),
@@ -414,4 +455,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-04 19:29:44
+-- Dump completed on 2025-04-05  1:00:21

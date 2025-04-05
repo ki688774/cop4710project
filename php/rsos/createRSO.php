@@ -32,7 +32,7 @@
     }
 
     // Add RSO.
-    $stmt = $conn->prepare("INSERT INTO rsos (university_id, rso_name, admin_id) VALUES (?,?,?)");
+    $stmt = $conn->prepare("INSERT INTO rsos (university_id, rso_name, admin_id, active) VALUES (?,?,?,0)");
     $stmt->bind_param("iii", $universityID, $rsoName, $currentUser);
 
     if (!attemptExecute($stmt, $conn))
