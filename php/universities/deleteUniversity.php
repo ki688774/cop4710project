@@ -31,6 +31,18 @@
         return;
     }
 
+    // Check if the super-admin is also an admin of an RSO.
+    $stmt = $conn->prepare("SELECT * FROM rsos WHERE admin_id=?");
+    $stmt->bind_param("i", $currentUser);
+
+    if (!attemptExecute($stmt, $conn))
+        return;
+
+    if ($stmt->get_result()->fetch_assoc()) {
+        returnErrorAndClose("You cannot delete your account as the admin of an RSO.", $stmt, $conn);
+        return;
+    }
+
 
 
     // Set the super-admin's university domain to null.

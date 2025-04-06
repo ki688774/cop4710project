@@ -73,7 +73,7 @@
             return;
 
         if ($stmt->get_result()->fetch_assoc()) {
-            returnErrorAndClose("Attempted to change universities as the super-admin of the old university.", $stmt, $conn);
+            returnErrorAndClose("You cannot change universities as the super-admin of the old university.", $stmt, $conn);
             return;
         }
 
@@ -84,7 +84,7 @@
             return;
 
         if ($stmt->get_result()->fetch_assoc()) {
-            returnErrorAndClose("Attempted to change universities while still owning an RSO.", $stmt, $conn);
+            returnErrorAndClose("You cannot change universities while still owning an RSO.", $stmt, $conn);
             return;
         }
     }

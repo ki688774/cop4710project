@@ -380,6 +380,28 @@ LOCK TABLES `rsos` WRITE;
 /*!40000 ALTER TABLE `rsos` DISABLE KEYS */;
 /*!40000 ALTER TABLE `rsos` ENABLE KEYS */;
 UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = cp850 */ ;
+/*!50003 SET character_set_results = cp850 */ ;
+/*!50003 SET collation_connection  = cp850_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `delete_rso_locations` BEFORE DELETE ON `rsos` FOR EACH ROW DELETE FROM locations L WHERE ( EXISTS (
+SELECT *
+FROM events E, private_events P, rso_events R
+WHERE L.location_id = E.location_id 
+AND ((E.event_id = R.event_id AND R.rso_id = old.rso_id) 
+OR (E.event_id = P.event_id AND P.rso_id = old.rso_id))
+)
+) */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Table structure for table `universities`
@@ -455,4 +477,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-05 14:51:30
+-- Dump completed on 2025-04-06 17:56:44

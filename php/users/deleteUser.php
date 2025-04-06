@@ -10,6 +10,7 @@
         return;
 
 
+
     // Check if user exists
     $stmt = $conn->prepare("SELECT * FROM users WHERE uid=?");
     $stmt->bind_param("i", $currentUser);
@@ -17,11 +18,35 @@
     if (!attemptExecute($stmt, $conn))
         return;
 
-    if (!$stmt->get_result()->fetch_assoc()) {
+    $oldUserData = $stmt->get_result()->fetch_assoc();
+
+    if (!$oldUserData) {
         returnErrorAndClose("User not found.", $stmt, $conn);
         return;
     }
 
+    // Check if user is an admin or super-admin.
+    $stmt = $conn->prepare("SELECT * FROM universities WHERE super_admin_id=? AND university_id=?");
+    $stmt->bind_param("ii", $currentUser, $oldUserData["university_id"]);
+
+    if (!attemptExecute($stmt, $conn))
+        return;
+
+    if ($stmt->get_result()->fetch_assoc()) {
+        returnErrorAndClose("You cannot delete your account as the super-admin of the old university without also deleting your university.", $stmt, $conn);
+        return;
+    }
+
+    $stmt = $conn->prepare("SELECT * FROM rsos WHERE admin_id=?");
+    $stmt->bind_param("i", $currentUser);
+
+    if (!attemptExecute($stmt, $conn))
+        return;
+
+    if ($stmt->get_result()->fetch_assoc()) {
+        returnErrorAndClose("You cannot delete your account as the admin of an RSO.", $stmt, $conn);
+        return;
+    }
 
 
     // Delete user
