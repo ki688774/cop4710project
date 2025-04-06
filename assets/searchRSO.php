@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
+        <title>SearchRSOs</title>
     </head>
     <header>
         <!-- INCLUDE FOR HEADER.PHP SHOULD GO HERE-->
@@ -13,7 +13,7 @@
     <body>
         <div class="search-container">
             <h2>Search</h2>
-            <form action="" method="get">
+            <form action="../php/rsos/searchJoinableRSOs.php" method="get">
                 <input type="text" name="q" class="search-input" placeholder="Enter your search" required>
                 <br>
                 <button type="submit" class="search-button">Search</button>

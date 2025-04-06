@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up Page</title>
+    <title>Sign Up</title>
 </head>
 
 <header>
@@ -15,9 +15,13 @@
 
 <body>
     <body>
-        <form action="../php/users/register.php" method="POST" enctype="multipart/form-data"></form>
+        <!-- <form action="../php/users/register.php" method="POST" enctype="multipart/form-data"></form> -->
         <!-- Below form action is for checking the input --> 
         <!-- <form action="process-signup.php" method="POST"> -->
+        <?php if(isset($_GET['error'])) { ?>
+                <p> class="error"> <?php echo $_GET['error']; ?></p>
+                <?php } ?>
+        <form action="../php/users/register.php" method="POST"></form>
             <p>
                 <label for="firstName">Firstname:</label>    
                 <input type="text" name="firstName" id="firstName" required>
