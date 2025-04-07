@@ -5,3 +5,16 @@
 #successModal {
     display: none;
 }
+
+h1 {
+    text-align: center;
+}
+
+#registerForm {
+    position: absolute;
+    top: 10%;
+    left: 40%;
+    right: 40%;
+    transform: translate(0%, 0%);
+}
+
