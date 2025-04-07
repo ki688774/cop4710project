@@ -12,7 +12,12 @@
         <?php include 'header.php';?>
     </header>
     <body>
+        <form action="../php/rsos/createRSO.php" method="POST" enctype="multipart/form-data">
+
+
+
         
+        </form>
     </body>
 
     <footer><?php include 'footer.php';?></footer>

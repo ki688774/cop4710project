@@ -1,6 +1,8 @@
 <?php
+    
     $inData = json_decode(file_get_contents('php://input'), true);
     require __DIR__ . '/../global.php';
+    
 
     // Proccess input and pre-hash password
     $firstName = $inData["firstName"] ?? null;
@@ -8,9 +10,15 @@
     $email = strtolower($inData["email"]) ?? null;
     $username = $inData["username"] ?? null;
     $password = $inData["password"] ?? null;
-
-    if (!$firstName || !$lastName || !$username || !$password) {
+    $password_confirmation = $inData["password_confirmation"] ?? null;
+    
+    if (!$firstName || !$lastName || !$username || !$password || !$password_confirmation) {
         returnError("All fields must be filled.");
+        return;
+    }
+
+    if($inData["password"] !== $inData["password_confirmation"]) {
+        returnError("Passwords must match.");
         return;
     }
 
