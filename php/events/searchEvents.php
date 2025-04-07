@@ -5,6 +5,8 @@
     // Proccess input
     $currentUser = $inData["current_user"] ?? null;
     $searchTerm = "%" . $inData["search"] . "%";
+    $minRating = $inData["minimum_rating"] ?? 0;
+    $maxRating = $inData["maximum_rating"] ?? 5;
     $minTime = $inData["minimum_time"] ?? "1000-01-01 00:00:00";
     $maxTime = $inData["maximum_time"] ?? "9999-12-31 23:59:59";
 
@@ -29,11 +31,12 @@
     $universityID = $stmt->get_result()->fetch_assoc()["university_id"];
 
     // Search events that are still occurring between $minTime and $maxTime that the user has access to.
-    $stmt = $conn->prepare("SELECT * FROM events E WHERE event_name LIKE ? AND (NOT ((start_time < ? AND end_time < ?) OR (start_time > ? AND end_time > ?))) AND (
+    $stmt = $conn->prepare("SELECT * FROM events E WHERE event_name LIKE ? AND (total_rating>=? OR (total_rating IS NULL AND ?=0)) AND (total_rating>=? OR (total_rating IS NULL AND ?=0)) AND (NOT ((start_time < ? AND end_time < ?) OR (start_time > ? AND end_time > ?))) AND (
 	    EXISTS (SELECT * FROM public_events P WHERE P.event_id=E.event_id) OR
 	    EXISTS (SELECT * FROM private_events P WHERE P.event_id=E.event_id AND university_id=?) OR
 	    EXISTS (SELECT * FROM rso_events R WHERE R.event_id=E.event_id AND EXISTS (SELECT * FROM rso_joins J WHERE R.rso_id=J.rso_id AND J.uid=?)))");
-    $stmt->bind_param("sssssii", $searchTerm, $minTime, $minTime, $maxTime, $maxTime, $universityID, $currentUser);
+    $stmt->bind_param("siiiissssii", $searchTerm, $minRating, $minRating, $maxRating, $minRating, $minTime, $minTime, $maxTime, $maxTime, $universityID, $currentUser);
+    
 
     if (!attemptExecute($stmt, $conn))
         return;

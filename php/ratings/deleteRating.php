@@ -4,9 +4,9 @@
 
     // Proccess input
     $currentUser = $inData["current_user"] ?? null;
-    $commentID = $inData["comment_id"] ?? null;
+    $eventID = $inData["event_id"] ?? null;
 
-    if (!$currentUser || !$commentID) {
+    if (!$currentUser || !$eventID) {
         returnError("All fields must be filled.");
         return;
     }
@@ -17,23 +17,23 @@
 
 
 
-    // Check if that comment exists.
-    $stmt = $conn->prepare("SELECT * FROM comments WHERE uid=? AND comment_id=?");
-    $stmt->bind_param("ii", $currentUser, $commentID);
+    // Check if the rating exists.
+    $stmt = $conn->prepare("SELECT * FROM ratings WHERE uid=? AND event_id=?");
+    $stmt->bind_param("ii", $currentUser, $eventID);
 
     if (!attemptExecute($stmt, $conn))
         return;
 
     if (!$stmt->get_result()->fetch_assoc()) {
-        returnErrorAndClose("Comment not found.");
+        returnError("Rating not found.");
         return;
     }
 
 
 
-    // Delete the comment.
-    $stmt = $conn->prepare("DELETE FROM comments WHERE comment_id=?");
-    $stmt->bind_param("i", $commentID);
+    // Delete the rating.
+    $stmt = $conn->prepare("DELETE FROM ratings WHERE uid=? AND event_id=?");
+    $stmt->bind_param("ii", $currentUser, $eventID);
 
     if (!attemptExecute($stmt, $conn))
         return;
@@ -41,7 +41,7 @@
 
 
     // Return successful result
-    $result = '{"result": "Comment deleted successfully."}';
+    $result = '{"result": "Rating deleted successfully."}';
     returnObject($result);
     return;
 ?>

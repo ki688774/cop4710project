@@ -4,12 +4,16 @@
 
     // Proccess input
     $currentUser = $inData["current_user"] ?? null;
-    $minTime = $inData["minimum_time"] ?? "1000-01-01 00:00:00";
-    $maxTime = $inData["maximum_time"] ?? "9999-12-31 23:59:59";
     $eventID = $inData["event_id"] ?? null;
+    $rating = $inData["rating"] ?? null;
 
-    if (!$currentUser || !$eventID) {
-        returnError("All critical fields must be filled.");
+    if (!$currentUser || !$eventID || !$rating) {
+        returnError("All fields must be filled.");
+        return;
+    }
+
+    if ($rating < 1 || $rating > 5) {
+        returnError("Rating must be between 1 and 5.");
         return;
     }
 
@@ -27,7 +31,7 @@
         return;
 
     $universityID = $stmt->get_result()->fetch_assoc()["university_id"];
-
+    
     if (!$universityID) {
         returnError("User not found.");
         return;
@@ -50,21 +54,34 @@
 
 
 
-    // Search for comments.
-    $stmt = $conn->prepare("SELECT * FROM comments WHERE event_id=? AND timestamp>=? AND timestamp<=?");
-    $stmt->bind_param("iss", $eventID, $minTime, $maxTime);
+    $stmt = $conn->prepare("SELECT * FROM ratings WHERE uid=? AND event_id=?");
+    $stmt->bind_param("ii", $currentUser, $eventID);
 
     if (!attemptExecute($stmt, $conn))
         return;
 
-    assembleJsonArrayFromQuery($stmt, $conn, $rows);
-    
-    
-    
-    // Return comments as result
-    $result = '{"result": ' . $rows . '}';
+    if ($stmt->get_result()->fetch_assoc()) {
+        // Edit the rating.
+        $stmt = $conn->prepare("UPDATE ratings SET rating=? WHERE uid=? AND event_id=?");
+        $stmt->bind_param("iii", $rating, $currentUser, $eventID);
+
+        if (!attemptExecute($stmt, $conn))
+            return;
+
+    } else {
+        // Add the rating.
+        $stmt = $conn->prepare("INSERT INTO ratings (uid, event_id, rating) VALUES (?,?,?)");
+        $stmt->bind_param("iii", $currentUser, $eventID, $rating);
+
+        if (!attemptExecute($stmt, $conn))
+            return;
+
+    }
+
+
+
+    // Return successful result
+    $result = '{"result": "Rating added successfully."}';
     returnObject($result);
-    $stmt->close();
-    $conn->close();
     return;
 ?>

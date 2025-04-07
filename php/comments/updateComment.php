@@ -4,17 +4,12 @@
 
     // Proccess input
     $currentUser = $inData["current_user"] ?? null;
+    $commentID = $inData["comment_id"] ?? null;
     $eventID = $inData["event_id"] ?? null;
-    $rating = $inData["rating"] ?? null;
     $text = $inData["text"] ?? null;
 
-    if (!$currentUser || !$eventID || !$rating) {
+    if (!$currentUser || !$eventID || !$commentID || !$text) {
         returnError("All fields must be filled.");
-        return;
-    }
-
-    if ($rating < 1 || $rating > 5) {
-        returnError("Rating must be from 1 to 5.");
         return;
     }
 
@@ -23,22 +18,23 @@
         return;
 
 
-    // Check if the user has already made a comment.
-    $stmt = $conn->prepare("SELECT * FROM comments WHERE uid=? AND event_id=?");
-    $stmt->bind_param("ii", $currentUser, $eventID);
+    // Check if the user has already made a comment with that ID.
+    $stmt = $conn->prepare("SELECT * FROM comments WHERE uid=? AND event_id=? AND comment_id=?");
+    $stmt->bind_param("iii", $currentUser, $eventID, $commentID);
+
     if (!attemptExecute($stmt, $conn))
         return;
 
     if (!$stmt->get_result()->fetch_assoc()) {
-        returnErrorAndClose("You have not already left a comment.");
+        returnErrorAndClose("Comment not found.");
         return;
     }
 
 
 
     // Update the comment.
-    $stmt = $conn->prepare("UPDATE comments SET text=?, rating=?, timestamp=? WHERE uid=? AND event_id=?");
-    $stmt->bind_param("sisii", $text, $rating, date("Y-m-d H:i:s"), $currentUser, $eventID);
+    $stmt = $conn->prepare("UPDATE comments SET text=?, timestamp=? WHERE comment_id=?");
+    $stmt->bind_param("ssi", $text, date("Y-m-d H:i:s"), $commentID);
 
     if (!attemptExecute($stmt, $conn))
         return;
