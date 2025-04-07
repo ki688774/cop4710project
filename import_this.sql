@@ -455,7 +455,7 @@ CREATE TABLE `users` (
   UNIQUE KEY `email` (`email`),
   KEY `users_ibfk_1` (`university_id`),
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`university_id`) REFERENCES `universities` (`university_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -464,7 +464,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,1,'Rudolph','Reindeer','rednose@northpole.org','RedNose1939','$2y$10$DP.R71h2M7O6NJ/M/foMjOU2gWu837wdvkx5MPOHz4kDd0uCzg1ua'),(2,1,'Prancer','Reindeer','prancer@northpole.org','xXPrancerXx','$2y$10$2jSW1yPWAMi4mTsmnv12keBqcTjg6W.e0v.sGYgAxY95IQjWsF.4G'),(4,1,'Donner','Reindeer','donner@northpole.org','KingCaribou','$2y$10$qHMYrANcpdUmicI3RFXpT.VckOmSb/vw5FWfgGI7tMLJFnw/GXntK'),(6,2,'Krampus','Goat','krampus@coal.org','CoalBringer','$2y$10$gjeBqspfJuLnv9afK13l0.sg.a1CvMijP0Uge5hA73lsTkCCTdGG6'),(7,2,'Yule','Cat','yuleeee@coal.org','ClothesCat','$2y$10$8gPK52VVVJnqGMbBG8ybHOMHJSLHjArHAFOwElGrfwWzpBUsdMrG2');
+INSERT INTO `users` VALUES (1,1,'Rudolph','Reindeer','rednose@northpole.org','RedNose1939','$2y$10$DP.R71h2M7O6NJ/M/foMjOU2gWu837wdvkx5MPOHz4kDd0uCzg1ua'),(2,1,'Prancer','Reindeer','prancer@northpole.org','xXPrancerXx','$2y$10$2jSW1yPWAMi4mTsmnv12keBqcTjg6W.e0v.sGYgAxY95IQjWsF.4G'),(4,1,'Donner','Reindeer','donner@northpole.org','KingCaribou','$2y$10$qHMYrANcpdUmicI3RFXpT.VckOmSb/vw5FWfgGI7tMLJFnw/GXntK'),(6,2,'Krampus','Goat','krampus@coal.org','CoalBringer','$2y$10$gjeBqspfJuLnv9afK13l0.sg.a1CvMijP0Uge5hA73lsTkCCTdGG6'),(7,2,'Yule','Cat','yuleeee@coal.org','ClothesCat','$2y$10$8gPK52VVVJnqGMbBG8ybHOMHJSLHjArHAFOwElGrfwWzpBUsdMrG2'),(10,1,'Blitzen','Reindeer','blitzen@northpole.org','blitzzzzz','$2y$10$lRxd5J0QMvYqA5ouhM4eS.TW5HtXffZciiIzFu28BXE5TNb95kk4e'),(11,1,'Cupid','Reindeer','cupid@northpole.org','TwelveTwentyfive','$2y$10$tz9S6yRz8FCsdjhEVvx9weITDJhZrPC7EgkRLLnLV1mcRBuMW7cZG'),(12,1,'Vixen','Reindeer','vixen@northpole.org','0u7f0x3d','$2y$10$w4CfBXXrX/MlH1nGtlfk.u21Al6yub3Y87D59GSO3diFKGRzI9C42');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -477,4 +477,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-06 17:56:44
+-- Dump completed on 2025-04-07  0:37:02
