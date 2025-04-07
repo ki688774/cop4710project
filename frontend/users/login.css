@@ -1,0 +1,19 @@
+#errorModal {
+    display: none;
+}
+
+#successModal {
+    display: none;
+}
+
+h1 {
+    text-align: center;
+}
+
+#loginForm {
+    position: absolute;
+    top: 20%;
+    left: 40%;
+    right: 40%;
+    transform: translate(0%, 0%);
+}
