@@ -4,11 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Homepage</title>
+    <link rel="stylesheet" href="./styles.css">
 </head>
 <header>
-    <!-- INCLUDE FOR HEADER.PHP SHOULD GO HERE-->
-    <!-- SHOULD ALSO INCLUDE THE EXTRA NEEDED BUTTONS FOR JOINING AN RSO ETC-->
     <?php include 'templates/header.php';?>
 </header>
 
