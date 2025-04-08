@@ -43,7 +43,6 @@ document.getElementById("errorClose").onclick = function () {
 
 document.getElementById("successClose").onclick = function () {
     successModal.style.display = "none";
-    // code to redirect to homepage.html goes here
 }
 function summonErrorModal (errorString) {
     errorText.innerText = errorString;
@@ -53,4 +52,6 @@ function summonErrorModal (errorString) {
 function summonSuccessModal (successString) {
     successText.innerText = successString;
     successModal.style.display = "block";
+    // code for redirection goes here!
+    window.location.assign("../homepage.php");
 }

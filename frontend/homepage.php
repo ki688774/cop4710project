@@ -9,7 +9,7 @@
 <header>
     <!-- INCLUDE FOR HEADER.PHP SHOULD GO HERE-->
     <!-- SHOULD ALSO INCLUDE THE EXTRA NEEDED BUTTONS FOR JOINING AN RSO ETC-->
-    <?php include 'header.php';?>
+    <?php include 'templates/header.php';?>
 </header>
 
 
@@ -28,7 +28,9 @@
     </div>
 </body>
 
-<?php include 'footer.php';?>
+<footer id="footer">
+    <?php include 'templates/footer.php';?>
+</footer>
 
 </html>
 
