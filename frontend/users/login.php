@@ -22,9 +22,8 @@
         <input type="submit" value="Login">
     </form>
 
-    <?php include '../templates/errorModal.php';?>
-
     <script src="login.js"></script>
+    <?php include '../templates/errorModal.php';?>
 </body>
 
 <footer id="footer">

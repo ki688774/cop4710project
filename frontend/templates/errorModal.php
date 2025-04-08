@@ -22,6 +22,9 @@
 </style>
 
 <script>
+    let errorModal = document.getElementById("errorModal");
+    let errorText = document.getElementById("errorText");
+    
     document.getElementById("errorClose").onclick = function () {
         errorModal.style.display = "none";
     }

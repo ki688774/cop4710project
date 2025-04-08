@@ -17,12 +17,7 @@
     <a href="">Sign Out</a>
   </div>
 </div>
-
 </html>
-
-<script>
-  
-</script>
 
 <style>
   /* Style the header with a grey background and some padding */

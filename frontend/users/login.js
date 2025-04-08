@@ -1,7 +1,4 @@
-let errorModal = document.getElementById("errorModal");
-let errorText = document.getElementById("errorText");
-let successModal = document.getElementById("successModal");
-let successText = document.getElementById("successText");
+import {saveCookie} from '../templates/cookieFunctions.js';
 
 document.getElementById("loginForm").addEventListener("submit", async function (event) {
     event.preventDefault();
@@ -32,6 +29,6 @@ document.getElementById("loginForm").addEventListener("submit", async function (
         return;
     }
 
-    document.cookie = "current_user=" + returnedData.result + ";"
+    saveCookie("userData", returnedData.result);
     window.location.assign("../homepage.php");
 });

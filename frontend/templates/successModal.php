@@ -22,6 +22,9 @@
 </style>
 
 <script>
+    let successModal = document.getElementById("successModal");
+    let successText = document.getElementById("successText");
+
     document.getElementById("successClose").onclick = function () {
         successModal.style.display = "none";
     }
