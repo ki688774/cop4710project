@@ -9,7 +9,7 @@ document.getElementById("createRSO").addEventListener("submit", async function (
     let rsoName = document.getElementById("rsoName").value;
     
     try {
-        returnedResponse = await fetch("./../../php/users/createRSO.php", {
+        returnedResponse = await fetch("../../../php/users/createRSO.php", {
             method: "POST",
             headers: {
                 "content-type": "application/json"
