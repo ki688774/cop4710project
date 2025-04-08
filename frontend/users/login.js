@@ -13,7 +13,7 @@ document.getElementById("loginForm").addEventListener("submit", async function (
     let returnedResponse = null;
 
     try {
-        returnedResponse = await fetch("./../../php/users/login.php", {
+        returnedResponse = await fetch("../../php/users/login.php", {
             method: "POST",
             headers: {
                 "content-type": "application/json"
@@ -32,26 +32,6 @@ document.getElementById("loginForm").addEventListener("submit", async function (
         return;
     }
 
-
-    summonSuccessModal(returnedData.result);
-    
-})
-
-document.getElementById("errorClose").onclick = function () {
-    errorModal.style.display = "none";
-}
-
-document.getElementById("successClose").onclick = function () {
-    successModal.style.display = "none";
-}
-function summonErrorModal (errorString) {
-    errorText.innerText = errorString;
-    errorModal.style.display = "block";
-}
-
-function summonSuccessModal (successString) {
-    successText.innerText = successString;
-    successModal.style.display = "block";
-    // code for redirection goes here!
+    document.cookie = "current_user=" + returnedData.result + ";"
     window.location.assign("../homepage.php");
-}
+});

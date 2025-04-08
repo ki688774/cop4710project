@@ -32,29 +32,8 @@
         <input type="submit" value="Register">
     </form>
 
-    <div id="errorModal" class="modal">        
-        <div class="modal-content">
-            <div class="modal-header">
-                <span id="errorClose" class="close">&times;</span>
-                <h2>Error</h2>
-            </div>
-            <div id="errorText" class="modal-body">
-                <p>This text gets overwritten anyhow.</p>
-            </div>
-        </div>
-    </div>
-
-    <div id="successModal" class="modal">        
-        <div class="modal-content">
-            <div class="modal-header">
-                <span id="successClose" class="close">&times;</span>
-                <h2>Success!</h2>
-            </div>
-            <div id="successText" class="modal-body">
-                <p>This text gets overwritten anyhow.</p>
-            </div>
-        </div>
-    </div>
+    <?php include '../templates/errorModal.php';?>
+    <?php include '../templates/successModal.php';?>
     
 <footer id="footer">
     <?php include '../templates/footer.php';?>

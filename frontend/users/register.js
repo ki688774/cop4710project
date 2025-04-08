@@ -22,7 +22,7 @@ document.getElementById("registerForm").addEventListener("submit", async functio
     let returnedResponse = null;
 
     try {
-        returnedResponse = await fetch("./../../php/users/register.php", {
+        returnedResponse = await fetch("../../php/users/register.php", {
             method: "POST",
             headers: {
                 "content-type": "application/json"
@@ -43,30 +43,4 @@ document.getElementById("registerForm").addEventListener("submit", async functio
 
 
     summonSuccessModal(returnedData.result);
-    
-
-    
-
-
-
-
-})
-
-document.getElementById("errorClose").onclick = function () {
-    errorModal.style.display = "none";
-}
-
-document.getElementById("successClose").onclick = function () {
-    successModal.style.display = "none";
-    // code to redirect to login.html goes here, i think
-}
-
-function summonErrorModal (errorString) {
-    errorText.innerText = errorString;
-    errorModal.style.display = "block";
-}
-
-function summonSuccessModal (successString) {
-    successText.innerText = successString;
-    successModal.style.display = "block";
-}
+});

@@ -1,20 +1,11 @@
-#errorModal {
-    display: none;
-}
-
-#successModal {
-    display: none;
-}
-
 h1 {
     text-align: center;
 }
 
 #registerForm {
     position: absolute;
-    top: 10%;
+    top: 15%;
     left: 40%;
     right: 40%;
     transform: translate(0%, 0%);
 }
-
