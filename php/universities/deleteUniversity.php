@@ -59,13 +59,6 @@
     if (!attemptExecute($stmt, $conn))
         return;
 
-    // Delete the location.
-    $stmt = $conn->prepare("DELETE FROM locations WHERE location_id=?");
-    $stmt->bind_param("i", $targetRow["location_id"]);
-
-    if (!attemptExecute($stmt, $conn))
-        return;
-
 
     // Delete the former super-admin.
     $stmt = $conn->prepare("DELETE FROM users WHERE uid=?");

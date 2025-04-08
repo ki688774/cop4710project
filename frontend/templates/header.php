@@ -4,19 +4,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CalendarHomepage</title>
+  <title>Event Manager Header</title>
 </head>
 
 <html>
 <div class="header">
-  <a href="#default" class="logo">CompanyLogo</a>
+  <a href="#default" id="mainPage" class="logo">Event Manager</a>
   <div class="header-right">
-    <a href="homepage.php">Home</a>
+    <a href="homepage.php">Events</a>
+    <a href="">RSOs</a>
+    <a href="">Settings</a>
     <a href="">Sign Out</a>
   </div>
 </div>
 
 </html>
+
+<script>
+  
+</script>
 
 <style>
   /* Style the header with a grey background and some padding */
@@ -33,9 +39,14 @@
     text-align: center;
     padding: 12px;
     text-decoration: none;
+    display: none;
     font-size: 18px;
     line-height: 25px;
     border-radius: 4px;
+  }
+
+  #mainPage {
+    display: block;
   }
 
   /* Style the logo link (notice that we set the same value of line-height and font-size to prevent the header to increase when the font gets bigger */

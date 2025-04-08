@@ -54,6 +54,8 @@
 
 
 
+    $conn->begin_transaction();
+
     if (!createLocation($locationName, $address, $longitude, $latitude, $stmt, $conn))
         return;
 
@@ -72,6 +74,8 @@
 
     if (!attemptExecute($stmt, $conn))
         return;
+
+    $conn->commit();
 
 
 

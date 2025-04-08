@@ -4,6 +4,7 @@
 
     // Proccess input
     $currentUser = $inData["current_user"] ?? null;
+    $password = $inData["password"] ?? null;
 
     // Create and check connection
     if (!attemptConnect($conn))
@@ -20,8 +21,8 @@
 
     $oldUserData = $stmt->get_result()->fetch_assoc();
 
-    if (!$oldUserData) {
-        returnErrorAndClose("User not found.", $stmt, $conn);
+    if (!$oldUserData || !password_verify($password, $oldUserData["password"])) {
+        returnErrorAndClose("Old password was incorrect.", $stmt, $conn);
         return;
     }
 

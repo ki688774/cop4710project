@@ -82,6 +82,9 @@
     }
 
 
+
+    $conn->begin_transaction();
+
     // Create location
     if (!createLocation($locationName, $address, $longitude, $latitude, $stmt, $conn))
         return;
@@ -112,6 +115,8 @@
 
     if (!attemptExecute($stmt, $conn))
         return;
+
+    $conn->commit();
 
 
 

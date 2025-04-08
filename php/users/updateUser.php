@@ -2,15 +2,14 @@
     $inData = json_decode(file_get_contents('php://input'), true);
     require __DIR__ . '/../global.php';
 
-    // Proccess input and pre-hash password
+    // Proccess input
     $currentUser = $inData["current_user"] ?? null;
     $firstName = $inData["firstName"] ?? null;
     $lastName = $inData["lastName"] ?? null;
     $email = strtolower($inData["email"]) ?? null;
     $username = $inData["username"] ?? null;
-    $password = $inData["password"] ?? null;
 
-    if (!$firstName || !$lastName || !$username || !$password) {
+    if (!$firstName || !$lastName || !$username) {
         returnError("All fields must be filled.");
         return;
     }
@@ -20,7 +19,6 @@
         return;
     }
 
-    $hashedPass = password_hash($password, PASSWORD_DEFAULT);
     $emailDomain = explode("@", $email, "2")[1];
 
     // Create and check connection
@@ -42,8 +40,6 @@
         returnErrorAndClose("New user's email domain has no associated university.", $stmt, $conn);
         return;
     }
-
-
 
     // Prepare, bind and execute
     $stmt = $conn->prepare("SELECT * FROM users WHERE uid=?");
@@ -89,19 +85,18 @@
         }
     }
 
+    
 
 
     // Update user
-    $stmt = $conn->prepare("UPDATE users SET university_id=?, firstName=?, lastName=?, email=?, username=?, password=? WHERE uid=?");
-    $stmt->bind_param("isssssi", $universityRow["university_id"], $firstName, $lastName, $email, $username, $hashedPass, $currentUser);
+    $stmt = $conn->prepare("UPDATE users SET university_id=?, firstName=?, lastName=?, email=?, username=? WHERE uid=?");
+    $stmt->bind_param("issssi", $universityRow["university_id"], $firstName, $lastName, $email, $username, $currentUser);
 
     if (!attemptExecute($stmt, $conn))
         return;
 
-
-
     // Return successful result
-    $result = '{"result": "User updated successfully."}';
+    $result = '{"result": {"uid":' . $currentUser . ',"firstName":"' . $firstName . '","lastName":"' . $lastName . '","email":"' . $email . '","username":"' . $username . '"} }';
     returnObject($result);
     return;
 ?>

@@ -33,6 +33,8 @@
         return;
     }
 
+    
+
     // Create and check connection
     if (!attemptConnect($conn))
         return;
@@ -55,10 +57,17 @@
 
 
 
+    $conn->begin_transaction();
+
     if (!createLocation($locationName, $address, $longitude, $latitude, $stmt, $conn))
         return;
 
     $locationID = $conn->insert_id;
+
+    $conn->rollback();
+
+    returnErrorAndClose("Attempted to buy lamp oil with insufficient rubies.", $stmt, $conn);
+        return;
 
     // Create the event in the events table and add its reference to the public_events table.
     $stmt = $conn->prepare("INSERT INTO events (start_time, end_time, event_name, event_description, contact_phone, contact_email, location_id) VALUES (?,?,?,?,?,?,?)");
@@ -73,6 +82,8 @@
 
     if (!attemptExecute($stmt, $conn))
         return;
+
+    $conn->commit();
 
 
 
