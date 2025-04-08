@@ -22,7 +22,7 @@
         <input type="submit" value="Login">
     </form>
 
-    <script src="login.js"></script>
+    <script type="module" src="login.js"></script>
     <?php include '../templates/errorModal.php';?>
 </body>
 

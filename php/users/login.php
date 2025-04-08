@@ -35,7 +35,7 @@
     array_splice($loginRow, 1, 1);
 
     // Return successful result
-    $result = '{"result": {' . json_encode($loginRow) . '}}';
+    $result = '{"result":' . json_encode($loginRow) . '}';
     returnObject($result);
     return;
 ?>
