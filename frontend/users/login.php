@@ -7,7 +7,7 @@
 </head>
 
 <header>
-    <?php include '../../assets/header.php';?>
+    <?php include '../templates/header.php';?>
 </header>
 
 <body>
@@ -52,7 +52,7 @@
 </body>
 
 <footer id="footer">
-    <?php include '../../assets/footer.php';?>
+    <?php include '../templates/footer.php';?>
 </footer>
 
 </html>

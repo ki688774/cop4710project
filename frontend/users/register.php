@@ -3,7 +3,11 @@
 <head>
     <title>Registration Page</title>
     <link rel="stylesheet" href="./register.css">
+    <link rel="stylesheet" href="./styles.css">
 </head>
+<header>
+    <?php include '../templates/header.php';?>
+</header>
 <body>
     <h1>Register Account</h1>
     <form id="registerForm">
@@ -51,6 +55,10 @@
             </div>
         </div>
     </div>
+    
+<footer id="footer">
+    <?php include '../templates/footer.php';?>
+</footer>
 
     <script src="register.js"></script>
 </body>
