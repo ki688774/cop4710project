@@ -11,13 +11,35 @@
 <div class="header">
   <a href="#default" id="mainPage" class="logo">Event Manager</a>
   <div class="header-right">
-    <a href="homepage.php">Events</a>
+    <a href="">Events</a>
     <a href="">RSOs</a>
     <a href="">Settings</a>
-    <a href="">Sign Out</a>
+    <a href="" id="signOut">Sign Out</a>
+    <a href="../users/login.php" id="login">Log In</a>
+    <a href="../users/register.php" id="register">Register</a>
   </div>
 </div>
 </html>
+
+<script type="module">
+  import {getCookie, deleteCookie} from '../templates/cookieFunctions.js';
+
+  let userData = getCookie("userData");
+  if (userData != "" && JSON.parse(userData).uid != null) {
+    let login = document.getElementById("login");
+    let register = document.getElementById("register");
+    document.querySelectorAll(".header a").forEach(a=>a.style.display = "block");
+    login.style.display = "none";
+    register.style.display = "none";
+  }
+
+  document.getElementById("signOut").addEventListener("click", async function (event) {
+    event.preventDefault();
+    deleteCookie("userData");
+    window.location.assign("../users/login.php");
+  });
+
+</script>
 
 <style>
   /* Style the header with a grey background and some padding */
@@ -38,6 +60,14 @@
     font-size: 18px;
     line-height: 25px;
     border-radius: 4px;
+  }
+
+  #register {
+    display:block;
+  }
+
+  #login {
+    display:block;
   }
 
   #mainPage {
@@ -72,7 +102,6 @@
   @media screen and (max-width: 500px) {
     .header a {
       float: none;
-      display: block;
       text-align: left;
     }
 

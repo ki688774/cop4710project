@@ -3,7 +3,7 @@
 <head>
     <title>Registration Page</title>
     <link rel="stylesheet" href="./register.css">
-    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="../templates/styles.css">
 </head>
 <header>
     <?php include '../templates/header.php';?>

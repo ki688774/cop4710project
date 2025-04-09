@@ -5,10 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Homepage</title>
-    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="../templates/styles.css">
 </head>
+
 <header>
-    <?php include 'templates/header.php';?>
+    <?php include '../templates/header.php';?>
 </header>
 
 
@@ -28,7 +29,7 @@
 </body>
 
 <footer id="footer">
-    <?php include 'templates/footer.php';?>
+    <?php include '../templates/footer.php';?>
 </footer>
 
 </html>

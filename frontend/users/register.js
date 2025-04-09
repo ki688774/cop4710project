@@ -36,7 +36,7 @@ document.getElementById("registerForm").addEventListener("submit", async functio
 
     let returnedData = await returnedResponse.json();
 
-    if (typeof returnedData.error !== 'undefined') {
+    if (typeof returnedData.result === 'undefined') {
         summonErrorModal(returnedData.error);
         return;
     }

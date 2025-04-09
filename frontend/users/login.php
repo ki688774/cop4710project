@@ -3,7 +3,7 @@
 <head>
     <title>Login Page</title>
     <link rel="stylesheet" href="./login.css">
-    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="../templates/styles.css">
 </head>
 
 <header>

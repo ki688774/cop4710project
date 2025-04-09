@@ -24,11 +24,11 @@ document.getElementById("loginForm").addEventListener("submit", async function (
 
     let returnedData = await returnedResponse.json();
 
-    if (typeof returnedData.error !== 'undefined') {
+    if (typeof returnedData.result === 'undefined') {
         summonErrorModal(returnedData.error);
         return;
     }
 
     saveCookie("userData", JSON.stringify(returnedData.result));
-    window.location.assign("../homepage.php");
+    window.location.assign("../events/homepage.php");
 });
