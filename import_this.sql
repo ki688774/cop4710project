@@ -99,8 +99,8 @@ DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `StopOverlappingTimes` BEFORE INSERT ON `events` FOR EACH ROW begin
 if (exists (
 select *
-from events E2
-where new.location_id=E2.location_id AND ((new.start_time >= E2.start_time AND new.start_time <= E2.end_time) OR (new.end_time >= E2.start_time AND new.end_time <= E2.end_time)))) then
+from events E2, locations L1, locations L2
+where new.location_id=L1.location_id AND E2.location_id=L2.location_id AND L1.longitude=L2.longitude AND L2.latitude=L2.latitude AND ((new.start_time >= E2.start_time AND new.start_time <= E2.end_time) OR (new.end_time >= E2.start_time AND new.end_time <= E2.end_time)))) then
 SIGNAL SQLSTATE '45000'
 SET MESSAGE_TEXT = 'New event overlapped with another event at the same location.';
 end if;
@@ -137,8 +137,8 @@ CREATE TABLE `locations` (
   `location_id` int NOT NULL AUTO_INCREMENT,
   `location_name` varchar(256) NOT NULL,
   `address` varchar(256) NOT NULL,
-  `longitude` decimal(9,6) NOT NULL,
-  `latitude` decimal(8,6) NOT NULL,
+  `longitude` decimal(11,8) NOT NULL,
+  `latitude` decimal(10,8) NOT NULL,
   PRIMARY KEY (`location_id`),
   CONSTRAINT `LatitudeClamp` CHECK (((`latitude` >= -(90)) and (`latitude` <= 90))),
   CONSTRAINT `LongitudeClamp` CHECK (((`longitude` >= -(180)) and (`longitude` <= 180)))
@@ -151,7 +151,7 @@ CREATE TABLE `locations` (
 
 LOCK TABLES `locations` WRITE;
 /*!40000 ALTER TABLE `locations` DISABLE KEYS */;
-INSERT INTO `locations` VALUES (2,'Null Island','???',0.000000,0.000000),(3,'Santa\'s Workshop','123 North Pole Rd.',0.000000,90.000000),(4,'Krampus HQ','456 North Pole Rd.',0.000000,90.000000),(12,'Rudolph\'s House','1009 North Pole Rd.',0.000000,90.000000);
+INSERT INTO `locations` VALUES (2,'Null Island','???',0.00000000,0.00000000),(3,'Santa\'s Workshop','123 North Pole Rd.',0.00000000,90.00000000),(4,'Krampus HQ','456 North Pole Rd.',0.01204733,89.99723432),(12,'Rudolph\'s House','1009 North Pole Rd.',-0.10340000,89.902134);
 /*!40000 ALTER TABLE `locations` ENABLE KEYS */;
 UNLOCK TABLES;
 

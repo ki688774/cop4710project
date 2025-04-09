@@ -10,7 +10,7 @@
             $conn = mysqli_connect(MYSQLHOST, MYSQLUSER, MYSQLPASSWORD, MYSQLDATABASE);
             return true;
         } catch (Exception $e) {
-            returnMYSQLError($e);
+            returnMYSQLError($conn);
             return false;
         }
     
@@ -40,7 +40,7 @@
             $stmt->execute();
             return true;
         } catch (Exception $error) {
-            returnMYSQLErrorAndClose($error, $stmt, $conn);
+            returnMYSQLErrorAndClose($stmt, $conn);
             return false;
         }
     }
@@ -81,12 +81,12 @@
         $conn->close();
     }
 
-    function returnMYSQLError ($error) {
-        returnObject('{"error": "A mySQL error occurred.", "my_sql_error": "' . $error . '"}');
+    function returnMYSQLError (&$conn) {
+        returnObject('{"error": "' . $conn->error . '"}');
     }
 
-    function returnMYSQLErrorAndClose ($error, &$stmt, &$conn) {
-        returnMYSQLError($error);
+    function returnMYSQLErrorAndClose (&$stmt, &$conn) {
+        returnMYSQLError($conn);
         $stmt->close();
         $conn->close();
     }
