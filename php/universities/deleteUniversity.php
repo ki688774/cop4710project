@@ -4,11 +4,16 @@
 
     // Proccess input
     $currentUser = $inData["current_user"] ?? null;
-    $universityDomain = $inData["university_domain"] ?? null;
+    $universityDomain = strtolower($inData["university_domain"]) ?? null;
     $password = $inData["password"] ?? null;
 
     if (!$universityDomain || !$password || !$currentUser) {
-        returnError("University domain and super-admin password.");
+        returnError("University domain and super-admin password must be given.");
+        return;
+    }
+
+    if (!filter_var("a@". $universityDomain, FILTER_VALIDATE_EMAIL)) {
+        returnError("Email domain is not in the proper format.");
         return;
     }
 
@@ -32,8 +37,6 @@
         return;
     }
 
-
-
     // Check if university is accessible
     $stmt = $conn->prepare("SELECT * FROM universities WHERE university_domain=? AND super_admin_id=?");
     $stmt->bind_param("si", $universityDomain, $currentUser);
@@ -45,18 +48,6 @@
 
     if (!$targetRow) {
         returnErrorAndClose("University domain is incorrect.", $stmt, $conn);
-        return;
-    }
-
-    // Check if the super-admin is also an admin of an RSO.
-    $stmt = $conn->prepare("SELECT * FROM rsos WHERE admin_id=?");
-    $stmt->bind_param("i", $currentUser);
-
-    if (!attemptExecute($stmt, $conn))
-        return;
-
-    if ($stmt->get_result()->fetch_assoc()) {
-        returnErrorAndClose("You cannot delete your account as the admin of an RSO.", $stmt, $conn);
         return;
     }
 

@@ -4,29 +4,20 @@
 
     // Proccess input
     $currentUser = $inData["current_user"] ?? null;
-    $universityDomain = strtolower($inData["university_domain"]) ?? null;
-    $universityName = $inData["university_name"] ?? null;
+    $newSuperAdminEmail = strtolower($inData["new_super_admin_email"]) ?? null;
     $password = $inData["password"] ?? null;
 
-    $locationName = $inData["location_name"] ?? null;
-    $address = $inData["address"] ?? null;
-    $longitude = $inData["longitude"] ?? null; 
-    $latitude = $inData["latitude"] ?? null;
-
-    if (!$currentUser || !$universityDomain || !$universityName) {
-        returnError("All university fields must be filled.");
+    if (!$newSuperAdminEmail) {
+        returnError("The new super-admin's email must be provided.");
         return;
     }
 
-    if (!$locationName || !$address || is_null($longitude) || is_null($latitude)) {
-        returnError("All location fields must be filled.");
+    if (!filter_var($newSuperAdminEmail, FILTER_VALIDATE_EMAIL)) {
+        returnError("The new super-admin's email is in the wrong format.");
         return;
     }
 
-    if (!filter_var("a@". $universityDomain, FILTER_VALIDATE_EMAIL)) {
-        returnError("Email domain is not in the proper format.");
-        return;
-    }
+    $emailDomain = explode("@", $newSuperAdminEmail, "2")[1];
 
     // Create and check connection
     if (!attemptConnect($conn))
@@ -47,8 +38,8 @@
         returnErrorAndClose("The password is incorrect.", $stmt, $conn);
         return;
     }
-    
-    // Check if university belongs to the user
+
+    // Check if university belongs to the user.
     $stmt = $conn->prepare("SELECT * FROM universities WHERE super_admin_id=?");
     $stmt->bind_param("i", $currentUser);
 
@@ -58,26 +49,36 @@
     $universityData = $stmt->get_result()->fetch_assoc();
 
     if (!$universityData) {
-        returnErrorAndClose("University not found.", $stmt, $conn);
+        returnErrorAndClose("The university does not belong to the current user.", $stmt, $conn);
         return;
     }
 
-    $locationID = $universityData["location_id"];
+    $universityID = $universityData["university_id"];
 
-
-
-    // Update university
-    $stmt = $conn->prepare("UPDATE universities SET university_domain=?, university_name=? WHERE university_id=?");
-    $stmt->bind_param("ssi", $universityDomain, $universityName, $universityID);
+    // Check if the new super-admin belongs to the university.
+    $stmt = $conn->prepare("SELECT * FROM users WHERE email=? AND university_id=?");
+    $stmt->bind_param("si", $newSuperAdminEmail, $universityID);
 
     if (!attemptExecute($stmt, $conn))
         return;
 
-    // Update location
-    if (!updateLocation($locationID, $locationName, $address, $longitude, $latitude, $stmt, $conn))
+    $newSuperAdminData = $stmt->get_result()->fetch_assoc();
+
+    if (!$newSuperAdminData) {
+        returnErrorAndClose("The new super-admin was either not found or belongs to another university.", $stmt, $conn);
+        return;
+    }
+
+
+
+    // Update university
+    $stmt = $conn->prepare("UPDATE universities SET super_admin_id=? WHERE university_id=?");
+    $stmt->bind_param("ii", $newSuperAdminData["uid"], $universityID);
+
+    if (!attemptExecute($stmt, $conn))
         return;
 
-    
+
 
     // Return successful result
     $result = '{"result": "University updated successfully."}';

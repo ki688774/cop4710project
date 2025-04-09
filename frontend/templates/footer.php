@@ -8,7 +8,7 @@
 </head>
 
  <!-- Site footer -->
- <footer class="site-footer">
+<footer class="site-footer">
     <div class="container">
       <div class="row">
         <div class="col-md-8 col-sm-6 col-xs-12">
@@ -24,8 +24,9 @@
 
 <style>
     .site-footer {
+        margin-top: 100px;
         background-color: #f1f1f1;
-        padding: 35px 10px 20px;
+        padding: 20px 15px 20px;
         font-size: 15px;
         line-height: 24px;
         color: #737373;

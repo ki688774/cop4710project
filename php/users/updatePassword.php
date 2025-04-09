@@ -13,7 +13,6 @@
     }
 
     $hashedPass = password_hash($newPassword, PASSWORD_DEFAULT);
-    $emailDomain = explode("@", $email, "2")[1];
 
     // Create and check connection
     if (!attemptConnect($conn))

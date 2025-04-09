@@ -5,6 +5,6 @@
     width: 350px;
 }
 
-#deleteUniversityForm {
+.dependentForm {
     display: none;
 }

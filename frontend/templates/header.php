@@ -97,16 +97,4 @@
   .header-right {
     float: right;
   }
-
-  /* Add media queries for responsiveness - when the screen is 500px wide or less, stack the links on top of each other */
-  @media screen and (max-width: 500px) {
-    .header a {
-      float: none;
-      text-align: left;
-    }
-
-    .header-right {
-      float: none;
-    }
-  }
 </style>
