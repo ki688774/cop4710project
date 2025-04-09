@@ -21,8 +21,13 @@
 
 
     // Check if the provided old password was correct.
-    $stmt = $conn->prepare("SELECT * FROM users WHERE uid=?");
-    $stmt->bind_param("i", $currentUser);
+    try {
+        $stmt = $conn->prepare("SELECT * FROM users WHERE uid=?");
+        $stmt->bind_param("i", $currentUser);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;
@@ -37,8 +42,13 @@
 
 
     // Update user
-    $stmt = $conn->prepare("UPDATE users SET password=? WHERE uid=?");
-    $stmt->bind_param("si", $hashedPass, $currentUser);
+    try {
+        $stmt = $conn->prepare("UPDATE users SET password=? WHERE uid=?");
+        $stmt->bind_param("si", $hashedPass, $currentUser);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;

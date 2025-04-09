@@ -18,8 +18,13 @@
 
 
     // Prepare, bind and execute
-    $stmt = $conn->prepare("SELECT * FROM users WHERE username=?");
-    $stmt->bind_param("s", $username);
+    try {
+        $stmt = $conn->prepare("SELECT * FROM users WHERE username=?");
+        $stmt->bind_param("s", $username);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;

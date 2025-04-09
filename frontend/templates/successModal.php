@@ -18,7 +18,12 @@
 <style>
     #successModal {
         display: none;
+        width: 400px;
     }
+
+    #successHeader {
+        text-align: left;
+    }   
 </style>
 
 <script>

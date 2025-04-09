@@ -5,7 +5,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <span id="errorClose" class="close">&times;</span>
-                <h2>Error</h2>
+                <h2 id=errorHeader>Error</h2>
             </div>
             <div id="errorText" class="modal-body">
                 <p>This text gets overwritten anyhow.</p>
@@ -18,7 +18,12 @@
 <style>
     #errorModal {
         display: none;
+        width: 400px;
     }
+
+    #errorHeader {
+        text-align: left;
+    }    
 </style>
 
 <script>

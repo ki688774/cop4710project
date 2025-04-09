@@ -1,0 +1,40 @@
+.form {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 80px;
+}
+
+.text-button {
+    border: none;
+    background-color: inherit;
+    padding: 4px 4px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.form-element {
+    margin-right: 8px;
+}
+
+.text-button:hover {background: #eee;}
+
+.button-container {
+    /* Use flexbox to line up the buttons horizontally */
+    display: flex;
+    /* Center the buttons horizontally within the container */
+    justify-content: center;
+    /* Add a little top padding so they're not at the very top of the page */
+    padding-top: 20px;
+}
+
+.button-container button {
+    margin: 0 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* Optional hover effect */
+.button-container button:hover {
+    opacity: 0.8;
+}

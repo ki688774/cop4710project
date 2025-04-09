@@ -24,8 +24,13 @@
 
 
     // Find user's university (which must exist).
-    $stmt = $conn->prepare("SELECT * FROM users WHERE uid=?");
-    $stmt->bind_param("i", $currentUser);
+    try {
+        $stmt = $conn->prepare("SELECT * FROM users WHERE uid=?");
+        $stmt->bind_param("i", $currentUser);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;
@@ -38,11 +43,16 @@
     }
 
     // Check if the user has access to this event.
-    $stmt = $conn->prepare("SELECT * FROM events E WHERE event_id=? AND (
-	    EXISTS (SELECT * FROM public_events P WHERE P.event_id=E.event_id) OR
-	    EXISTS (SELECT * FROM private_events P WHERE P.event_id=E.event_id AND university_id=?) OR
-	    EXISTS (SELECT * FROM rso_events R WHERE R.event_id=E.event_id AND EXISTS (SELECT * FROM rso_joins J WHERE R.rso_id=J.rso_id AND J.uid=?)))");
-    $stmt->bind_param("iii", $eventID, $universityID, $currentUser);
+    try {
+        $stmt = $conn->prepare("SELECT * FROM events E WHERE event_id=? AND (
+	        EXISTS (SELECT * FROM public_events P WHERE P.event_id=E.event_id) OR
+	        EXISTS (SELECT * FROM private_events P WHERE P.event_id=E.event_id AND university_id=?) OR
+	        EXISTS (SELECT * FROM rso_events R WHERE R.event_id=E.event_id AND EXISTS (SELECT * FROM rso_joins J WHERE R.rso_id=J.rso_id AND J.uid=?)))");
+        $stmt->bind_param("iii", $eventID, $universityID, $currentUser);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;
@@ -54,24 +64,39 @@
 
 
 
-    $stmt = $conn->prepare("SELECT * FROM ratings WHERE uid=? AND event_id=?");
-    $stmt->bind_param("ii", $currentUser, $eventID);
+    try {
+        $stmt = $conn->prepare("SELECT * FROM ratings WHERE uid=? AND event_id=?");
+        $stmt->bind_param("ii", $currentUser, $eventID);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;
 
     if ($stmt->get_result()->fetch_assoc()) {
         // Edit the rating.
-        $stmt = $conn->prepare("UPDATE ratings SET rating=? WHERE uid=? AND event_id=?");
-        $stmt->bind_param("iii", $rating, $currentUser, $eventID);
+        try {
+            $stmt = $conn->prepare("UPDATE ratings SET rating=? WHERE uid=? AND event_id=?");
+            $stmt->bind_param("iii", $rating, $currentUser, $eventID);
+        } catch (Exception $error){
+            returnMYSQLErrorAndClose($stmt, $conn);
+            return;
+        }
 
         if (!attemptExecute($stmt, $conn))
             return;
 
     } else {
         // Add the rating.
-        $stmt = $conn->prepare("INSERT INTO ratings (uid, event_id, rating) VALUES (?,?,?)");
-        $stmt->bind_param("iii", $currentUser, $eventID, $rating);
+        try {
+            $stmt = $conn->prepare("INSERT INTO ratings (uid, event_id, rating) VALUES (?,?,?)");
+            $stmt->bind_param("iii", $currentUser, $eventID, $rating);
+        } catch (Exception $error){
+            returnMYSQLErrorAndClose($stmt, $conn);
+            return;
+        }
 
         if (!attemptExecute($stmt, $conn))
             return;

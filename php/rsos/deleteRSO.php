@@ -18,8 +18,13 @@
 
     
     // Check if the RSO belongs to the user.
-    $stmt = $conn->prepare("SELECT * FROM rsos WHERE rso_id=? AND admin_id=?");
-    $stmt->bind_param("ii", $rsoID, $currentUser);
+    try {
+        $stmt = $conn->prepare("SELECT * FROM rsos WHERE rso_id=? AND admin_id=?");
+        $stmt->bind_param("ii", $rsoID, $currentUser);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;
@@ -30,8 +35,13 @@
     }
 
     // Delete the RSO.
-    $stmt = $conn->prepare("DELETE FROM rsos WHERE rso_id=?");
-    $stmt->bind_param("i", $rso_id);
+    try {
+        $stmt = $conn->prepare("DELETE FROM rsos WHERE rso_id=?");
+        $stmt->bind_param("i", $rso_id);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;

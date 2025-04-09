@@ -13,8 +13,13 @@
 
 
     // Check if user exists
-    $stmt = $conn->prepare("SELECT * FROM users WHERE uid=?");
-    $stmt->bind_param("i", $currentUser);
+    try {
+        $stmt = $conn->prepare("SELECT * FROM users WHERE uid=?");
+        $stmt->bind_param("i", $currentUser);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;
@@ -27,8 +32,13 @@
     }
 
     // Check if user is an admin or super-admin.
-    $stmt = $conn->prepare("SELECT * FROM universities WHERE super_admin_id=? AND university_id=?");
-    $stmt->bind_param("ii", $currentUser, $oldUserData["university_id"]);
+    try {
+        $stmt = $conn->prepare("SELECT * FROM universities WHERE super_admin_id=? AND university_id=?");
+        $stmt->bind_param("ii", $currentUser, $oldUserData["university_id"]);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;
@@ -38,8 +48,13 @@
         return;
     }
 
-    $stmt = $conn->prepare("SELECT * FROM rsos WHERE admin_id=?");
-    $stmt->bind_param("i", $currentUser);
+    try {
+        $stmt = $conn->prepare("SELECT * FROM rsos WHERE admin_id=?");
+        $stmt->bind_param("i", $currentUser);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;
@@ -51,8 +66,13 @@
 
 
     // Delete user
-    $stmt = $conn->prepare("DELETE FROM users WHERE uid=?");
-    $stmt->bind_param("i", $currentUser);
+    try {
+        $stmt = $conn->prepare("DELETE FROM users WHERE uid=?");
+        $stmt->bind_param("i", $currentUser);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;

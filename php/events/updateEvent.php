@@ -39,8 +39,14 @@
     function postCheckUpdateEvent (&$stmt, &$conn) {
         global $eventID, $startTime, $endTime, $eventName, $eventDescription, $contactPhone, $contactEmail, $locationName, $address, $longitude, $latitude;
 
-        $stmt = $conn->prepare("SELECT location_id FROM events WHERE event_id=?");
-        $stmt->bind_param("i", $eventID);
+        try {
+            $stmt = $conn->prepare("SELECT location_id FROM events WHERE event_id=?");
+            $stmt->bind_param("i", $eventID);
+        } catch (Exception $error){
+            returnMYSQLErrorAndClose($stmt, $conn);
+            return;
+        }
+    
 
         if (!attemptExecute($stmt, $conn))
             return;
@@ -49,15 +55,24 @@
             return;
 
 
-
-        $stmt = $conn->prepare("UPDATE events SET start_time=?, end_time=?, event_name=?, event_description=?, contact_phone=?, contact_email=?, total_rating=NULL WHERE event_id=?");
-        $stmt->bind_param("ssssssi", $startTime, $endTime, $eventName, $eventDescription, $contactPhone, $contactEmail, $eventID);
+        try {
+            $stmt = $conn->prepare("UPDATE events SET start_time=?, end_time=?, event_name=?, event_description=?, contact_phone=?, contact_email=?, total_rating=NULL WHERE event_id=?");
+            $stmt->bind_param("ssssssi", $startTime, $endTime, $eventName, $eventDescription, $contactPhone, $contactEmail, $eventID);
+        } catch (Exception $error){
+            returnMYSQLErrorAndClose($stmt, $conn);
+            return;
+        }
 
         if (!attemptExecute($stmt, $conn))
             return;
 
-        $stmt = $conn->prepare("DELETE FROM comments WHERE event_id=?");
-        $stmt->bind_param("i", $eventID);
+        try {
+            $stmt = $conn->prepare("DELETE FROM comments WHERE event_id=?");
+            $stmt->bind_param("i", $eventID);
+        } catch (Exception $error){
+            returnMYSQLErrorAndClose($stmt, $conn);
+            return;
+        }
 
         if (!attemptExecute($stmt, $conn))
             return;

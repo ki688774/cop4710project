@@ -26,8 +26,13 @@
 
 
     // Check if user exists
-    $stmt = $conn->prepare("SELECT * FROM users WHERE uid=?");
-    $stmt->bind_param("i", $currentUser);
+    try {
+        $stmt = $conn->prepare("SELECT * FROM users WHERE uid=?");
+        $stmt->bind_param("i", $currentUser);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;
@@ -40,8 +45,13 @@
     }
 
     // Check if university belongs to the user.
-    $stmt = $conn->prepare("SELECT * FROM universities WHERE super_admin_id=?");
-    $stmt->bind_param("i", $currentUser);
+    try {
+        $stmt = $conn->prepare("SELECT * FROM universities WHERE super_admin_id=?");
+        $stmt->bind_param("i", $currentUser);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;
@@ -56,8 +66,13 @@
     $universityID = $universityData["university_id"];
 
     // Check if the new super-admin belongs to the university.
-    $stmt = $conn->prepare("SELECT * FROM users WHERE email=? AND university_id=?");
-    $stmt->bind_param("si", $newSuperAdminEmail, $universityID);
+    try {
+        $stmt = $conn->prepare("SELECT * FROM users WHERE email=? AND university_id=?");
+        $stmt->bind_param("si", $newSuperAdminEmail, $universityID);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;
@@ -72,8 +87,13 @@
 
 
     // Update university
-    $stmt = $conn->prepare("UPDATE universities SET super_admin_id=? WHERE university_id=?");
-    $stmt->bind_param("ii", $newSuperAdminData["uid"], $universityID);
+    try {
+        $stmt = $conn->prepare("UPDATE universities SET super_admin_id=? WHERE university_id=?");
+        $stmt->bind_param("ii", $newSuperAdminData["uid"], $universityID);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;

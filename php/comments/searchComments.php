@@ -34,11 +34,16 @@
     }
 
     // Check if the user has access to this event.
-    $stmt = $conn->prepare("SELECT * FROM events E WHERE event_id=? AND (
-	    EXISTS (SELECT * FROM public_events P WHERE P.event_id=E.event_id) OR
-	    EXISTS (SELECT * FROM private_events P WHERE P.event_id=E.event_id AND university_id=?) OR
-	    EXISTS (SELECT * FROM rso_events R WHERE R.event_id=E.event_id AND EXISTS (SELECT * FROM rso_joins J WHERE R.rso_id=J.rso_id AND J.uid=?)))");
-    $stmt->bind_param("iii", $eventID, $universityID, $currentUser);
+    try {
+        $stmt = $conn->prepare("SELECT * FROM events E WHERE event_id=? AND (
+	        EXISTS (SELECT * FROM public_events P WHERE P.event_id=E.event_id) OR
+    	    EXISTS (SELECT * FROM private_events P WHERE P.event_id=E.event_id AND university_id=?) OR
+	        EXISTS (SELECT * FROM rso_events R WHERE R.event_id=E.event_id AND EXISTS (SELECT * FROM rso_joins J WHERE R.rso_id=J.rso_id AND J.uid=?)))");
+        $stmt->bind_param("iii", $eventID, $universityID, $currentUser);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;
@@ -51,8 +56,13 @@
 
 
     // Search for comments.
-    $stmt = $conn->prepare("SELECT * FROM comments WHERE event_id=? AND timestamp>=? AND timestamp<=?");
-    $stmt->bind_param("iss", $eventID, $minTime, $maxTime);
+    try {
+        $stmt = $conn->prepare("SELECT * FROM comments WHERE event_id=? AND timestamp>=? AND timestamp<=?");
+        $stmt->bind_param("iss", $eventID, $minTime, $maxTime);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;

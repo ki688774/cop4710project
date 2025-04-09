@@ -18,8 +18,13 @@
 
 
     // Check if the rating exists.
-    $stmt = $conn->prepare("SELECT * FROM ratings WHERE uid=? AND event_id=?");
-    $stmt->bind_param("ii", $currentUser, $eventID);
+    try {
+        $stmt = $conn->prepare("SELECT * FROM ratings WHERE uid=? AND event_id=?");
+        $stmt->bind_param("ii", $currentUser, $eventID);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;
@@ -32,8 +37,13 @@
 
 
     // Delete the rating.
-    $stmt = $conn->prepare("DELETE FROM ratings WHERE uid=? AND event_id=?");
-    $stmt->bind_param("ii", $currentUser, $eventID);
+    try {
+        $stmt = $conn->prepare("DELETE FROM ratings WHERE uid=? AND event_id=?");
+        $stmt->bind_param("ii", $currentUser, $eventID);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;

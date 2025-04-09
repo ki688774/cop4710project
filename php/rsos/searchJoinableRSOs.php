@@ -17,8 +17,13 @@
 
     
     // Get the current user's university.
-    $stmt = $conn->prepare("SELECT university_id FROM users WHERE uid=?");
-    $stmt->bind_param("i", $currentUser);
+    try {
+        $stmt = $conn->prepare("SELECT university_id FROM users WHERE uid=?");
+        $stmt->bind_param("i", $currentUser);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;
@@ -31,8 +36,13 @@
     }
 
     // Search for RSOs of the user's university.
-    $stmt = $conn->prepare("SELECT * from rsos WHERE university_id=?");
-    $stmt->bind_param("i", $universityID);
+    try {
+        $stmt = $conn->prepare("SELECT * from rsos WHERE university_id=?");
+        $stmt->bind_param("i", $universityID);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;

@@ -18,8 +18,13 @@
 
 
     // Check if that comment exists.
-    $stmt = $conn->prepare("SELECT * FROM comments WHERE uid=? AND comment_id=?");
-    $stmt->bind_param("ii", $currentUser, $commentID);
+    try {
+        $stmt = $conn->prepare("SELECT * FROM comments WHERE uid=? AND comment_id=?");
+        $stmt->bind_param("ii", $currentUser, $commentID);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;
@@ -32,8 +37,13 @@
 
 
     // Delete the comment.
-    $stmt = $conn->prepare("DELETE FROM comments WHERE comment_id=?");
-    $stmt->bind_param("i", $commentID);
+    try {
+        $stmt = $conn->prepare("DELETE FROM comments WHERE comment_id=?");
+        $stmt->bind_param("i", $commentID);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;

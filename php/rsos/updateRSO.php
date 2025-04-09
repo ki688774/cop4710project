@@ -20,8 +20,13 @@
 
 
     // Check if the target RSO belongs to the user.
-    $stmt = $conn->prepare("SELECT * FROM rsos WHERE rso_id=? AND admin_id=?");
-    $stmt->bind_param("ii", $rsoID, $currentUser);
+    try {
+        $stmt = $conn->prepare("SELECT * FROM rsos WHERE rso_id=? AND admin_id=?");
+        $stmt->bind_param("ii", $rsoID, $currentUser);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;
@@ -34,8 +39,13 @@
     }
 
     // Check if the new super-admin actually exists
-    $stmt = $conn->prepare("SELECT university_id FROM users WHERE uid=? AND university_id=?");
-    $stmt->bind_param("ii", $adminID, $universityID);
+    try {
+        $stmt = $conn->prepare("SELECT university_id FROM users WHERE uid=? AND university_id=?");
+        $stmt->bind_param("ii", $adminID, $universityID);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;
@@ -46,8 +56,13 @@
     }
 
     // Update the RSO's information.
-    $stmt = $conn->prepare("UPDATE rsos SET rso_name=?, admin_id=? WHERE rso_id=?");
-    $stmt->bind_param("sii", $rsoName, $adminID, $rsoID);
+    try {
+        $stmt = $conn->prepare("UPDATE rsos SET rso_name=?, admin_id=? WHERE rso_id=?");
+        $stmt->bind_param("sii", $rsoName, $adminID, $rsoID);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;

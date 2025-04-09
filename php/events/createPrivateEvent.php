@@ -41,8 +41,13 @@
 
 
     // Check if current user is the admin of the target RSO.
-    $stmt = $conn->prepare("SELECT * FROM rsos WHERE admin_id=? AND rso_id=? AND active=1");
-    $stmt->bind_param("ii", $currentUser, $rsoID);
+    try {
+        $stmt = $conn->prepare("SELECT * FROM rsos WHERE admin_id=? AND rso_id=? AND active=1");
+        $stmt->bind_param("ii", $currentUser, $rsoID);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;
@@ -61,15 +66,26 @@
     $locationID = $conn->insert_id;
 
     // Create the event in the events table and add its reference to the private_events table.
-    $stmt = $conn->prepare("INSERT INTO events (start_time, end_time, event_name, event_description, contact_phone, contact_email, location_id) VALUES (?,?,?,?,?,?,?)");
-    $stmt->bind_param("ssssssi", $startTime, $endTime, $eventName, $eventDescription, $contactPhone, $contactEmail, $locationID);
+    try {
+        $stmt = $conn->prepare("INSERT INTO events (start_time, end_time, event_name, event_description, contact_phone, contact_email, location_id) VALUES (?,?,?,?,?,?,?)");
+        $stmt->bind_param("ssssssi", $startTime, $endTime, $eventName, $eventDescription, $contactPhone, $contactEmail, $locationID);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;
 
     $eventID = $conn->insert_id;
-    $stmt = $conn->prepare("INSERT INTO private_events (event_id, rso_id, university_id) VALUES (?,?,?)");
-    $stmt->bind_param("iii", $eventID, $rsoID, $universityID);
+    
+    try {
+        $stmt = $conn->prepare("INSERT INTO private_events (event_id, rso_id, university_id) VALUES (?,?,?)");
+        $stmt->bind_param("iii", $eventID, $rsoID, $universityID);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;

@@ -18,13 +18,18 @@
 
 
     // Get the university data from the university's ID.
-    if ($universityID) {
-        $stmt = $conn->prepare("SELECT * FROM universities WHERE university_id=?");
-        $stmt->bind_param("i", $universityID);
-    } else {
-        // Get the university data from the university's email domain.
-        $stmt = $conn->prepare("SELECT * FROM universities WHERE university_domain=?");
-        $stmt->bind_param("s", $universityDomain);
+    try {
+        if ($universityID) {
+            $stmt = $conn->prepare("SELECT * FROM universities WHERE university_id=?");
+            $stmt->bind_param("i", $universityID);
+        } else {
+            // Get the university data from the university's email domain.
+            $stmt = $conn->prepare("SELECT * FROM universities WHERE university_domain=?");
+            $stmt->bind_param("s", $universityDomain);
+        }
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
     }
 
     if (!attemptExecute($stmt, $conn))

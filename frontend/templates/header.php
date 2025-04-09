@@ -11,7 +11,7 @@
 <div class="header">
   <a href="#default" id="mainPage" class="logo">Event Manager</a>
   <div class="header-right">
-    <a href="">Events</a>
+    <a href="../events/events.php">Events</a>
     <a href="">RSOs</a>
     <a href="../settings/settings.php">Settings</a>
     <a href="" id="signOut">Sign Out</a>
@@ -31,6 +31,12 @@
     document.querySelectorAll(".header a").forEach(a=>a.style.display = "block");
     login.style.display = "none";
     register.style.display = "none";
+  } else {
+    var path = window.location.pathname;
+    var page = path.split("/").pop();
+    
+    if (page != "login.php" && page != "register.php" && page != "universityCreation.php")
+      window.location.assign("../users/login.php");
   }
 
   document.getElementById("signOut").addEventListener("click", async function (event) {

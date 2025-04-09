@@ -25,8 +25,15 @@
     // Delete the event and its corresponding location.
     function postCheckDeleteEvent (&$stmt, &$conn) {
         global $eventID;
-        $stmt = $conn->prepare("DELETE FROM events WHERE event_id=?");
-        $stmt->bind_param("i", $eventID);
+
+        try {
+            $stmt = $conn->prepare("DELETE FROM events WHERE event_id=?");
+            $stmt->bind_param("i", $eventID);
+        } catch (Exception $error){
+            returnMYSQLErrorAndClose($stmt, $conn);
+            return;
+        }
+    
 
         if (!attemptExecute($stmt, $conn))
             return;

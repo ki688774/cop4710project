@@ -24,8 +24,13 @@
 
 
     // Check if user exists
-    $stmt = $conn->prepare("SELECT * FROM users WHERE uid=?");
-    $stmt->bind_param("i", $currentUser);
+    try {
+        $stmt = $conn->prepare("SELECT * FROM users WHERE uid=?");
+        $stmt->bind_param("i", $currentUser);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;
@@ -38,8 +43,13 @@
     }
 
     // Check if university is accessible
-    $stmt = $conn->prepare("SELECT * FROM universities WHERE university_domain=? AND super_admin_id=?");
-    $stmt->bind_param("si", $universityDomain, $currentUser);
+    try {
+        $stmt = $conn->prepare("SELECT * FROM universities WHERE university_domain=? AND super_admin_id=?");
+        $stmt->bind_param("si", $universityDomain, $currentUser);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;
@@ -54,23 +64,38 @@
 
 
     // Set the super-admin's university domain to null.
-    $stmt = $conn->prepare("UPDATE users SET university_id=NULL where uid=?");
-    $stmt->bind_param("i", $currentUser);
+    try {
+        $stmt = $conn->prepare("UPDATE users SET university_id=NULL where uid=?");
+        $stmt->bind_param("i", $currentUser);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;
 
     // Delete the university.
-    $stmt = $conn->prepare("DELETE FROM universities WHERE university_id=? AND super_admin_id=?");
-    $stmt->bind_param("ii", $universityID, $currentUser);
+    try {
+        $stmt = $conn->prepare("DELETE FROM universities WHERE university_id=? AND super_admin_id=?");
+        $stmt->bind_param("ii", $universityID, $currentUser);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;
 
 
     // Delete the former super-admin.
-    $stmt = $conn->prepare("DELETE FROM users WHERE uid=?");
-    $stmt->bind_param("i", $currentUser);
+    try {
+        $stmt = $conn->prepare("DELETE FROM users WHERE uid=?");
+        $stmt->bind_param("i", $currentUser);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;

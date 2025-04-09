@@ -2,8 +2,8 @@
 <html>
 <head>
     <title>Login Page</title>
-    <link rel="stylesheet" href="./login.css">
     <link rel="stylesheet" href="../templates/styles.css">
+    <link rel="stylesheet" href="./login.css">
 </head>
 
 <header>

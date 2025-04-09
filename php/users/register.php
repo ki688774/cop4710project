@@ -29,8 +29,13 @@
 
 
     // Find if new user's domain has an attached university
-    $stmt = $conn->prepare("SELECT * FROM universities WHERE university_domain=?");
-    $stmt->bind_param("s", $emailDomain);
+    try {
+        $stmt = $conn->prepare("SELECT * FROM universities WHERE university_domain=?");
+        $stmt->bind_param("s", $emailDomain);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;
@@ -45,8 +50,13 @@
 
 
     // Prepare, bind and execute
-    $stmt = $conn->prepare("INSERT INTO users (university_id, firstName, lastName, email, username, password) VALUES (?,?,?,?,?,?)");
-    $stmt->bind_param("isssss", $targetRow["university_id"], $firstName, $lastName, $email, $username, $hashedPass);
+    try {
+        $stmt = $conn->prepare("INSERT INTO users (university_id, firstName, lastName, email, username, password) VALUES (?,?,?,?,?,?)");
+        $stmt->bind_param("isssss", $targetRow["university_id"], $firstName, $lastName, $email, $username, $hashedPass);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;

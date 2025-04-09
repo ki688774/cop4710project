@@ -18,8 +18,13 @@
 
     
     // Get the current user's university.
-    $stmt = $conn->prepare("SELECT university_id FROM users WHERE uid=?");
-    $stmt->bind_param("i", $currentUser);
+    try {
+        $stmt = $conn->prepare("SELECT university_id FROM users WHERE uid=?");
+        $stmt->bind_param("i", $currentUser);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;
@@ -32,8 +37,13 @@
     }
 
     // Check if the user's university is the same as the RSO's.
-    $stmt = $conn->prepare("SELECT * from rsos WHERE rso_id=? AND university_id=?");
-    $stmt->bind_param("ii", $rsoID, $universityID);
+    try {
+        $stmt = $conn->prepare("SELECT * from rsos WHERE rso_id=? AND university_id=?");
+        $stmt->bind_param("ii", $rsoID, $universityID);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;
@@ -44,8 +54,13 @@
     }
 
     // Join the RSO.
-    $stmt = $conn->prepare("INSERT INTO rso_joins (uid, rso_id) VALUES (?,?)");
-    $stmt->bind_param("ii", $currentUser, $rsoName);
+    try {
+        $stmt = $conn->prepare("INSERT INTO rso_joins (uid, rso_id) VALUES (?,?)");
+        $stmt->bind_param("ii", $currentUser, $rsoName);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;

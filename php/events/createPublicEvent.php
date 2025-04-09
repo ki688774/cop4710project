@@ -42,8 +42,13 @@
 
 
     // Check if current user is a super-admin.
-    $stmt = $conn->prepare("SELECT university_id FROM universities WHERE super_admin_id=?");
-    $stmt->bind_param("i", $currentUser);
+    try {
+        $stmt = $conn->prepare("SELECT university_id FROM universities WHERE super_admin_id=?");
+        $stmt->bind_param("i", $currentUser);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;
@@ -65,15 +70,26 @@
     $locationID = $conn->insert_id;
 
     // Create the event in the events table and add its reference to the public_events table.
-    $stmt = $conn->prepare("INSERT INTO events (start_time, end_time, event_name, event_description, contact_phone, contact_email, location_id) VALUES (?,?,?,?,?,?,?)");
-    $stmt->bind_param("ssssssi", $startTime, $endTime, $eventName, $eventDescription, $contactPhone, $contactEmail, $locationID);
+    try {
+        $stmt = $conn->prepare("INSERT INTO events (start_time, end_time, event_name, event_description, contact_phone, contact_email, location_id) VALUES (?,?,?,?,?,?,?)");
+        $stmt->bind_param("ssssssi", $startTime, $endTime, $eventName, $eventDescription, $contactPhone, $contactEmail, $locationID);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;
 
     $eventID = $conn->insert_id;
-    $stmt = $conn->prepare("INSERT INTO public_events (event_id, university_id) VALUES (?,?)");
-    $stmt->bind_param("ii", $eventID, $universityID);
+    
+    try {
+        $stmt = $conn->prepare("INSERT INTO public_events (event_id, university_id) VALUES (?,?)");
+        $stmt->bind_param("ii", $eventID, $universityID);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;

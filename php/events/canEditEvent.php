@@ -1,8 +1,13 @@
 <?php
     function canEditEvent ($currentUser, $eventID, &$stmt, &$conn) {
         // Check if the event is a private event.
-        $stmt = $conn->prepare("SELECT * FROM private_events WHERE event_id=?");
-        $stmt->bind_param("i", $eventID);
+        try {
+            $stmt = $conn->prepare("SELECT * FROM private_events WHERE event_id=?");
+            $stmt->bind_param("i", $eventID);
+        } catch (Exception $error){
+            returnMYSQLErrorAndClose($stmt, $conn);
+            return;
+        }
 
         if (!attemptExecute($stmt, $conn))
             return false;
@@ -15,8 +20,13 @@
 
 
         // Check if the event is an RSO event.
-        $stmt = $conn->prepare("SELECT * FROM rso_events WHERE event_id=?");
-        $stmt->bind_param("i", $eventID);
+        try {
+            $stmt = $conn->prepare("SELECT * FROM rso_events WHERE event_id=?");
+            $stmt->bind_param("i", $eventID);
+        } catch (Exception $error){
+            returnMYSQLErrorAndClose($stmt, $conn);
+            return;
+        }
 
         if (!attemptExecute($stmt, $conn))
             return false;
@@ -29,8 +39,13 @@
 
 
         // Check if the event is a public event.
-        $stmt = $conn->prepare("SELECT * FROM public_events WHERE event_id=?");
-        $stmt->bind_param("i", $eventID);
+        try {
+            $stmt = $conn->prepare("SELECT * FROM public_events WHERE event_id=?");
+            $stmt->bind_param("i", $eventID);
+        } catch (Exception $error){
+            returnMYSQLErrorAndClose($stmt, $conn);
+            return;
+        }
 
         if (!attemptExecute($stmt, $conn))
             return false;
@@ -38,8 +53,13 @@
         $oldEntry = $stmt->get_result()->fetch_assoc();
 
         if ($oldEntry) {
-            $stmt = $conn->prepare("SELECT * FROM universities WHERE university_id=? AND super_admin_id=?");
-            $stmt->bind_param("ii", $oldEntry["university_id"], $currentUser);
+            try {
+                $stmt = $conn->prepare("SELECT * FROM universities WHERE university_id=? AND super_admin_id=?");
+                $stmt->bind_param("ii", $oldEntry["university_id"], $currentUser);
+            } catch (Exception $error){
+                returnMYSQLErrorAndClose($stmt, $conn);
+                return;
+            }
 
             if (!attemptExecute($stmt, $conn))
                 return false;
@@ -65,8 +85,14 @@
     // If the event is private or an RSO event, check if the current user is the admin.
     function rsoBasedCheck (&$stmt, &$conn) {
         global $currentUser, $oldEntry;
-        $stmt = $conn->prepare("SELECT * FROM rso WHERE rso_id=? AND admin_id=?");
-        $stmt->bind_param("ii", $oldEntry["rso_id"], $currentUser);
+        
+        try {
+            $stmt = $conn->prepare("SELECT * FROM rso WHERE rso_id=? AND admin_id=?");
+            $stmt->bind_param("ii", $oldEntry["rso_id"], $currentUser);
+        } catch (Exception $error){
+            returnMYSQLErrorAndClose($stmt, $conn);
+            return;
+        }
 
         if (!attemptExecute($stmt, $conn))
             return false;

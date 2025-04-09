@@ -28,8 +28,13 @@
 
 
     // Find if new user's domain has an attached university
-    $stmt = $conn->prepare("SELECT * FROM universities WHERE university_domain=?");
-    $stmt->bind_param("s", $emailDomain);
+    try {
+        $stmt = $conn->prepare("SELECT * FROM universities WHERE university_domain=?");
+        $stmt->bind_param("s", $emailDomain);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;
@@ -42,8 +47,13 @@
     }
 
     // Prepare, bind and execute
-    $stmt = $conn->prepare("SELECT * FROM users WHERE uid=?");
-    $stmt->bind_param("i", $currentUser);
+    try {
+        $stmt = $conn->prepare("SELECT * FROM users WHERE uid=?");
+        $stmt->bind_param("i", $currentUser);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;
@@ -62,8 +72,13 @@
        you pass off your duties.
     */
     if ($oldUserData["university_id"] != $universityRow["university_id"]) {
-        $stmt = $conn->prepare("SELECT * FROM universities WHERE super_admin_id=?");
-        $stmt->bind_param("i", $currentUser);
+        try {
+            $stmt = $conn->prepare("SELECT * FROM universities WHERE super_admin_id=?");
+            $stmt->bind_param("i", $currentUser);
+        } catch (Exception $error){
+            returnMYSQLErrorAndClose($stmt, $conn);
+            return;
+        }
 
         if (!attemptExecute($stmt, $conn))
             return;
@@ -73,8 +88,13 @@
             return;
         }
 
-        $stmt = $conn->prepare("SELECT * FROM rsos WHERE admin_id=?");
-        $stmt->bind_param("i", $currentUser);
+        try {
+            $stmt = $conn->prepare("SELECT * FROM rsos WHERE admin_id=?");
+            $stmt->bind_param("i", $currentUser);
+        } catch (Exception $error){
+            returnMYSQLErrorAndClose($stmt, $conn);
+            return;
+        }
 
         if (!attemptExecute($stmt, $conn))
             return;
@@ -89,8 +109,13 @@
 
 
     // Update user
-    $stmt = $conn->prepare("UPDATE users SET university_id=?, firstName=?, lastName=?, email=?, username=? WHERE uid=?");
-    $stmt->bind_param("issssi", $universityRow["university_id"], $firstName, $lastName, $email, $username, $currentUser);
+    try {
+        $stmt = $conn->prepare("UPDATE users SET university_id=?, firstName=?, lastName=?, email=?, username=? WHERE uid=?");
+        $stmt->bind_param("issssi", $universityRow["university_id"], $firstName, $lastName, $email, $username, $currentUser);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;

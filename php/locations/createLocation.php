@@ -11,8 +11,13 @@
     
     
         // Add location
-        $stmt = $conn->prepare("INSERT INTO locations (location_name, address, longitude, latitude) VALUES (?,?,?,?)");
-        $stmt->bind_param("ssdd", $locationName, $address, $longitude, $latitude);
+        try {
+            $stmt = $conn->prepare("INSERT INTO locations (location_name, address, longitude, latitude) VALUES (?,?,?,?)");
+            $stmt->bind_param("ssdd", $locationName, $address, $longitude, $latitude);
+        } catch (Exception $error){
+            returnMYSQLErrorAndClose($stmt, $conn);
+            return;
+        }
     
         if (!attemptExecute($stmt, $conn))
             return false;

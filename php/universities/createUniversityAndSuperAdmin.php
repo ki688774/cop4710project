@@ -46,8 +46,13 @@
 
 
     // Find if new user's domain has an attached university
-    $stmt = $conn->prepare("select count(*) as count from universities where university_domain=?");
-    $stmt->bind_param("s", $emailDomain);
+    try {
+        $stmt = $conn->prepare("select count(*) as count from universities where university_domain=?");
+        $stmt->bind_param("s", $emailDomain);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;
@@ -58,8 +63,13 @@
     }
 
     // Find if the new user's email is in use
-    $stmt = $conn->prepare("select count(*) as count from users where email=?");
-    $stmt->bind_param("s", $email);
+    try {
+        $stmt = $conn->prepare("select count(*) as count from users where email=?");
+        $stmt->bind_param("s", $email);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;
@@ -80,8 +90,13 @@
     $locationID = $conn->insert_id;
 
     // Add super-admin
-    $stmt = $conn->prepare("INSERT INTO users (firstName, lastName, email, username, password) VALUES (?,?,?,?,?)");
-    $stmt->bind_param("sssss", $firstName, $lastName, $email, $username, $hashedPass);
+    try {
+        $stmt = $conn->prepare("INSERT INTO users (firstName, lastName, email, username, password) VALUES (?,?,?,?,?)");
+        $stmt->bind_param("sssss", $firstName, $lastName, $email, $username, $hashedPass);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;
@@ -89,8 +104,13 @@
     $superAdminID = $conn->insert_id;
 
     // Add university
-    $stmt = $conn->prepare("INSERT INTO universities (university_domain, university_name, location_id, super_admin_id) VALUES (?,?,?,?)");
-    $stmt->bind_param("ssii", $emailDomain, $universityName, $locationID, $superAdminID);
+    try {
+        $stmt = $conn->prepare("INSERT INTO universities (university_domain, university_name, location_id, super_admin_id) VALUES (?,?,?,?)");
+        $stmt->bind_param("ssii", $emailDomain, $universityName, $locationID, $superAdminID);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;
@@ -98,8 +118,13 @@
     $universityID = $conn->insert_id;
 
     // Set super-admin's university
-    $stmt = $conn->prepare("UPDATE users SET university_id=? where uid=?");
-    $stmt->bind_param("ii", $universityID, $superAdminID);
+    try {
+        $stmt = $conn->prepare("UPDATE users SET university_id=? where uid=?");
+        $stmt->bind_param("ii", $universityID, $superAdminID);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;

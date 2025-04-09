@@ -19,8 +19,13 @@
 
 
     // Check if the user has already made a comment with that ID.
-    $stmt = $conn->prepare("SELECT * FROM comments WHERE uid=? AND event_id=? AND comment_id=?");
-    $stmt->bind_param("iii", $currentUser, $eventID, $commentID);
+    try {
+        $stmt = $conn->prepare("SELECT * FROM comments WHERE uid=? AND event_id=? AND comment_id=?");
+        $stmt->bind_param("iii", $currentUser, $eventID, $commentID);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;
@@ -33,8 +38,13 @@
 
 
     // Update the comment.
-    $stmt = $conn->prepare("UPDATE comments SET text=?, timestamp=? WHERE comment_id=?");
-    $stmt->bind_param("ssi", $text, date("Y-m-d H:i:s"), $commentID);
+    try {
+        $stmt = $conn->prepare("UPDATE comments SET text=?, timestamp=? WHERE comment_id=?");
+        $stmt->bind_param("ssi", $text, date("Y-m-d H:i:s"), $commentID);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;

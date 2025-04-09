@@ -2,8 +2,8 @@
 <html>
 <head>
     <title>Settings Page</title>
-    <link rel="stylesheet" href="./settings.css">
     <link rel="stylesheet" href="../templates/styles.css">
+    <link rel="stylesheet" href="./settings.css">
 </head>
 
 <header>
@@ -80,7 +80,7 @@
         <label for="updateUniversityConfirmPassword">Confirm Password:</label>
         <input type="password" id="updateUniversityConfirmPassword" name="updateUniversityConfirmPassword" required><br><br>
 
-        <input type="submit" value="Delete">
+        <input type="submit" value="Update">
     </form>
 
     <form class="form dependentForm" id="transferUniversityForm">
@@ -94,7 +94,7 @@
         <label for="transferUniversityConfirmPassword">Confirm Password:</label>
         <input type="password" id="transferUniversityConfirmPassword" name="transferUniversityConfirmPassword" required><br><br>
 
-        <input type="submit" value="Delete">
+        <input type="submit" value="Transfer">
     </form>
 
     <form class="form dependentForm" id="deleteUniversityForm">
