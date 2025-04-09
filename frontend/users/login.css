@@ -1,5 +1,11 @@
 #loginForm {
     margin-left: auto;
     margin-right: auto;
-    margin-top: 20px;
+    margin-top: 40px;
+    width: 350px;
+    background-color: #415A77;
+    padding: 0px 10px 10px 10px;  
+    /* top right left bottom*/
+    border-radius: 5%;
+    color:#E0E1DD;
 }

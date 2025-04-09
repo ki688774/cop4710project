@@ -51,7 +51,7 @@
   /* Style the header with a grey background and some padding */
   .header {
     overflow: hidden;
-    background-color: #f1f1f1;
+    background-color: #0D1B2A;
     padding: 5px 10px;
   }
 
@@ -66,6 +66,7 @@
     font-size: 18px;
     line-height: 25px;
     border-radius: 4px;
+    color: #E0E1DD;
   }
 
   #register {
@@ -88,7 +89,7 @@
 
   /* Change the background color on mouse-over */
   .header a:hover {
-    background-color: #ddd;
+    background-color: #415A77;
     color: black;
   }
 

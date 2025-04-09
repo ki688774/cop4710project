@@ -17,24 +17,3 @@
 }
 
 .text-button:hover {background: #eee;}
-
-.button-container {
-    /* Use flexbox to line up the buttons horizontally */
-    display: flex;
-    /* Center the buttons horizontally within the container */
-    justify-content: center;
-    /* Add a little top padding so they're not at the very top of the page */
-    padding-top: 20px;
-}
-
-.button-container button {
-    margin: 0 10px;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-/* Optional hover effect */
-.button-container button:hover {
-    opacity: 0.8;
-}
