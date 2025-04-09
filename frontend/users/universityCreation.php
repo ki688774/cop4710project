@@ -4,9 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register University</title>
-    <link rel="stylesheet" href="./universityCreation.css">
-    <link rel="stylesheet" href="../templates/styles.css">
+    <title>University Creation</title>
+    <link rel="stylesheet" href="users/styles.css">
 </head>
 
 <header>
@@ -17,7 +16,8 @@
     <form id="universityCreation">
     <h1>Register University</h1>
     <p>Make sure this information is correct!</p>
-        
+    <form id="universityCreation">
+
         <label for="university_name">University Name:</label>
         <input type="text" id="university_name" name="university_name" required><br><br>
 
