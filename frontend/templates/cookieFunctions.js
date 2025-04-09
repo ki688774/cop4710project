@@ -3,7 +3,7 @@ const minutes = 30;
 export function saveCookie (cname, data) {
     let date = new Date();
     date.setTime(date.getTime() + minutes * 60000);
-    document.cookie = cname + "=" + data + ";expires=" + date.toUTCString;
+    document.cookie = cname + "=" + data + ";expires=" + date.toUTCString() + ";path=/";
 }
 
 export function getCookie (cname) {

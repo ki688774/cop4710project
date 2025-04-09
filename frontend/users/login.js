@@ -29,6 +29,6 @@ document.getElementById("loginForm").addEventListener("submit", async function (
         return;
     }
 
-    saveCookie("userData", returnedData.result);
+    saveCookie("userData", JSON.stringify(returnedData.result));
     window.location.assign("../homepage.php");
 });
