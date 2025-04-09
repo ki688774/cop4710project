@@ -27,3 +27,7 @@ export function getCookie (cname) {
 export function deleteCookie (cname) {
     saveCookie(cname, "");
 }
+
+export function refreshCookie (cname) {
+    saveCookie(cname, (getCookie(cname)));
+}

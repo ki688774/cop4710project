@@ -22,7 +22,7 @@
     $oldUserData = $stmt->get_result()->fetch_assoc();
 
     if (!$oldUserData || !password_verify($password, $oldUserData["password"])) {
-        returnErrorAndClose("Old password was incorrect.", $stmt, $conn);
+        returnErrorAndClose("Password was incorrect.", $stmt, $conn);
         return;
     }
 

@@ -5,7 +5,7 @@
     // Proccess input and pre-hash newPassword
     $currentUser = $inData["current_user"] ?? null;
     $password = $inData["password"] ?? null;
-    $newPassword = $inData["newPassword"] ?? null;
+    $newPassword = $inData["new_password"] ?? null;
 
     if (!$password || !$newPassword) {
         returnError("All fields must be filled.");

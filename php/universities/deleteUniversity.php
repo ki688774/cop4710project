@@ -4,10 +4,11 @@
 
     // Proccess input
     $currentUser = $inData["current_user"] ?? null;
-    $universityID = $inData["university_id"] ?? null;
+    $universityDomain = $inData["university_domain"] ?? null;
+    $password = $inData["password"] ?? null;
 
-    if (!$universityID || !$currentUser) {
-        returnError("University ID and current user must be given.");
+    if (!$universityDomain || !$password || !$currentUser) {
+        returnError("University domain and super-admin password.");
         return;
     }
 
@@ -17,9 +18,25 @@
 
 
 
+    // Check if user exists
+    $stmt = $conn->prepare("SELECT * FROM users WHERE uid=?");
+    $stmt->bind_param("i", $currentUser);
+
+    if (!attemptExecute($stmt, $conn))
+        return;
+
+    $oldUserData = $stmt->get_result()->fetch_assoc();
+
+    if (!$oldUserData || !password_verify($password, $oldUserData["password"])) {
+        returnErrorAndClose("Password is incorrect.", $stmt, $conn);
+        return;
+    }
+
+
+
     // Check if university is accessible
-    $stmt = $conn->prepare("SELECT * FROM universities WHERE university_id=? AND super_admin_id=?");
-    $stmt->bind_param("ii", $universityID, $currentUser);
+    $stmt = $conn->prepare("SELECT * FROM universities WHERE university_domain=? AND super_admin_id=?");
+    $stmt->bind_param("si", $universityDomain, $currentUser);
 
     if (!attemptExecute($stmt, $conn))
         return;
@@ -27,7 +44,7 @@
     $targetRow = $stmt->get_result()->fetch_assoc();
 
     if (!$targetRow) {
-        returnErrorAndClose("University not found.", $stmt, $conn);
+        returnErrorAndClose("University domain is incorrect.", $stmt, $conn);
         return;
     }
 

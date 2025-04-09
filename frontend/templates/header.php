@@ -13,7 +13,7 @@
   <div class="header-right">
     <a href="">Events</a>
     <a href="">RSOs</a>
-    <a href="">Settings</a>
+    <a href="../settings/settings.php">Settings</a>
     <a href="" id="signOut">Sign Out</a>
     <a href="../users/login.php" id="login">Log In</a>
     <a href="../users/register.php" id="register">Register</a>
