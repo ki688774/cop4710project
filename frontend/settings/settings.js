@@ -5,8 +5,7 @@ let userData = getCookie("userData");
 if (userData != "" && JSON.parse(userData).uid != null) {
 
     userData = JSON.parse(userData);
-    let userDomain = (userData.email.split("@"))[1];
-    let payload = JSON.stringify({university_domain: userDomain});
+    let payload = JSON.stringify({university_id: userData.university_id});
     let returnedResponse = null;
 
     try {

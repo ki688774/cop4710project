@@ -32,7 +32,6 @@
     }
 
     array_splice($loginRow, 6, 1);
-    array_splice($loginRow, 1, 1);
 
     // Return successful result
     $result = '{"result":' . json_encode($loginRow) . '}';

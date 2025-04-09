@@ -3,9 +3,10 @@
     require __DIR__ . '/../global.php';
 
     // Proccess input
+    $universityID = $inData["university_id"] ?? null;
     $universityDomain = $inData["university_domain"] ?? null;
 
-    if (!$universityDomain) {
+    if (!$universityID && !$universityDomain) {
         returnError("University domain must be given.");
         return;
     }
@@ -16,9 +17,15 @@
 
 
 
-    // Get the university data.
-    $stmt = $conn->prepare("SELECT * FROM universities WHERE university_domain=?");
-    $stmt->bind_param("s", $universityDomain);
+    // Get the university data from the university's ID.
+    if ($universityID) {
+        $stmt = $conn->prepare("SELECT * FROM universities WHERE university_id=?");
+        $stmt->bind_param("i", $universityID);
+    } else {
+        // Get the university data from the university's email domain.
+        $stmt = $conn->prepare("SELECT * FROM universities WHERE university_domain=?");
+        $stmt->bind_param("s", $universityDomain);
+    }
 
     if (!attemptExecute($stmt, $conn))
         return;
