@@ -97,7 +97,7 @@
 
 
 
-    <script type="module" src="manageRSO.js"></script>
+    <script src="manageRSO.js"></script>
     <?php include '../templates/errorModal.php';?>
     <?php include '../templates/successModal.php';?> 
 
