@@ -69,18 +69,6 @@
         return;
     }
 
-    // Find if location exists
-    $stmt = $conn->prepare("select * from locations where location_id=?");
-    $stmt->bind_param("i", $locationID);
-
-    if (!attemptExecute($stmt, $conn))
-        return;
-
-    if (!$stmt->get_result()->fetch_assoc()) {
-        returnErrorAndClose("Location not found.", $stmt, $conn);
-        return;
-    }
-
 
 
     $conn->begin_transaction();

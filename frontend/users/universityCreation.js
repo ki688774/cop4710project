@@ -1,8 +1,8 @@
-document.getElementById("unviersityCreation").addEventListener("submit", async function (event) {
+document.getElementById("universityCreation").addEventListener("submit", async function (event) {
     event.preventDefault();
 
     //university information
-    let unviersity_name = document.getElementById("university_name").value;
+    let university_name = document.getElementById("university_name").value;
     let location_name = document.getElementById("location_name").value;
     let address = document.getElementById("address").value;
     let longitude = document.getElementById("longitude").value;
@@ -16,10 +16,14 @@ document.getElementById("unviersityCreation").addEventListener("submit", async f
     let password = document.getElementById("password").value;
     let confirmPassword = document.getElementById("confirmPassword").value;
 
-    let payload = JSON.stringify({unviersity_name: unviersity_name, location_name: location_name, 
-                                address: address, longitude: longitude, latitude: latitude, firstName: firstName, 
-                                lastName: lastName, email: email, username: username, password: password,
-                                confirmPassword: confirmPassword})
+    if (password !== confirmPassword) {
+        summonErrorModal("The passwords do not match.");
+        return;
+    }
+
+    let payload = JSON.stringify({university_name: university_name, location_name: location_name, 
+        address: address, longitude: longitude, latitude: latitude, firstName: firstName, 
+        lastName: lastName, email: email, username: username, password: password,})
     let returnedResponse = null;
 
     try {
@@ -37,11 +41,10 @@ document.getElementById("unviersityCreation").addEventListener("submit", async f
 
     let returnedData = await returnedResponse.json();
     
-        if (typeof returnedData.error !== 'undefined') {
-            summonErrorModal(returnedData.error);
-            return;
-        }
+    if (typeof returnedData.result === 'undefined') {
+        summonErrorModal(returnedData.error);
+        return;
+    }
     
-        saveCookie("userData", returnedData.result);
-        //window.location.assign("../homepage.php");
-    });
+    window.location.assign("./login.php");
+});

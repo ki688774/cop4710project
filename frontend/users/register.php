@@ -5,9 +5,11 @@
     <link rel="stylesheet" href="./register.css">
     <link rel="stylesheet" href="../templates/styles.css">
 </head>
+
 <header>
     <?php include '../templates/header.php';?>
 </header>
+
 <body>
     <h1>Register Account</h1>
     <form id="registerForm">
@@ -32,13 +34,19 @@
         <input type="submit" value="Register">
     </form>
 
+    <button class="button" onclick="window.location.href='../users/universityCreation.php';">
+        Register University and Super-Admin
+    </button>
+
+    <script src="register.js"></script>
     <?php include '../templates/errorModal.php';?>
-    <?php include '../templates/successModal.php';?>
-    
+    <?php include '../templates/successModal.php';?>    
+</body>
+
 <footer id="footer">
     <?php include '../templates/footer.php';?>
 </footer>
 
-    <script src="register.js"></script>
-</body>
+
+
 </html>

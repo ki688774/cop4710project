@@ -4,18 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Homepage</title>
-    <link rel="stylesheet" href="users/styles.css">
+    <title>Register University</title>
+    <link rel="stylesheet" href="./universityCreation.css">
+    <link rel="stylesheet" href="../templates/styles.css">
 </head>
 
 <header>
-    <?php include 'templates/header.php';?>
+    <?php include '../templates/header.php';?>
 </header>
 
 <body>
+    <form id="universityCreation">
     <h1>Register University</h1>
     <p>Make sure this information is correct!</p>
-    <form id="unviersityCreation">
         
         <label for="university_name">University Name:</label>
         <input type="text" id="university_name" name="university_name" required><br><br>
@@ -33,8 +34,8 @@
         <input type="text" id="latitude" name="latitude" required><br><br>
        
     <h1>Register Super Admin Credentials</h1>
-    <p>This information is required for registering a super admin, this super admin will need to 
-        pass on the super admin to the next when needed. 
+    <p>This information is required for registering a super admin.<br> 
+        This super admin will need to pass on the super admin to the next when needed. 
     </p>
 
         <label for="firstName">First Name:</label>
@@ -58,13 +59,13 @@
         <input type="submit" value="Register">
  
     </form>
+    
+    <script src="universityCreation.js"></script>
+    <?php include '../templates/errorModal.php';?>
 </body>
 
-<?php include 'templates/errorModal.php';?>
-<?php include 'templates/successModal.php';?>
-
 <footer id="footer">
-    <?php include 'templates/footer.php';?>
+    <?php include '../templates/footer.php';?>
 </footer>
 
 </html>

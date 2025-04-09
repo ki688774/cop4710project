@@ -1,8 +1,3 @@
-let errorModal = document.getElementById("errorModal");
-let errorText = document.getElementById("errorText");
-let successModal = document.getElementById("successModal");
-let successText = document.getElementById("successText");
-
 document.getElementById("registerForm").addEventListener("submit", async function (event) {
     event.preventDefault();
     
@@ -41,6 +36,5 @@ document.getElementById("registerForm").addEventListener("submit", async functio
         return;
     }
 
-
-    summonSuccessModal(returnedData.result);
+    window.location.assign("./login.php");
 });
