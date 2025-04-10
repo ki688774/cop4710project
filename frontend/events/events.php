@@ -25,7 +25,7 @@
         <span class="form-element">
             <label for="search">Event Name:</label>
             <input type="text" id="search" name="search">
-        </span>
+        </span><br>
 
         <span class="form-element">
             <label for="sort">Sort By:</label>
@@ -49,7 +49,7 @@
             <input type="datetime-local" id="maxTime" name="maxTime">
         </span>
 
-        <input type="submit" value="Search">
+        <br><br><input class="button" type="submit" value="Search">
     </form>
     <div class="results-container" id="results-container">
        <ul class="results-list" id="list">

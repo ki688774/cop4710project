@@ -7,7 +7,7 @@
     $universityDomain = $inData["university_domain"] ?? null;
 
     if (!$universityID && !$universityDomain) {
-        returnError("University domain must be given.");
+        returnError("University domain or ID must be given.");
         return;
     }
 

@@ -5,7 +5,7 @@
     // Proccess input
     $currentUser = $inData["current_user"] ?? null;
     $searchTerm = "%" . $inData["search"] . "%";
-    $sortType = $inData["sortType"] ?? 0;
+    $sortType = $inData["sort_type"] ?? 0;
     $minRating = $inData["minimum_rating"] ?? 0;
     $maxRating = $inData["maximum_rating"] ?? 5;
     $now = new DateTime();
@@ -71,8 +71,9 @@
         $stmt = $conn->prepare("SELECT * FROM events E WHERE event_name LIKE ? AND (total_rating>=? OR (total_rating IS NULL AND ?=0)) AND (total_rating<=? OR (total_rating IS NULL AND ?=0)) AND (NOT ((start_time < ? AND end_time < ?) OR (start_time > ? AND end_time > ?))) AND (
 	        EXISTS (SELECT * FROM public_events P WHERE P.event_id=E.event_id) OR
 	        EXISTS (SELECT * FROM private_events P WHERE P.event_id=E.event_id AND university_id=?) OR
-	        EXISTS (SELECT * FROM rso_events R WHERE R.event_id=E.event_id AND EXISTS (SELECT * FROM rso_joins J WHERE R.rso_id=J.rso_id AND J.uid=?))) ORDER BY ?");
-        $stmt->bind_param("siiiissssiis", $searchTerm, $minRating, $minRating, $maxRating, $minRating, $minTime, $minTime, $maxTime, $maxTime, $universityID, $currentUser, $sortTypeText);
+	        EXISTS (SELECT * FROM rso_events R WHERE R.event_id=E.event_id AND EXISTS (SELECT * FROM rso_joins J WHERE R.rso_id=J.rso_id AND J.uid=?))) 
+            ORDER BY " . $sortTypeText);
+        $stmt->bind_param("siiiissssii", $searchTerm, $minRating, $minRating, $maxRating, $minRating, $minTime, $minTime, $maxTime, $maxTime, $universityID, $currentUser);
     } catch (Exception $error){
         returnMYSQLErrorAndClose($stmt, $conn);
         return;

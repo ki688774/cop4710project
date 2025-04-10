@@ -12,8 +12,7 @@
     <div class="container">
       <div class="row">
         <div class="col-md-8 col-sm-6 col-xs-12">
-          <p class="copyright-text">Copyright &copy; 2025 All Rights Reserved by 
-       <a href="#">Blank</a>.
+          <p class="copyright-text">Copyright &copy; 2025 All Rights Reserved.
           </p>
         </div>
       </div>
@@ -26,7 +25,7 @@
     .site-footer {
         margin-top: 100px;
         background-color: #0D1B2A;
-        padding: 20px 15px 20px;
+        padding: 20px 20px 20px;
         font-size: 15px;
         line-height: 24px;
         color: #E0E1DD;

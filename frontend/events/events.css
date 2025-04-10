@@ -1,11 +1,31 @@
 .form {
     margin-left: auto;
     margin-right: auto;
-    margin-top: 80px;
+    margin-top: 20px;
+    width: 450px;
+    background-color: #0D1B2A;
+    padding: 0px 20px 20px 20px;
+    border-radius: 5%;
 }
 
 ul {
     list-style-type: none;
+}
+
+#eventSearchForm {
+    width: 800px;
+}
+
+#search {
+    width: 75%;
+}
+
+#sort {
+    width: 20%;
+}
+
+.text-button {
+    color: #E0E1DD;
 }
 
 li {
@@ -38,4 +58,7 @@ li {
     margin-right: 8px;
 }
 
-.text-button:hover {background: #eee;}
+.text-button:hover {
+    color: #0D1B2A;
+    background: #eee;
+}

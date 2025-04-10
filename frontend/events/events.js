@@ -40,7 +40,7 @@ document.getElementById("eventSearchForm").addEventListener("submit", async func
 
     
     // Create payload and push.
-    let payload = JSON.stringify({current_user: userData.uid, search: search, sortType: sortType, minimum_time: minTime, maximum_time: maxTime})
+    let payload = JSON.stringify({current_user: userData.uid, search: search, sort_type: sortType, minimum_time: minTime, maximum_time: maxTime})
     let returnedResponse = null;
     
     try {
@@ -55,6 +55,7 @@ document.getElementById("eventSearchForm").addEventListener("submit", async func
         summonErrorModal(error);
         return;
     }
+    
     
 
     let returnedData = await returnedResponse.json();
