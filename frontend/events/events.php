@@ -17,7 +17,6 @@
 <body>
     <h1>Events</h1>
     <div class="button-container">
-        <button>Find Events</button>
         <button>Create an Event</button>
         <button>Manage your Events</button>
     </div>

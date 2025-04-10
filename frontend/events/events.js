@@ -94,14 +94,23 @@ document.getElementById("eventSearchForm").addEventListener("submit", async func
         address.appendChild(document.createTextNode(entry.address));
         resultItem.appendChild(address);
 
+        const eventID = document.createElement('p')
+        eventID.classList.add("eventID");
+        eventID.appendChild(document.createTextNode(entry.event_id));
+        resultItem.appendChild(eventID);
+
         list.appendChild(resultItem);
     }
     
     refreshCookie("userData");
 });
 
+document.getElementsByClassName("event").addEventListener("click", async function (event) {
+
+});
+
 // yyyy-mm-dd hh:mm:ss -> 
 function convertToUserFriendlyTime (inString) {
     let date = Date(inString.replace(" ", "T"));
-    return date.toLocaleString();
+    return date.toLocaleString("en-US", { timeZone: "UTC" });
 }

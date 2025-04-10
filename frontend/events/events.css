@@ -4,6 +4,20 @@
     margin-top: 80px;
 }
 
+ul {
+    list-style-type: none;
+}
+
+li {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    width: 450px;
+    background-color: #0D1B2A;
+    padding: 10px 20px 20px 10px;
+    border-radius: 5%;
+}
+
 .results-list {
     margin-top: 80px;
 }
