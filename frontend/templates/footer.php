@@ -25,11 +25,11 @@
 <style>
     .site-footer {
         margin-top: 100px;
-        background-color: #f1f1f1;
+        background-color: #0D1B2A;
         padding: 20px 15px 20px;
         font-size: 15px;
         line-height: 24px;
-        color: #737373;
+        color: #E0E1DD;
     }
 
     .site-footer h6 {
@@ -41,7 +41,7 @@
     }
 
     .site-footer a {
-        color: #737373;
+        color: #E0E1DD;
     }
 
     .site-footer a:hover {

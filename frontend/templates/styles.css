@@ -1,9 +1,11 @@
 h1 {
     text-align: center;
+    color: #E0E1DD;
 }
 
 h2 {
     text-align: center;
+    color: #E0E1DD;
 }
 
 body {
@@ -15,8 +17,46 @@ body {
     display: flex;
     flex-direction: column;
     overflow: auto;
+    background-color: #1B263B;
+}
+
+input {
+    background-color: #415A77;
 }
 
 #footer {
     margin-top: auto;
+}
+
+.form label {
+    color: #E0E1DD;
+}
+
+.form input {
+    color: #E0E1DD;
+}
+
+.button-container {
+    /* Use flexbox to line up the buttons horizontally */
+    display: flex;
+    /* Center the buttons horizontally within the container */
+    justify-content: center;
+    /* Add a little top padding so they're not at the very top of the page */
+    padding-top: 20px;
+}
+
+.button-container button {
+    margin: 0 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    color: #E0E1DD;
+    background-color: #0D1B2A;
+}
+
+/* Optional hover effect */
+.button-container button:hover {
+    opacity: 0.8;
+    background-color: #415A77;
+    color: black;
 }
