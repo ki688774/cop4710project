@@ -52,6 +52,11 @@
 
         <input type="submit" value="Search">
     </form>
+    <div class="results-container">
+       <ul class="results-list" id="list">
+
+       </ul>
+    </div>
     <script type="module" src="events.js"></script>
     <?php include '../templates/errorModal.php';?>
 </body>

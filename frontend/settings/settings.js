@@ -127,7 +127,7 @@ document.getElementById("updatePasswordForm").addEventListener("submit", async f
         return;
     }
 
-    refreshCookie();
+    refreshCookie("userData");
     summonSuccessModal("User password updated successfully.");
 });
 
@@ -235,7 +235,7 @@ document.getElementById("updateUniversityForm").addEventListener("submit", async
         return;
     }
 
-    refreshCookie();
+    refreshCookie("userData");
     summonSuccessModal("University data updated successfully.");
 });
 
@@ -284,7 +284,7 @@ document.getElementById("transferUniversityForm").addEventListener("submit", asy
         return;
     }
 
-    refreshCookie();
+    refreshCookie("userData");
     window.location.reload();
 });
 

@@ -4,6 +4,14 @@
     margin-top: 80px;
 }
 
+.results-list {
+    margin-top: 80px;
+}
+
+.eventID {
+    display: none;
+}
+
 .text-button {
     border: none;
     background-color: inherit;

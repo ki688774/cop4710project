@@ -1,10 +1,8 @@
 import {refreshCookie, getCookie} from '../templates/cookieFunctions.js';
 
 let descending = false;
-
 let date = new Date();
 date.setTime(date.getTime());
-document.getElementById("minTime").value = (date.toISOString()).substring(0,16);
 
 // Invert the value of descending and switch ascendingDescending's text on click.
 document.getElementById("ascendingDescending").addEventListener("click", async function (event) {
@@ -21,9 +19,15 @@ document.getElementById("eventSearchForm").addEventListener("submit", async func
     event.preventDefault();
     
     let search = document.getElementById("search").value;
-    let sortType = document.getElementById("sort").value + (descending ? 1 : 0);
+    let sortType = Number(document.getElementById("sort").value) + (descending ? 1 : 0);
     let minTime = document.getElementById("minTime").value.replace("T", " ") + ":00";
     let maxTime = document.getElementById("maxTime").value.replace("T", " ") + ":00";
+
+    if (minTime == ":00")
+        minTime = "";
+
+    if (maxTime == ":00")
+        maxTime = "";
 
     let userData = getCookie("userData");
     if (userData == "" || JSON.parse(userData).uid == null) {
@@ -60,6 +64,44 @@ document.getElementById("eventSearchForm").addEventListener("submit", async func
         return;
     }
 
-    summonErrorModal(returnedData.result);
-    refreshCookie();
+    let list = document.getElementById("list");
+
+    while (list.firstChild){
+        list.removeChild(list.firstChild)
+    }
+
+    for (const entry of returnedData.result) {
+        const resultItem = document.createElement('li');
+        resultItem.classList.add('event')
+
+        const eventName = document.createElement('h3')
+        eventName.classList.add("eventName");
+        eventName.appendChild(document.createTextNode(entry.event_name));
+        resultItem.appendChild(eventName);
+
+        const eventDescription = document.createElement('p')
+        eventDescription.classList.add("eventDescription");
+        eventDescription.appendChild(document.createTextNode(entry.event_description));
+        resultItem.appendChild(eventDescription);
+
+        const times = document.createElement('p')
+        times.classList.add("times");
+        times.appendChild(document.createTextNode(convertToUserFriendlyTime(entry.start_time) + " to " + convertToUserFriendlyTime(entry.end_time)));
+        resultItem.appendChild(times);
+
+        const address = document.createElement('p')
+        address.classList.add("address");
+        address.appendChild(document.createTextNode(entry.address));
+        resultItem.appendChild(address);
+
+        list.appendChild(resultItem);
+    }
+    
+    refreshCookie("userData");
 });
+
+// yyyy-mm-dd hh:mm:ss -> 
+function convertToUserFriendlyTime (inString) {
+    let date = Date(inString.replace(" ", "T"));
+    return date.toLocaleString();
+}
