@@ -20,12 +20,28 @@ body {
     background-color: #1B263B;
 }
 
-input {
+input[type="submit"].button:hover {
     background-color: #415A77;
+}
+
+input {
+    background-color: #1B263B;
 }
 
 #footer {
     margin-top: auto;
+}
+
+input[type="text"], select {
+    width:100%;
+}
+
+input[type="password"], select {
+    width:100%;
+}
+
+input[type="email"], select {
+    width:100%;
 }
 
 .form label {
@@ -35,6 +51,23 @@ input {
 .form input {
     color: #E0E1DD;
 }
+
+.button {
+    margin: 0 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    color: #E0E1DD;
+    background-color: #0D1B2A;
+    border-radius: 5%;
+}
+
+.button a:hover{
+    opacity: 0.8;
+    background-color: #415A77;
+    color: #E0E1DD;
+}
+
 
 .button-container {
     /* Use flexbox to line up the buttons horizontally */
