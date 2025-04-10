@@ -26,6 +26,7 @@
         background-color: #0D1B2A;
         padding: 10px 20px 20px 10px;
         border-radius: 5%;
+        overflow-wrap: break-word;
     }
 
     .close {

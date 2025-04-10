@@ -1,0 +1,56 @@
+#eventInformation {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    max-width: 800px;
+    overflow-wrap: break-word;
+    padding: 0px 40px 20px 40px;
+    background-color: #0D1B2A;
+    border-radius: 5%;
+}
+
+.form {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    width: 450px;
+    background-color: #0D1B2A;
+    padding: 10px 20px 20px 10px;
+    border-radius: 5%;
+}
+
+ul {
+    list-style-type: none;
+}
+
+li {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    width: 450px;
+    background-color: #0D1B2A;
+    padding: 10px 20px 20px 10px;
+    border-radius: 5%;
+}
+
+.results-list {
+    margin-top: 80px;
+}
+
+.eventID {
+    display: none;
+}
+
+.text-button {
+    border: none;
+    background-color: inherit;
+    padding: 4px 4px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.form-element {
+    margin-right: 8px;
+}
+
+.text-button:hover {background: #eee;}

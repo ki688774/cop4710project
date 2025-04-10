@@ -51,7 +51,7 @@
 
         <input type="submit" value="Search">
     </form>
-    <div class="results-container">
+    <div class="results-container" id="results-container">
        <ul class="results-list" id="list">
 
        </ul>

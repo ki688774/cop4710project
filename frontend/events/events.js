@@ -105,8 +105,17 @@ document.getElementById("eventSearchForm").addEventListener("submit", async func
     refreshCookie("userData");
 });
 
-document.getElementsByClassName("event").addEventListener("click", async function (event) {
-
+document.getElementById("results-container").addEventListener("click", async function (event) {
+    let target = event.target;
+    if (target.tagName != 'LI')
+        if (target.parentNode.tagName != 'LI')
+            return;
+        else
+            target = target.parentNode;
+    
+    let eventID = target.querySelector('.eventID');
+    refreshCookie("userData");
+    window.location.assign("./eventDetails.php?event_id=" + eventID.textContent);
 });
 
 // yyyy-mm-dd hh:mm:ss -> 
