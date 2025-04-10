@@ -25,7 +25,7 @@
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required><br><br>
 
-        <input type="submit" value="Update">
+        <input class="button" type="submit" value="Update">
     </form>
 
     <form class="form" id="updatePasswordForm">
@@ -40,7 +40,7 @@
         <label for="confirmPassword">Confirm Password:</label>
         <input type="password" id="confirmPassword" name="confirmPassword" required><br><br>
 
-        <input type="submit" value="Update">
+        <input class="button" type="submit" value="Update">
     </form>
 
     <form class="form dependentForm" id="deleteAccountForm">
@@ -51,7 +51,7 @@
         <label for="deleteAccountConfirmPassword">Confirm Password:</label>
         <input type="password" id="deleteAccountConfirmPassword" name="deleteAccountConfirmPassword" required><br><br>
 
-        <input type="submit" value="Delete">
+        <input class="button" type="submit" value="Delete">
     </form>
 
     <form class="form dependentForm" id="updateUniversityForm">
@@ -80,7 +80,7 @@
         <label for="updateUniversityConfirmPassword">Confirm Password:</label>
         <input type="password" id="updateUniversityConfirmPassword" name="updateUniversityConfirmPassword" required><br><br>
 
-        <input type="submit" value="Update">
+        <input class="button" type="submit" value="Update">
     </form>
 
     <form class="form dependentForm" id="transferUniversityForm">
@@ -94,7 +94,7 @@
         <label for="transferUniversityConfirmPassword">Confirm Password:</label>
         <input type="password" id="transferUniversityConfirmPassword" name="transferUniversityConfirmPassword" required><br><br>
 
-        <input type="submit" value="Transfer">
+        <input class="button" type="submit" value="Transfer">
     </form>
 
     <form class="form dependentForm" id="deleteUniversityForm">
@@ -108,7 +108,7 @@
         <label for="deleteUniversityConfirmPassword">Confirm Password:</label>
         <input type="password" id="deleteUniversityConfirmPassword" name="deleteUniversityConfirmPassword" required><br><br>
 
-        <input type="submit" value="Delete">
+        <input class="button" type="submit" value="Delete">
     </form>
 
     <script type="module" src="settings.js"></script>

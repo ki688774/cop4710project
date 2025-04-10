@@ -13,7 +13,7 @@
         <label for="universityDomain">University Domain:</label>
         <input type="email" id="universityDomain" name="universityDomain" required><br><br>
 
-        <input type="submit">
+        <input class="button" type="submit" value="Delete">
     </form>
 </body>
 

@@ -16,7 +16,7 @@
         <label for="rso_name">RSO Name:</label>
         <input type="text" id="rso_name" name="rso_name" required><br><br>
 
-        <input type="submit">
+        <input class="button" type="submit" value="Delete">
     </form>
 </body>
 

@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>University Creation</title>
-    <link rel="stylesheet" href="users/styles.css">
+    <link rel="stylesheet" href="../templates/styles.css">
+    <link rel="stylesheet" href="./universityCreation.css">
 </head>
 
 <header>
@@ -16,7 +17,6 @@
     <form id="universityCreation">
     <h1>Register University</h1>
     <p>Make sure this information is correct!</p>
-    <form id="universityCreation">
 
         <label for="university_name">University Name:</label>
         <input type="text" id="university_name" name="university_name" required><br><br>
@@ -56,7 +56,7 @@
         <label for="confirmPassword">Confirm Password:</label>
         <input type="password" id="confirmPassword" name="confirmPassword" required><br><br>
 
-        <input type="submit" value="Register">
+        <input class="button" type="submit" value="Register">
  
     </form>
     
