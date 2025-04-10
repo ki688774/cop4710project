@@ -55,7 +55,7 @@ document.getElementById("eventSearchForm").addEventListener("submit", async func
         summonErrorModal(error);
         return;
     }
-    
+
     
 
     let returnedData = await returnedResponse.json();
@@ -119,7 +119,7 @@ document.getElementById("results-container").addEventListener("click", async fun
     window.location.assign("./eventDetails.php?event_id=" + eventID.textContent);
 });
 
-// yyyy-mm-dd hh:mm:ss -> 
+// yyyy-mm-dd hh:mm:ss -> mm/dd/yyyy hh:mm:ss am/pm
 function convertToUserFriendlyTime (inString) {
     let date = Date(inString.replace(" ", "T"));
     return date.toLocaleString("en-US", { timeZone: "UTC" });

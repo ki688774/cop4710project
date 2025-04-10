@@ -9,6 +9,11 @@
     border-radius: 5%;
 }
 
+#commentBox {
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .form {
     margin-left: auto;
     margin-right: auto;
