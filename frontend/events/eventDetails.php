@@ -16,11 +16,24 @@
 
 <body>
     <div id="eventInformation">
-        <h1 id="eventName">Temporary Event Name</h1>
+        <div id="eventHeader">
+            <h1 id="eventName">Temporary Event Name</h1>
+        </div>
         <p id="eventDescription">This is a temporary description for the event.</p>
-        <p id="eventTime">01/02/2003, 12:00:00 PM to 02/03/2004, 12:00:00 PM</p>
-        <p id="eventAddress">123 Example Rd. (12.34567890, 12.34567890)</p>
-        <p id="contactInformation">example@example.org, (123) 456-7890</p>
+        <div id="eventTime">
+            <span id="startTime">01/02/2003, 12:00:00 PM</span>
+            <span> to </span>
+            <span id="endTime">02/03/2004, 12:00:00 PM</span>
+        </div>
+        <div id="eventLocation">
+            <span id="locationName">Example,</span>
+            <span id="locationAddress">123 Example Rd.</span>
+            <span id="locationCoords">(12.34567890, 12.34567890)</span>
+        </div>
+        <div id="contactInformation">
+            <span id="contactEmail">example@example.org</span>
+            <span id="contactPhone">(123) 456-7890</span>
+        </div>
     </div>
 
     <form class="form" id="commentForm">

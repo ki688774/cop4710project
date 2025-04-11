@@ -17,9 +17,6 @@ document.getElementById("ascendingDescending").addEventListener("click", async f
 });
 
 document.addEventListener("DOMContentLoaded", async function () {
-    const urlParams = new URLSearchParams(window.location.search);
-    const eventID = urlParams.get('event_id');
-
     let userData = getCookie("userData");
     if (userData == "" || JSON.parse(userData).uid == null) {
         summonErrorModal("User is not signed in.");
@@ -52,13 +49,66 @@ document.addEventListener("DOMContentLoaded", async function () {
         return;
     }
 
+
+
     document.getElementById("eventName").textContent = returnedData.result.event_name;
     document.getElementById("eventDescription").textContent = returnedData.result.event_description;
-    document.getElementById("eventTime").textContent = convertToUserFriendlyTime(returnedData.result.start_time) + " to " + convertToUserFriendlyTime(returnedData.result.end_time);
-    document.getElementById("eventAddress").textContent = returnedData.result.location_name + ", " + returnedData.result.address + " (" + returnedData.result.longitude + ", " + returnedData.result.latitude + ")";
-    document.getElementById("contactInformation").textContent = returnedData.result.contact_email + ", " + returnedData.result.contact_phone;
+
+    document.getElementById("startTime").textContent = convertToUserFriendlyTime(returnedData.result.start_time);
+    document.getElementById("endTime").textContent = convertToUserFriendlyTime(returnedData.result.end_time);
+    
+    document.getElementById("locationName").textContent = returnedData.result.location_name + ","
+    document.getElementById("locationAddress").textContent = returnedData.result.address;
+    document.getElementById("locationCoords").textContent = "(" + returnedData.result.longitude + ", " + returnedData.result.latitude + ")";
+
+    document.getElementById("contactEmail").textContent = returnedData.result.contact_email + ","
+    document.getElementById("contactPhone").textContent = returnedData.result.contact_phone;
 
     getComments();
+
+
+
+    // Create payload and push.
+    payload = JSON.stringify({current_user: userData.uid, event_id: eventID});
+    returnedResponse = null;
+
+    try {
+        returnedResponse = await fetch("../../php/events/canEditEventStandalone.php", {
+            method: "POST",
+            headers: {
+                "content-type": "application/json"
+            },
+            body: payload
+        });
+    } catch (error) {
+        summonErrorModal(error);
+        return;
+    }
+
+    returnedData = await returnedResponse.json();
+
+    if (typeof returnedData.result === 'undefined') {
+        return;
+    }
+
+
+    // If you're the owner of this event, then create the edit and delete buttons.
+    const eventOptionsSpan = document.createElement('span');
+    eventOptionsSpan.classList.add("eventOptionsSpan", "forceInline");
+
+    const editButton = document.createElement('p');
+    editButton.classList.add("editEventButton", "text-button", "forceInline");
+    editButton.appendChild(document.createTextNode("✎"));
+    editButton.addEventListener('click', editEvent, false);
+    eventOptionsSpan.appendChild(editButton);
+
+    const deleteButton = document.createElement('p');
+    deleteButton.classList.add("deleteEventButton", "text-button", "forceInline");
+    deleteButton.appendChild(document.createTextNode("×"));
+    deleteButton.addEventListener('click', deleteEvent, false);
+    eventOptionsSpan.appendChild(deleteButton);
+
+    document.getElementById("eventHeader").appendChild(eventOptionsSpan); 
 });
 
 document.getElementById("commentForm").addEventListener("submit", async function (event) {
@@ -111,6 +161,57 @@ document.getElementById("searchForm").addEventListener("submit", async function 
     event.preventDefault();
     getComments();
 });
+
+async function editEvent (event) {
+    let eventInformation = event.target.parentNode.parentNode;
+    let eventName = eventInformation.querySelector("#eventName").innerHTML;
+
+    // Hide existing elements.
+    eventInformation.querySelector("#eventHeader").style.display = 'none';
+    eventInformation.querySelector("#eventDescription").style.display = 'none';
+    eventInformation.querySelector("#eventTime").style.display = 'none';
+    eventInformation.querySelector("#eventAddress").style.display = 'none';
+    eventInformation.querySelector("#contactInformation").style.display = 'none';
+}
+
+async function deleteEvent (event) {
+    // Check if the user is signed in.
+    let userData = getCookie("userData");
+    if (userData == "" || JSON.parse(userData).uid == null) {
+        summonErrorModal("User is not signed in.");
+        return;
+    }
+
+    userData = JSON.parse(userData);
+
+
+
+    // Create payload and push.
+    let payload = JSON.stringify({current_user: userData.uid, event_id: eventID});
+    let returnedResponse = null;
+
+    try {
+        returnedResponse = await fetch("../../php/events/deleteEvent.php", {
+            method: "POST",
+            headers: {
+                "content-type": "application/json"
+            },
+            body: payload
+        });
+    } catch (error) {
+        summonErrorModal(error);
+        return;
+    }
+
+    let returnedData = await returnedResponse.json();
+
+    if (typeof returnedData.result === 'undefined') {
+        summonErrorModal(returnedData.error);
+        return;
+    }
+
+    window.location.assign("./events.php");
+}
 
 // yyyy-mm-dd hh:mm:ss -> mm/dd/yyyy hh:mm:ss am/pm
 // There is technically a function that already does this, but it was giving me trouble.

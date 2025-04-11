@@ -65,7 +65,7 @@ CREATE TABLE `events` (
   `event_id` int NOT NULL AUTO_INCREMENT,
   `start_time` datetime NOT NULL,
   `end_time` datetime NOT NULL,
-  `event_name` varchar(50) NOT NULL,
+  `event_name` varchar(100) NOT NULL,
   `event_description` varchar(1024) NOT NULL,
   `contact_phone` varchar(20) NOT NULL,
   `contact_email` varchar(256) NOT NULL,

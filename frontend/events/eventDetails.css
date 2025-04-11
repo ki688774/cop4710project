@@ -5,6 +5,17 @@
     top: -20px;
 }
 
+.eventOptionsSpan {
+    font-size: xx-large;
+    position: absolute;
+    right: 0px;
+    top: -38px;
+}
+
+#eventHeader {
+    position: relative;
+}
+
 input[type="edit"].button:hover {
     background-color: #415A77;
 }
@@ -58,6 +69,11 @@ input[type="cancelEdit"].button:hover {
     padding: 0px 40px 20px 40px;
     background-color: #0D1B2A;
     border-radius: 5%;
+}
+
+#eventName {
+    text-align: left;
+    width: 80%;
 }
 
 #search {
