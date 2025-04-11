@@ -120,7 +120,26 @@ document.getElementById("results-container").addEventListener("click", async fun
 });
 
 // yyyy-mm-dd hh:mm:ss -> mm/dd/yyyy hh:mm:ss am/pm
+// There is technically a function that already does this, but it was giving me trouble.
 function convertToUserFriendlyTime (inString) {
-    let date = Date(inString.replace(" ", "T"));
-    return date.toLocaleString("en-US", { timeZone: "UTC" });
+    let year = inString.substring(0, 4);
+    let month = inString.substring(5, 7);
+    let day = inString.substring(8, 10);
+    let hour = Number(inString.substring(11, 13));
+    let minute = inString.substring(14, 16);
+    let seconds = inString.substring(17, 19);
+
+    let amPm = "AM";
+
+    if (hour >= 12) {
+        amPM = "PM";
+        if (hour > 12)
+            hour -= 12;
+    }
+
+    if (hour == 0) {
+        hour = 12;
+    }
+
+    return month + "/" + day + "/" + year + " " + hour + ":" + minute + ":" + seconds + " " + amPm;
 }

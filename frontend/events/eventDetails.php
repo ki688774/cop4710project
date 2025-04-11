@@ -30,7 +30,7 @@
     </form>
 
     <div class="comments-container" id="comments-container">
-        <div class="form" id="searchForm">
+        <form class="form" id="searchForm">
             <span class="form-element">
                 <label for="minTime">From</label>
                 <input type="datetime-local" id="minTime" name="minTime">
@@ -55,7 +55,7 @@
                 <label for="search">Search:</label>
                 <input type="text" id="search" name="search">
             </span>
-        </div>
+        </form>
         <ul class="comments-list" id="list">
 
         </ul>

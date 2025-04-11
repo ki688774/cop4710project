@@ -5,10 +5,9 @@
     // Proccess input
     $currentUser = $inData["current_user"] ?? null;
     $commentID = $inData["comment_id"] ?? null;
-    $eventID = $inData["event_id"] ?? null;
     $text = $inData["text"] ?? null;
 
-    if (!$currentUser || !$eventID || !$commentID || !$text) {
+    if (!$currentUser || !$commentID || !$text) {
         returnError("All fields must be filled.");
         return;
     }
@@ -20,8 +19,8 @@
 
     // Check if the user has already made a comment with that ID.
     try {
-        $stmt = $conn->prepare("SELECT * FROM comments WHERE uid=? AND event_id=? AND comment_id=?");
-        $stmt->bind_param("iii", $currentUser, $eventID, $commentID);
+        $stmt = $conn->prepare("SELECT * FROM comments WHERE uid=? AND comment_id=?");
+        $stmt->bind_param("ii", $currentUser, $commentID);
     } catch (Exception $error){
         returnMYSQLErrorAndClose($stmt, $conn);
         return;

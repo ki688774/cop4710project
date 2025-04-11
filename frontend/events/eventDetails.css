@@ -1,7 +1,36 @@
 .optionsSpan {
+    font-size: x-large;
     position: absolute;
     right: 20px;
-    top: -8px;
+    top: -20px;
+}
+
+input[type="edit"].button:hover {
+    background-color: #415A77;
+}
+
+input[type="cancelEdit"].button:hover {
+    background-color: #415A77;
+}
+
+.commentText {
+    white-space: pre-wrap;
+}
+
+.editButtons {
+    position: relative;
+    padding-top: 20px;
+    height: 42px;
+    width: 100%;
+    overflow: auto;
+}
+
+.editButton {
+    left: -10px;
+}
+
+.cancelButton {
+    right: -10px;
 }
 
 .forceInline {

@@ -64,13 +64,219 @@ document.addEventListener("DOMContentLoaded", async function () {
 document.getElementById("commentForm").addEventListener("submit", async function (event) {
     // Process input.
     event.preventDefault();
+    let text = document.getElementById("commentBox").value;
+
+    let userData = getCookie("userData");
+    if (userData == "" || JSON.parse(userData).uid == null) {
+        summonErrorModal("User is not signed in.");
+        return;
+    }
+
+    userData = JSON.parse(userData);
+
+
+
+    // Create payload and push.
+    let payload = JSON.stringify({current_user: userData.uid, event_id: eventID, text: text})
+    let returnedResponse = null;
+    
+    try {
+        returnedResponse = await fetch("../../php/comments/createComment.php", {
+            method: "POST",
+            headers: {
+                "content-type": "application/json"
+            },
+            body: payload
+        });
+    } catch (error) {
+        summonErrorModal(error);
+        return;
+    }
+
+    
+
+    let returnedData = await returnedResponse.json();
+
+    if (typeof returnedData.result === 'undefined') {
+        summonErrorModal(returnedData.error);
+        return;
+    }
+
+    refreshCookie("userData");
+    getComments();
+});
+
+document.getElementById("searchForm").addEventListener("submit", async function (event) {
+    // Process input.
+    event.preventDefault();
     getComments();
 });
 
 // yyyy-mm-dd hh:mm:ss -> mm/dd/yyyy hh:mm:ss am/pm
+// There is technically a function that already does this, but it was giving me trouble.
 function convertToUserFriendlyTime (inString) {
-    let date = Date(inString.replace(" ", "T"));
-    return date.toLocaleString("en-US", { timeZone: "UTC" });
+    let year = inString.substring(0, 4);
+    let month = inString.substring(5, 7);
+    let day = inString.substring(8, 10);
+    let hour = Number(inString.substring(11, 13));
+    let minute = inString.substring(14, 16);
+    let seconds = inString.substring(17, 19);
+
+    let amPm = "AM";
+
+    if (hour >= 12) {
+        amPM = "PM";
+        if (hour > 12)
+            hour -= 12;
+    }
+
+    if (hour == 0) {
+        hour = 12;
+    }
+
+    return month + "/" + day + "/" + year + " " + hour + ":" + minute + ":" + seconds + " " + amPm;
+}
+
+async function deleteComment (event) {
+    let listItem = event.target.parentNode.parentNode;
+    let targetCommentID = Number(listItem.querySelector(".commentID").innerHTML);
+
+    let userData = getCookie("userData");
+    if (userData == "" || JSON.parse(userData).uid == null) {
+        summonErrorModal("User is not signed in.");
+        return;
+    }
+
+    userData = JSON.parse(userData);
+
+
+
+    // Create payload and push.
+    let payload = JSON.stringify({current_user: userData.uid, comment_id: targetCommentID});
+    let returnedResponse = null;
+    
+    try {
+        returnedResponse = await fetch("../../php/comments/deleteComment.php", {
+            method: "POST",
+            headers: {
+                "content-type": "application/json"
+            },
+            body: payload
+        });
+    } catch (error) {
+        summonErrorModal(error);
+        return;
+    }
+
+    
+
+    let returnedData = await returnedResponse.json();
+
+    if (typeof returnedData.result === 'undefined') {
+        summonErrorModal(returnedData.error);
+        return;
+    }
+
+    getComments();
+}
+
+async function enterEditMode (event) {
+    let listItem = event.target.parentNode.parentNode;
+    let currentText = listItem.querySelector(".commentText").innerHTML;
+
+    // Hide existing elements.
+    listItem.querySelector(".commenterName").style.display = 'none';
+    listItem.querySelector(".timestamp").style.display = 'none';
+    listItem.querySelector(".optionsSpan").style.display = 'none';
+    listItem.querySelector(".commentText").style.display = 'none';
+
+
+
+    // Set up update mode elements and append them to the entry.
+    const textUpdateBox = document.createElement('textarea');
+    textUpdateBox.classList.add("textUpdateBox");
+    textUpdateBox.setAttribute("rows", 5);
+    textUpdateBox.setAttribute("cols", 75);
+    textUpdateBox.innerText = currentText;
+    listItem.appendChild(textUpdateBox);
+
+    const buttonDiv = document.createElement('div');
+    buttonDiv.classList.add("editButtons");
+
+    const pushEditButton = document.createElement('input');
+    pushEditButton.classList.add("button", "cancelButton");
+    pushEditButton.setAttribute("type", "edit");
+    pushEditButton.setAttribute("value", "Edit");
+    pushEditButton.addEventListener('click', pushEdit, false);
+    buttonDiv.appendChild(pushEditButton);
+
+    const cancelEditButton = document.createElement('input');
+    cancelEditButton.classList.add("button", "editButton");
+    cancelEditButton.setAttribute("type", "cancelEdit");
+    cancelEditButton.setAttribute("value", "Cancel");
+    cancelEditButton.addEventListener('click', exitEditMode, false);
+    buttonDiv.appendChild(cancelEditButton);
+
+    listItem.appendChild(buttonDiv);
+}
+
+async function pushEdit (event) {
+    // Process input.
+    let listItem = event.target.parentNode.parentNode;
+    let currentText = listItem.querySelector(".textUpdateBox").value;
+    let targetCommentID = Number(listItem.querySelector(".commentID").innerHTML);
+
+    let userData = getCookie("userData");
+    if (userData == "" || JSON.parse(userData).uid == null) {
+        summonErrorModal("User is not signed in.");
+        return;
+    }
+
+    userData = JSON.parse(userData);
+
+
+
+    // Create payload and push.
+    let payload = JSON.stringify({current_user: userData.uid, comment_id: targetCommentID, text: currentText})
+    let returnedResponse = null;
+    
+    try {
+        returnedResponse = await fetch("../../php/comments/updateComment.php", {
+            method: "POST",
+            headers: {
+                "content-type": "application/json"
+            },
+            body: payload
+        });
+    } catch (error) {
+        summonErrorModal(error);
+        return;
+    }
+
+    
+
+    let returnedData = await returnedResponse.json();
+
+    if (typeof returnedData.result === 'undefined') {
+        summonErrorModal(returnedData.error);
+        return;
+    }
+
+    refreshCookie("userData");
+    getComments();
+}
+
+async function exitEditMode (event) {
+    // Delete all edit elements.
+    let listItem = event.target.parentNode.parentNode;
+    listItem.removeChild(listItem.querySelector(".textUpdateBox"));
+    listItem.removeChild(listItem.querySelector(".editButtons"));
+
+    // Return all non-edit elements.
+    listItem.querySelector(".commenterName").style.display = 'inline';
+    listItem.querySelector(".timestamp").style.display = 'inline';
+    listItem.querySelector(".optionsSpan").style.display = 'inline';
+    listItem.querySelector(".commentText").style.display = 'block';
 }
 
 async function getComments () {
@@ -121,12 +327,14 @@ async function getComments () {
         return;
     }
 
+    // Get the current comment list, and empty it out if there is anything.
     let list = document.getElementById("list");
 
     while (list.firstChild){
         list.removeChild(list.firstChild)
     }
 
+    // Create each individual comment.
     for (const entry of returnedData.result) {
         const resultItem = document.createElement('li');
         resultItem.classList.add('comment')
@@ -148,11 +356,13 @@ async function getComments () {
             const editButton = document.createElement('p');
             editButton.classList.add("editButton", "text-button", "forceInline");
             editButton.appendChild(document.createTextNode("✎"));
+            editButton.addEventListener('click', enterEditMode, false);
             optionsSpan.appendChild(editButton);
 
             const deleteButton = document.createElement('p');
             deleteButton.classList.add("deleteButton", "text-button", "forceInline");
             deleteButton.appendChild(document.createTextNode("×"));
+            deleteButton.addEventListener('click', deleteComment, false);
             optionsSpan.appendChild(deleteButton);
 
             resultItem.appendChild(optionsSpan);
