@@ -25,9 +25,41 @@
 
     <form class="form" id="commentForm">
     <h2>Leave A Comment</h2>
-        <textarea id="commentBox" name="commentBox" rows="5" cols="50" required></textarea><br>
+        <textarea class="textarea" id="commentBox" name="commentBox" rows="5" cols="70" required></textarea>
         <input class="button" type="submit" value="Post">
     </form>
+
+    <div class="comments-container" id="comments-container">
+        <div class="form" id="searchForm">
+            <span class="form-element">
+                <label for="minTime">From</label>
+                <input type="datetime-local" id="minTime" name="minTime">
+            </span>
+
+            <span class="form-element">
+                <label for="maxTime">To</label>
+                <input type="datetime-local" id="maxTime" name="maxTime">
+            </span>
+            <input class="button" type="submit" value="Search">
+            <br>
+            <span class="form-element">
+                <label for="sort">Sort By:</label>
+                <select id="sort" name="sort">
+                    <option value=0 selected>Time</option>
+                    <option value=2>First Name</option>
+                    <option value=4>Last Name</option>
+                </select>
+                <button class="text-button" type="button" id="ascendingDescending">▲</button>
+            </span>
+            <span class="form-element">
+                <label for="search">Search:</label>
+                <input type="text" id="search" name="search">
+            </span>
+        </div>
+        <ul class="comments-list" id="list">
+
+        </ul>
+    </div>
 
     <script type="module" src="eventDetails.js"></script>
     <?php include '../templates/errorModal.php';?>

@@ -3,10 +3,18 @@
     require __DIR__ . '/../global.php';
 
     // Proccess input
+    $searchTerm = "%" . $inData["search"] . "%";
+    $sortType = $inData["sort_type"] ?? 0;
     $currentUser = $inData["current_user"] ?? null;
-    $minTime = $inData["minimum_time"] ?? "1000-01-01 00:00:00";
-    $maxTime = $inData["maximum_time"] ?? "9999-12-31 23:59:59";
     $eventID = $inData["event_id"] ?? null;
+    $minTime = $inData["minimum_time"] ?? "1000-01-01 00:00:00"; 
+    $maxTime = $inData["maximum_time"] ?? "9999-12-31 23:59:59";
+
+    if ($minTime == "")
+        $minTime = "1000-01-01 00:00:00"; 
+
+    if ($maxTime == "")
+        $maxTime = "9999-12-31 23:59:59";
 
     if (!$currentUser || !$eventID) {
         returnError("All critical fields must be filled.");
@@ -40,7 +48,7 @@
     	    EXISTS (SELECT * FROM private_events P WHERE P.event_id=E.event_id AND university_id=?) OR
 	        EXISTS (SELECT * FROM rso_events R WHERE R.event_id=E.event_id AND EXISTS (SELECT * FROM rso_joins J WHERE R.rso_id=J.rso_id AND J.uid=?)))");
         $stmt->bind_param("iii", $eventID, $universityID, $currentUser);
-    } catch (Exception $error){
+    } catch (Exception $error) {
         returnMYSQLErrorAndClose($stmt, $conn);
         return;
     }
@@ -55,10 +63,33 @@
 
 
 
+    $sortTypeText = null;
+
+    switch ($sortType) {
+        case 1:
+            $sortTypeText = "timestamp DESC";
+            break;
+        case 2:
+            $sortTypeText = "firstName ASC";
+            break;
+        case 3:
+            $sortTypeText = "firstName DESC";
+            break;
+        case 4:
+            $sortTypeText = "lastName ASC";
+            break;
+        case 5:
+            $sortTypeText = "lastName DESC";
+            break;
+        default:
+            $sortTypeText = "timestamp ASC";
+    }
+
     // Search for comments.
     try {
-        $stmt = $conn->prepare("SELECT * FROM comments WHERE event_id=? AND timestamp>=? AND timestamp<=?");
-        $stmt->bind_param("iss", $eventID, $minTime, $maxTime);
+        $stmt = $conn->prepare("SELECT C.comment_id, C.uid, C.text, C.timestamp, CONCAT(U.firstName, ' ', U.lastName) AS fullName FROM comments C INNER JOIN users U ON C.uid=U.uid 
+        WHERE CONCAT(U.firstName, ' ', U.lastName) LIKE ? AND C.event_id=? AND C.timestamp>=? AND C.timestamp<=? ORDER BY " . $sortTypeText);
+        $stmt->bind_param("siss", $searchTerm, $eventID, $minTime, $maxTime);
     } catch (Exception $error){
         returnMYSQLErrorAndClose($stmt, $conn);
         return;

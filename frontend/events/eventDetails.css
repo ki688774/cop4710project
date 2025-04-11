@@ -1,3 +1,25 @@
+.optionsSpan {
+    position: absolute;
+    right: 20px;
+    top: -8px;
+}
+
+.forceInline {
+    display: inline;
+}
+
+.timestamp {
+    padding-left: 20px;
+}
+
+.commentID {
+    display: none;
+}
+
+.userID {
+    display: none;
+}
+
 #eventInformation {
     margin-left: auto;
     margin-right: auto;
@@ -9,18 +31,43 @@
     border-radius: 5%;
 }
 
-#commentBox {
-    margin-left: auto;
-    margin-right: auto;
+#search {
+    width: 35%;
 }
 
+.text-button {
+    color: #E0E1DD;
+}
+
+.text-button:hover {
+    color: #0D1B2A;
+    background: #eee;
+}
+
+.button {
+    float: right;
+    position: absolute;
+    bottom: 20;
+}
+
+#sort {
+    width: 20%;
+}
+
+#searchForm {
+    padding-top: 20px;
+}
+
+
 .form {
+    margin: 0 auto;
+    position: relative;
     margin-left: auto;
     margin-right: auto;
     margin-top: 20px;
-    width: 450px;
+    width: 650px;
     background-color: #0D1B2A;
-    padding: 10px 20px 20px 10px;
+    padding: 10px 20px 20px 20px;
     border-radius: 5%;
 }
 
@@ -29,12 +76,13 @@ ul {
 }
 
 li {
+    position: relative;
     margin-left: auto;
     margin-right: auto;
     margin-top: 20px;
-    width: 450px;
+    width: 550px;
     background-color: #0D1B2A;
-    padding: 10px 20px 20px 10px;
+    padding: 10px 20px 20px 20px;
     border-radius: 5%;
 }
 
