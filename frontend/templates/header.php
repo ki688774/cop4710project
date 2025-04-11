@@ -9,7 +9,7 @@
 
 <html>
 <div class="header">
-  <a href="#default" id="mainPage" class="logo">Event Manager</a>
+  <a href="../events/events.php" id="mainPage" class="logo">Event Manager</a>
   <div class="header-right">
     <a href="../events/events.php">Events</a>
     <a href="">RSOs</a>

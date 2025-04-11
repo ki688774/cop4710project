@@ -5,6 +5,7 @@
     // Proccess input
     $currentUser = $inData["current_user"] ?? null;
     $searchTerm = "%" . $inData["search"] . "%";
+    $onlyYourEvents = ($inData["only_your_events"] ?? false) ? 1 : 0;
     $sortType = $inData["sort_type"] ?? 0;
     $minRating = $inData["minimum_rating"] ?? 0;
     $maxRating = $inData["maximum_rating"] ?? 5;
@@ -68,12 +69,12 @@
 
     // Search events that are still occurring between $minTime and $maxTime that the user has access to.
     try {
-        $stmt = $conn->prepare("SELECT * FROM events E WHERE event_name LIKE ? AND (total_rating>=? OR (total_rating IS NULL AND ?=0)) AND (total_rating<=? OR (total_rating IS NULL AND ?=0)) AND (NOT ((start_time < ? AND end_time < ?) OR (start_time > ? AND end_time > ?))) AND (
-	        EXISTS (SELECT * FROM public_events P WHERE P.event_id=E.event_id) OR
-	        EXISTS (SELECT * FROM private_events P WHERE P.event_id=E.event_id AND university_id=?) OR
-	        EXISTS (SELECT * FROM rso_events R WHERE R.event_id=E.event_id AND EXISTS (SELECT * FROM rso_joins J WHERE R.rso_id=J.rso_id AND J.uid=?))) 
+        $stmt = $conn->prepare("SELECT * FROM events E WHERE (event_name LIKE ? or event_description LIKE ?) AND (total_rating>=? OR (total_rating IS NULL AND ?=0)) AND (total_rating<=? OR (total_rating IS NULL AND ?=0)) AND (NOT ((start_time < ? AND end_time < ?) OR (start_time > ? AND end_time > ?))) AND (
+	        EXISTS (SELECT * FROM public_events P WHERE P.event_id=E.event_id AND ((NOT 1 = ?) OR EXISTS (SELECT * FROM universities U WHERE U.university_id=P.university_id AND U.super_admin_id=?))) OR
+	        EXISTS (SELECT * FROM private_events P WHERE P.event_id=E.event_id AND university_id=? AND ((NOT 1 = ?) OR EXISTS (SELECT * FROM rsos R WHERE P.rso_id=R.rso_id AND R.admin_id=?))) OR
+	        EXISTS (SELECT * FROM rso_events RE WHERE RE.event_id=E.event_id AND EXISTS (SELECT * FROM rso_joins J WHERE RE.rso_id=J.rso_id AND J.uid=?) AND ((NOT 1 = ?) OR EXISTS (SELECT * FROM rsos R WHERE RE.rso_id=R.rso_id AND R.admin_id=?)))) 
             ORDER BY " . $sortTypeText);
-        $stmt->bind_param("siiiissssii", $searchTerm, $minRating, $minRating, $maxRating, $minRating, $minTime, $minTime, $maxTime, $maxTime, $universityID, $currentUser);
+        $stmt->bind_param("ssiiiissssiiiiiiii", $searchTerm, $searchTerm, $minRating, $minRating, $maxRating, $minRating, $minTime, $minTime, $maxTime, $maxTime, $onlyYourEvents, $currentUser, $universityID, $onlyYourEvents, $currentUser, $currentUser, $onlyYourEvents, $currentUser);
     } catch (Exception $error){
         returnMYSQLErrorAndClose($stmt, $conn);
         return;

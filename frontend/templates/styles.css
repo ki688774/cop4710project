@@ -52,12 +52,22 @@ body {
     background-color: #1B263B;
 }
 
-input[type="submit"].button:hover {
+input.button:hover {
     background-color: #415A77;
 }
 
-input {
+button:hover {
+    background-color: #415A77;
+}
+
+input, textarea, select {
     background-color: #1B263B;
+    font-family: Arial, sans-serif;
+    color: #E0E1DD;
+}
+
+textarea {
+    resize: none;
 }
 
 #footer {
@@ -65,22 +75,18 @@ input {
 }
 
 input[type="text"], select {
-    width:100%;
+    width:70%;
 }
 
 input[type="password"], select {
-    width:100%;
+    width:70%;
 }
 
 input[type="email"], select {
-    width:100%;
+    width:70%;
 }
 
-.form label {
-    color: #E0E1DD;
-}
-
-.form input {
+label {
     color: #E0E1DD;
 }
 

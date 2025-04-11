@@ -4,6 +4,9 @@ let descending = false;
 let date = new Date();
 date.setTime(date.getTime());
 
+document.addEventListener("DOMContentLoaded", async function () {
+    searchEvents();
+});
 // Invert the value of descending and switch ascendingDescending's text on click.
 document.getElementById("ascendingDescending").addEventListener("click", async function (event) {
     event.preventDefault();
@@ -17,11 +20,15 @@ document.getElementById("ascendingDescending").addEventListener("click", async f
 document.getElementById("eventSearchForm").addEventListener("submit", async function (event) {
     // Process input.
     event.preventDefault();
-    
+    searchEvents();
+});
+
+async function searchEvents () {
     let search = document.getElementById("search").value;
     let sortType = Number(document.getElementById("sort").value) + (descending ? 1 : 0);
     let minTime = document.getElementById("minTime").value.replace("T", " ") + ":00";
     let maxTime = document.getElementById("maxTime").value.replace("T", " ") + ":00";
+    let onlyYourEvents = document.getElementById("yourEvents").checked ? 1 : 0;
 
     if (minTime == ":00")
         minTime = "";
@@ -40,7 +47,7 @@ document.getElementById("eventSearchForm").addEventListener("submit", async func
 
     
     // Create payload and push.
-    let payload = JSON.stringify({current_user: userData.uid, search: search, sort_type: sortType, minimum_time: minTime, maximum_time: maxTime})
+    let payload = JSON.stringify({current_user: userData.uid, search: search, sort_type: sortType, minimum_time: minTime, maximum_time: maxTime, only_your_events: onlyYourEvents})
     let returnedResponse = null;
     
     try {
@@ -104,7 +111,7 @@ document.getElementById("eventSearchForm").addEventListener("submit", async func
     }
     
     refreshCookie("userData");
-});
+}
 
 document.getElementById("results-container").addEventListener("click", async function (event) {
     let target = event.target;

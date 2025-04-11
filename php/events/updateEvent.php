@@ -77,6 +77,17 @@
         if (!attemptExecute($stmt, $conn))
             return;
 
+        try {
+            $stmt = $conn->prepare("DELETE FROM ratings WHERE event_id=?");
+            $stmt->bind_param("i", $eventID);
+        } catch (Exception $error){
+            returnMYSQLErrorAndClose($stmt, $conn);
+            return;
+        }
+    
+        if (!attemptExecute($stmt, $conn))
+            return;
+
 
 
         // Return successful result

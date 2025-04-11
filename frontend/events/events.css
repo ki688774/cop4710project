@@ -23,6 +23,10 @@ ul {
     width: 20%;
 }
 
+.shortText {
+    width: 30%;
+}
+
 .text-button {
     color: #E0E1DD;
 }
@@ -33,8 +37,12 @@ li {
     margin-top: 20px;
     width: 600px;
     background-color: #0D1B2A;
-    padding: 10px 20px 20px 10px;
+    padding: 10px 20px 10px 20px;
     border-radius: 5%;
+}
+
+li:hover {
+    background-color: #415A77;
 }
 
 .results-list {

@@ -52,17 +52,28 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
     document.getElementById("eventName").textContent = returnedData.result.event_name;
+    document.getElementById("eventNameTextBox").value = returnedData.result.event_name;
     document.getElementById("eventDescription").textContent = returnedData.result.event_description;
+    document.getElementById("eventDescriptionTextBox").value = returnedData.result.event_description;
 
     document.getElementById("startTime").textContent = convertToUserFriendlyTime(returnedData.result.start_time);
+    document.getElementById("startTimeInput").value = returnedData.result.start_time.substring(0, 16).replace(" ", "T");
     document.getElementById("endTime").textContent = convertToUserFriendlyTime(returnedData.result.end_time);
+    document.getElementById("endTimeInput").value = returnedData.result.end_time.substring(0, 16).replace(" ", "T");
     
-    document.getElementById("locationName").textContent = returnedData.result.location_name + ","
+    document.getElementById("locationName").textContent = returnedData.result.location_name;
+    document.getElementById("locationInput").value = returnedData.result.location_name;
     document.getElementById("locationAddress").textContent = returnedData.result.address;
-    document.getElementById("locationCoords").textContent = "(" + returnedData.result.longitude + ", " + returnedData.result.latitude + ")";
+    document.getElementById("addressInput").value = returnedData.result.address;
+    document.getElementById("longitude").textContent = returnedData.result.longitude;
+    document.getElementById("longitudeInput").value = returnedData.result.longitude;
+    document.getElementById("latitude").textContent = returnedData.result.latitude;
+    document.getElementById("latitudeInput").value = returnedData.result.latitude;
 
-    document.getElementById("contactEmail").textContent = returnedData.result.contact_email + ","
+    document.getElementById("contactEmail").textContent = returnedData.result.contact_email;
+    document.getElementById("emailInput").value = returnedData.result.contact_email;
     document.getElementById("contactPhone").textContent = returnedData.result.contact_phone;
+    document.getElementById("phoneInput").value = returnedData.result.contact_phone;
 
     getComments();
 
@@ -152,6 +163,7 @@ document.getElementById("commentForm").addEventListener("submit", async function
         return;
     }
 
+    document.getElementById("commentBox").value = "";
     refreshCookie("userData");
     getComments();
 });
@@ -163,16 +175,98 @@ document.getElementById("searchForm").addEventListener("submit", async function 
 });
 
 async function editEvent (event) {
-    let eventInformation = event.target.parentNode.parentNode;
-    let eventName = eventInformation.querySelector("#eventName").innerHTML;
+    let eventInformation = event.target.parentNode.parentNode.parentNode;
 
-    // Hide existing elements.
+    // Hide existing elements and show editEventForm.
     eventInformation.querySelector("#eventHeader").style.display = 'none';
     eventInformation.querySelector("#eventDescription").style.display = 'none';
     eventInformation.querySelector("#eventTime").style.display = 'none';
-    eventInformation.querySelector("#eventAddress").style.display = 'none';
+    eventInformation.querySelector("#eventLocation").style.display = 'none';
     eventInformation.querySelector("#contactInformation").style.display = 'none';
+
+    eventInformation.querySelector("#editEventForm").style.display = 'block';
 }
+
+document.getElementById("editButton").addEventListener("click", async function (event) {
+    // Process input.
+    event.preventDefault();
+    let eventForm = event.target.parentNode.parentNode;
+
+    let eventName = document.getElementById("eventNameTextBox").value;
+    let eventDescription = document.getElementById("eventDescriptionTextBox").value;
+
+    let startTime = document.getElementById("startTimeInput").value.replace("T", " ") + ":00";
+    let endTime = document.getElementById("endTimeInput").value.replace("T", " ") + ":00";
+
+    let locationName = document.getElementById("locationInput").value;
+    let address = document.getElementById("addressInput").value;
+    let longitude = document.getElementById("longitudeInput").value;
+    let latitude = document.getElementById("latitudeInput").value;
+
+    let email = document.getElementById("emailInput").value;
+    let phone = document.getElementById("phoneInput").value;
+
+    if (startTime == ":00")
+        startTime = "";
+
+    if (endTime == ":00")
+        endTime = "";
+
+    let userData = getCookie("userData");
+    if (userData == "" || JSON.parse(userData).uid == null) {
+        summonErrorModal("User is not signed in.");
+        return;
+    }
+
+    userData = JSON.parse(userData);
+
+
+
+    // Create payload and push.
+    let payload = JSON.stringify({current_user: userData.uid, event_id: eventID, location_name: locationName, address,
+        longitude, latitude, start_time: startTime, end_time: endTime, event_name: eventName, event_description: eventDescription,
+        contact_email: email, contact_phone: phone});
+    let returnedResponse = null;
+    
+    try {
+        returnedResponse = await fetch("../../php/events/updateEvent.php", {
+            method: "POST",
+            headers: {
+                "content-type": "application/json"
+            },
+            body: payload
+        });
+    } catch (error) {
+        summonErrorModal(error);
+        return;
+    }
+
+    
+
+    let returnedData = await returnedResponse.json();
+
+    if (typeof returnedData.result === 'undefined') {
+        summonErrorModal(returnedData.error);
+        return;
+    }
+
+    refreshCookie("userData");
+    location.reload();
+});
+
+document.getElementById("cancelButton").addEventListener("click", async function (event) {
+    // Hide editEventForm and show normal elements.
+    event.preventDefault();
+    let eventInformation = event.target.parentNode.parentNode.parentNode;
+    
+    eventInformation.querySelector("#editEventForm").style.display = 'none';
+
+    eventInformation.querySelector("#eventHeader").style.display = 'block';
+    eventInformation.querySelector("#eventDescription").style.display = 'block';
+    eventInformation.querySelector("#eventTime").style.display = 'block';
+    eventInformation.querySelector("#eventLocation").style.display = 'block';
+    eventInformation.querySelector("#contactInformation").style.display = 'block';
+});
 
 async function deleteEvent (event) {
     // Check if the user is signed in.
@@ -236,6 +330,30 @@ function convertToUserFriendlyTime (inString) {
     }
 
     return month + "/" + day + "/" + year + " " + hour + ":" + minute + ":" + seconds + " " + amPm;
+}
+
+// mm/dd/yyyy hh:mm:ss am/pm -> yyyy-mm-ddThh:mm
+function convertToDateTimeLocal (inString) {
+    let month = inString.substring(0, 2);
+    let day = inString.substring(3, 5);
+    let year = inString.substring(6, 10);
+    let hour = Number(inString.substring(11, 13));
+    let minute = inString.substring(14, 16);
+    let amPm = inString.substring(20, 22);
+
+    if (amPm == "PM") {
+        hour += 12;
+    } else if (hour == 12) {
+        hour = 0;
+    }
+
+    hour = hour.toString();
+
+    if (hour.length == 1) {
+        hour = "0" + hour;
+    }
+
+    return year + "-" + month + "-" + day + "T" + hour + ":" + minute;
 }
 
 async function deleteComment (event) {

@@ -30,5 +30,5 @@ document.getElementById("loginForm").addEventListener("submit", async function (
     }
 
     saveCookie("userData", JSON.stringify(returnedData.result));
-    window.location.assign("../events/homepage.php");
+    window.location.assign("../events/events.php");
 });

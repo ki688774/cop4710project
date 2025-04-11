@@ -38,8 +38,8 @@
 
     // Add RSO.
     try {
-        $stmt = $conn->prepare("INSERT INTO rsos (university_id, rso_name, admin_id, active) VALUES (?,?,?,0)");
-        $stmt->bind_param("iii", $universityID, $rsoName, $currentUser);
+        $stmt = $conn->prepare("INSERT INTO rsos (university_id, rso_name, admin_id, active) VALUES (?,?,?,(0))");
+        $stmt->bind_param("isi", $universityID, $rsoName, $currentUser);
     } catch (Exception $error){
         returnMYSQLErrorAndClose($stmt, $conn);
         return;

@@ -16,12 +16,8 @@
 
 <body>
     <h1>Events</h1>
-    <div class="button-container">
-        <button>Create an Event</button>
-        <button>Manage your Events</button>
-    </div>
     <form class="form" id="eventSearchForm">
-    <h2>Search Events</h2>
+        <br>
         <span class="form-element">
             <label for="search">Event Name:</label>
             <input type="text" id="search" name="search">
@@ -47,9 +43,15 @@
         <span class="form-element">
             <label for="maxTime">To</label>
             <input type="datetime-local" id="maxTime" name="maxTime">
+        </span><br>
+
+        <span class="form-element">
+            <label for="yourEvents">Only Show Owned Events:&nbsp;</label>
+            <input type="checkbox" id="yourEvents" name="yourEvents">
         </span>
 
         <br><br><input class="button" type="submit" value="Search">
+        <button class="button" onclick="location.href='./createEvent.php'">Create an Event</button>
     </form>
     <div class="results-container" id="results-container">
        <ul class="results-list" id="list">

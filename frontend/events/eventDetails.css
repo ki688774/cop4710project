@@ -12,16 +12,20 @@
     top: -38px;
 }
 
+#submitButtonDiv {
+    height: 60px;
+}
+
+#submitButton {
+    bottom: 20px;
+}
+
 #eventHeader {
     position: relative;
 }
 
-input[type="edit"].button:hover {
-    background-color: #415A77;
-}
-
-input[type="cancelEdit"].button:hover {
-    background-color: #415A77;
+textarea {
+    width: 100%;
 }
 
 .commentText {
@@ -90,9 +94,15 @@ input[type="cancelEdit"].button:hover {
 }
 
 .button {
-    float: right;
     position: absolute;
-    bottom: 20;
+}
+
+.right-button {
+    right: 20px;
+}
+
+.left-button {
+    left: 20px;
 }
 
 #sort {
@@ -101,6 +111,10 @@ input[type="cancelEdit"].button:hover {
 
 #searchForm {
     padding-top: 20px;
+}
+
+#editEventForm {
+    display: none;
 }
 
 

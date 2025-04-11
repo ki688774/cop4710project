@@ -26,20 +26,65 @@
             <span id="endTime">02/03/2004, 12:00:00 PM</span>
         </div>
         <div id="eventLocation">
-            <span id="locationName">Example,</span>
-            <span id="locationAddress">123 Example Rd.</span>
-            <span id="locationCoords">(12.34567890, 12.34567890)</span>
+            <span id="locationName">Example</span><!--
+         --><span>,&nbsp;</span><!--
+         --><span id="locationAddress">123 Example Rd.</span><!--
+         --><span>&nbsp;(</span><!--
+         --><span id="longitude">12.34567890</span><!--
+         --><span>,&nbsp;</span><!--
+         --><span id="latitude">12.34567890</span><!--
+         --><span>)</span>
         </div>
         <div id="contactInformation">
-            <span id="contactEmail">example@example.org</span>
-            <span id="contactPhone">(123) 456-7890</span>
+            <span id="contactEmail">example@example.org</span><!--
+         --><span>,&nbsp;</span><!--
+         --><span id="contactPhone">(123) 456-7890</span>
         </div>
+
+        <form class="form" id="editEventForm">
+            <label for="eventNameTextBox">Event Name:&nbsp;</label>
+            <input type="text" id="eventNameTextBox" name="eventNameTextBox" required><br><br>
+
+            <label for="eventDescriptionTextBox">Event Description:&nbsp;</label>
+            <textarea class="textarea" id="eventDescriptionTextBox" name="eventDescriptionTextBox" rows="5" required></textarea><br><br>
+
+            <label for="startTimeInput">From:&nbsp;</label>
+            <input type="datetime-local" id="startTimeInput" name="startTimeInput" required>
+
+            <label for="endTimeInput">To:&nbsp;</label>
+            <input type="datetime-local" id="endTimeInput" name="endTimeInput" required><br><br>
+
+            <label for="locationInput">Location:&nbsp;</label>
+            <input type="text" id="locationInput" name="locationInput" required><br>
+
+            <label for="addressInput">Address:&nbsp;</label>
+            <input type="text" id="addressInput" name="addressInput" required><br>
+
+            <label for="longitudeInput">Longitude:&nbsp;</label>
+            <input type="text" id="longitudeInput" name="longitudeInput" required><br>
+
+            <label for="latitudeInput">Latitude:&nbsp;</label>
+            <input type="text" id="latitudeInput" name="latitudeInput" required><br><br>
+
+            <label for="emailInput">Contact Email:&nbsp;</label>
+            <input type="text" id="emailInput" name="emailInput" required><br>
+
+            <label for="phoneInput">Contact Phone:&nbsp;</label>
+            <input type="text" id="phoneInput" name="phoneInput" required><br>
+
+            <div class="editButtons">
+                <input class="button editButton" id="editButton" value="Edit">
+                <input class="button cancelButton" id="cancelButton" value="Cancel">
+            </div>
+        </form>
     </div>
 
     <form class="form" id="commentForm">
     <h2>Leave A Comment</h2>
         <textarea class="textarea" id="commentBox" name="commentBox" rows="5" cols="70" required></textarea>
-        <input class="button" type="submit" value="Post">
+        <div id="submitButtonDiv">
+            <input class="button" id="submitButton" type="submit" value="Post">
+        </div>
     </form>
 
     <div class="comments-container" id="comments-container">
@@ -53,7 +98,7 @@
                 <label for="maxTime">To</label>
                 <input type="datetime-local" id="maxTime" name="maxTime">
             </span>
-            <input class="button" type="submit" value="Search">
+            <input class="button right-button" type="submit" value="Search">
             <br>
             <span class="form-element">
                 <label for="sort">Sort By:</label>
