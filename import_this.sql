@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.41, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 9.1.0, for Win64 (x86_64)
 --
 -- Host: localhost    Database: cop4710project
 -- ------------------------------------------------------
--- Server version	8.0.41-0ubuntu0.22.04.1
+-- Server version	9.1.0
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -65,7 +65,7 @@ CREATE TABLE `events` (
   `event_id` int NOT NULL AUTO_INCREMENT,
   `start_time` datetime NOT NULL,
   `end_time` datetime NOT NULL,
-  `event_name` varchar(100) NOT NULL,
+  `event_name` varchar(50) NOT NULL,
   `event_description` varchar(1024) NOT NULL,
   `contact_phone` varchar(20) NOT NULL,
   `contact_email` varchar(256) NOT NULL,
@@ -75,7 +75,7 @@ CREATE TABLE `events` (
   KEY `events_ibfk_1` (`location_id`),
   CONSTRAINT `events_ibfk_1` FOREIGN KEY (`location_id`) REFERENCES `locations` (`location_id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `EventStartsBeforeEnd` CHECK ((`start_time` < `end_time`))
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -84,7 +84,7 @@ CREATE TABLE `events` (
 
 LOCK TABLES `events` WRITE;
 /*!40000 ALTER TABLE `events` DISABLE KEYS */;
-INSERT INTO `events` VALUES (8,'2025-12-23 00:00:00','2026-01-01 00:00:00','Reindeer Strike and Unionization','No more will Santa hold out on our moss and dental benefits! We organize for a better workshop, now and forevermore!','(555) 123-4567','rudolph.reindeer@proton.me',4.50,3),(12,'2026-01-02 00:00:00','2026-01-03 00:00:00','Relaxing after Reindeer Strike','Stroll on by, grab a cup of hot chocolate and bask in the glory of a successful strike. We got the dental benefits, boys.','(123) 456-7890','rudolph.reindeer@proton.me',NULL,12);
+INSERT INTO `events` VALUES (8,'2025-12-23 00:00:00','2026-01-01 00:00:00','Reindeer Strike and Unionization','No more will Santa hold out on our moss and dental benefits! We organize for a better workshop, now and forevermore!','(555) 123-4567','rudolph.reindeer@proton.me',4.50,3),(12,'2026-01-02 00:00:00','2026-01-03 00:00:00','Relaxing after Reindeer Strike','Stroll on by, grab a cup of hot chocolate and bask in the glory of a successful strike. We got the dental benefits, boys.','(123) 456-7890','rudolph.reindeer@proton.me',NULL,12),(13,'2027-01-02 20:00:00','2027-02-02 00:00:00','Another House Party','I found some moss in the attic. No, it wasn\'t mold: it was genuine attic moss.','(555) 123-4567','rudolph.reindeer@proton.me',4.00,13);
 /*!40000 ALTER TABLE `events` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -142,7 +142,7 @@ CREATE TABLE `locations` (
   PRIMARY KEY (`location_id`),
   CONSTRAINT `LatitudeClamp` CHECK (((`latitude` >= -(90)) and (`latitude` <= 90))),
   CONSTRAINT `LongitudeClamp` CHECK (((`longitude` >= -(180)) and (`longitude` <= 180)))
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -151,7 +151,7 @@ CREATE TABLE `locations` (
 
 LOCK TABLES `locations` WRITE;
 /*!40000 ALTER TABLE `locations` DISABLE KEYS */;
-INSERT INTO `locations` VALUES (2,'Null Island','???',0.00000000,0.00000000),(3,'Santa\'s Workshop','123 North Pole Rd.',0.00000000,90.00000000),(4,'Krampus HQ','456 North Pole Rd.',0.01204733,89.99723432),(12,'Rudolph\'s House','1009 North Pole Rd.',-0.10340000,89.902134);
+INSERT INTO `locations` VALUES (2,'Null Island','???',0.00000000,0.00000000),(3,'Santa\'s Workshop','100 North Pole Rd.',0.00000000,0.00000000),(4,'Krampus HQ','456 North Pole Rd.',0.01204733,89.99723432),(12,'Rudolph\'s House','1009 North Pole Rd.',-0.10340000,89.90213400),(13,'Rudolph\'s House','1009 North Pole Rd.',-0.10340000,89.90213400);
 /*!40000 ALTER TABLE `locations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -207,7 +207,7 @@ CREATE TABLE `public_events` (
 
 LOCK TABLES `public_events` WRITE;
 /*!40000 ALTER TABLE `public_events` DISABLE KEYS */;
-INSERT INTO `public_events` VALUES (8,1),(12,1);
+INSERT INTO `public_events` VALUES (8,1),(12,1),(13,1);
 /*!40000 ALTER TABLE `public_events` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -236,7 +236,7 @@ CREATE TABLE `ratings` (
 
 LOCK TABLES `ratings` WRITE;
 /*!40000 ALTER TABLE `ratings` DISABLE KEYS */;
-INSERT INTO `ratings` VALUES (4,8,4),(6,8,5);
+INSERT INTO `ratings` VALUES (1,13,4),(4,8,4),(6,8,5);
 /*!40000 ALTER TABLE `ratings` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -492,7 +492,7 @@ CREATE TABLE `users` (
   UNIQUE KEY `email` (`email`),
   KEY `users_ibfk_1` (`university_id`),
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`university_id`) REFERENCES `universities` (`university_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -501,7 +501,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,1,'Rudolph','Reindeer','rednose@northpole.org','RedNose1939','$2y$10$DP.R71h2M7O6NJ/M/foMjOU2gWu837wdvkx5MPOHz4kDd0uCzg1ua'),(2,1,'Prancer','Reindeer','prancer@northpole.org','SnowPrancer','$2y$10$2jSW1yPWAMi4mTsmnv12keBqcTjg6W.e0v.sGYgAxY95IQjWsF.4G'),(4,1,'Donner','Reindeer','donner@northpole.org','KingCaribou','$2y$10$qHMYrANcpdUmicI3RFXpT.VckOmSb/vw5FWfgGI7tMLJFnw/GXntK'),(6,2,'Krampus','Goat','krampus@coal.org','CoalBringer','$2y$10$gjeBqspfJuLnv9afK13l0.sg.a1CvMijP0Uge5hA73lsTkCCTdGG6'),(7,2,'Yule','Cat','yuleeee@coal.org','ClothesCat','$2y$10$8gPK52VVVJnqGMbBG8ybHOMHJSLHjArHAFOwElGrfwWzpBUsdMrG2');
+INSERT INTO `users` VALUES (1,1,'Rudolph','Reindeer','rudolph@northpole.org','RedNose1939','$2y$10$DP.R71h2M7O6NJ/M/foMjOU2gWu837wdvkx5MPOHz4kDd0uCzg1ua'),(2,1,'Prancer','Reindeer','prancer@northpole.org','SnowPrancer','$2y$10$2jSW1yPWAMi4mTsmnv12keBqcTjg6W.e0v.sGYgAxY95IQjWsF.4G'),(4,1,'Donner','Reindeer','donner@northpole.org','KingCaribou','$2y$10$qHMYrANcpdUmicI3RFXpT.VckOmSb/vw5FWfgGI7tMLJFnw/GXntK'),(6,2,'Krampus','Goat','krampus@coal.org','CoalBringer','$2y$10$gjeBqspfJuLnv9afK13l0.sg.a1CvMijP0Uge5hA73lsTkCCTdGG6'),(7,2,'Yule','Cat','yuleeee@coal.org','ClothesCat','$2y$10$8gPK52VVVJnqGMbBG8ybHOMHJSLHjArHAFOwElGrfwWzpBUsdMrG2'),(10,1,'Dasher','Reindeer','dasher@northpole.org','HundredYardDash','$2y$10$DChLJIvGhBg.V.TEFTqPX.QdNG4pCMZT.MXdQD0RmboWjtFLaimXC'),(11,1,'Dancer','Reindeer','dancer@northpole.org','SnowyTango','$2y$10$OaFQmOyz7huxlnQfssxDKOLFj8L1/xvlrDPzGtTTFH9uW.w2l9.ja'),(12,1,'Vixen','Reindeer','vixen@northpole.org','FoxyFrolicker','$2y$10$1CRAKVj.TdCHTi.vY9i4a.lYwZukzCw4cVZ.ho8rgykTYZzG7P.vO'),(13,1,'Comet','Reindeer','comet@northpole.org','StarBound','$2y$10$jS4bKYXhARqb2WmZwJCmr.pyEygeME68bwPa3NZ.uBMdek50w7AQi'),(14,1,'Cupid','Reindeer','cupid@northpole.org','TwelveTwentyfive','$2y$10$rXIcwMMdAV7Bb40DdHSmOuRjiPhe7RHhszy8r8QT.y8NczABT5JQ.'),(15,1,'Blitzen','Reindeer','blitzen@northpole.org','blitzzzzzzz','$2y$10$ro7oudN/shqmbkZW1mN6p.97cII1uyrMEuLGcH4oEIh0YRPSo5wQ6'),(16,1,'Santa','Claus','santa@northpole.org','SaintNick','$2y$10$aM82LKAhMjaPv89B/GLmf.1JMfeHODEgrgncbkConreU9nZ9u5sFW'),(17,1,'Shelf','Elf','shelf@northpole.org','EternalWatcher','$2y$10$7hVE0rYtjdTiPEN5u/DxsOubA11ik1M8y6QBQAmVE5jdbekIhb2kC'),(18,2,'Khool','Miner','khool@coal.org','TheSource','$2y$10$yOnaeHqpAKI9OhIcF5k7iuiS4DZ1284MIE7u5A64PK1vfOQmY32Ny'),(19,2,'Fur','Nace','fur@coal.org','TheDestination','$2y$10$bwLyTXpd.5e4c6SjLcGNT.vu/sPG0dtRjZtjnu0YjB3pboJAPzVp2');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -514,4 +514,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-08 14:21:15
+-- Dump completed on 2025-04-11 16:54:18
