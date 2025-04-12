@@ -51,7 +51,7 @@
         </span>
 
         <br><br><input class="button" type="submit" value="Search">
-        <button class="button" onclick="location.href='./createEvent.php'">Create an Event</button>
+        <button id="createClassButton" class="button" onclick="location.href='./createEvent.php'">Create an Event</button>
     </form>
     <div class="results-container" id="results-container">
        <ul class="results-list" id="list">

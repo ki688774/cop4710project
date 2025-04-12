@@ -56,7 +56,7 @@
     // Join the RSO.
     try {
         $stmt = $conn->prepare("INSERT INTO rso_joins (uid, rso_id) VALUES (?,?)");
-        $stmt->bind_param("ii", $currentUser, $rsoName);
+        $stmt->bind_param("ii", $currentUser, $rsoID);
     } catch (Exception $error){
         returnMYSQLErrorAndClose($stmt, $conn);
         return;

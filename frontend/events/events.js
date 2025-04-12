@@ -4,9 +4,39 @@ let descending = false;
 let date = new Date();
 date.setTime(date.getTime());
 
+let userData = getCookie("userData");
+if (userData == "" || JSON.parse(userData).uid == null) {
+    summonErrorModal("User is not signed in.");
+} else {
+    userData = JSON.parse(userData);
+}
+
+
+
 document.addEventListener("DOMContentLoaded", async function () {
+    let payload = JSON.stringify({current_user: userData.uid});
+    let returnedResponse = null;
+
+    try {
+        returnedResponse = await fetch("../../php/events/canCreateEvent.php", {
+            method: "POST",
+            headers: {
+                "content-type": "application/json"
+            },
+            body: payload
+        });
+    } catch (error) {
+        summonErrorModal(error);
+    }
+
+    let returnedData = await returnedResponse.json();
+
+    if (typeof returnedData.result !== 'undefined')
+        document.getElementById("createClassButton").style.display = 'inline';
+
     searchEvents();
 });
+
 // Invert the value of descending and switch ascendingDescending's text on click.
 document.getElementById("ascendingDescending").addEventListener("click", async function (event) {
     event.preventDefault();
@@ -35,14 +65,6 @@ async function searchEvents () {
 
     if (maxTime == ":00")
         maxTime = "";
-
-    let userData = getCookie("userData");
-    if (userData == "" || JSON.parse(userData).uid == null) {
-        summonErrorModal("User is not signed in.");
-        return;
-    }
-
-    userData = JSON.parse(userData);
 
 
     
@@ -139,7 +161,7 @@ function convertToUserFriendlyTime (inString) {
     let amPm = "AM";
 
     if (hour >= 12) {
-        amPM = "PM";
+        amPm = "PM";
         if (hour > 12)
             hour -= 12;
     }

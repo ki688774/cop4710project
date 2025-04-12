@@ -5,7 +5,7 @@
     // Proccess input
     $currentUser = $inData["current_user"] ?? null;
 
-    if (!$currentUser || !$eventID) {
+    if (!$currentUser) {
         returnError("All fields must be filled.");
         return;
     }
@@ -14,23 +14,45 @@
     if (!attemptConnect($conn))
         return;
 
+
+
     // Check if the user can create an event.
     try {
-        $stmt = $conn->prepare("EXISTS (SELECT * FROM universities U WHERE U.super_admin_id=?) 
-        OR EXISTS (SELECT * FROM rsos R WHERE R.admin_id=? AND R.active=(1))");
-        $stmt->bind_param("i", $eventID);
+        $stmt = $conn->prepare("SELECT * FROM universities U WHERE U.super_admin_id=?");
+        $stmt->bind_param("i", $currentUser);
     } catch (Exception $error){
         returnMYSQLErrorAndClose($stmt, $conn);
         return;
     }
-    
 
     if (!attemptExecute($stmt, $conn))
         return;
 
+    if ($stmt->get_result()->fetch_assoc()) {
+        $result = '{"result": "You can create events."}';
+        returnObject($result);
+        return;
+    }
+
+    try {
+        $stmt = $conn->prepare("SELECT * FROM rsos R WHERE R.admin_id=? AND NOT R.active=0");
+        $stmt->bind_param("i", $currentUser);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
+
+    if (!attemptExecute($stmt, $conn))
+        return;
+
+    if ($stmt->get_result()->fetch_assoc()) {
+        $result = '{"result": "You can create events."}';
+        returnObject($result);
+        return;
+    }
 
 
-    // Return successful result
-    $result = '{"result": "Event deleted successfully."}';
-    returnObject($result);
+
+    // Return unsuccessful result
+    returnError("You cannot create events.");
 ?>

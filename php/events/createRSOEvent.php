@@ -96,7 +96,7 @@
 
 
     // Return successful result
-    $result = '{"result": "RSO event added successfully."}';
+    $result = '{"result": "RSO event added successfully.", "event_id": ' . $eventID . '}';
     returnObject($result);
     return;
 ?>

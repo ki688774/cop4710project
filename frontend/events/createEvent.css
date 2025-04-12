@@ -1,29 +1,25 @@
-h1 {
-    text-align: left;
-}
-
 .form {
     margin-left: auto;
     margin-right: auto;
     margin-top: 20px;
-    width: 450px;
+    width: 600px;
     background-color: #0D1B2A;
-    padding: 10px 20px 20px 10px;
+    padding: 20px 20px 20px 20px;
     border-radius: 5%;
+}
+
+textarea {
+    width: 100%;
 }
 
 .dependentForm {
     display: none;
 }
 
-input[type="text"], select {
-    width:60%;
+select {
+    width: 40%;
 }
 
-input[type="password"], select {
-    width:60%;
-}
-
-input[type="email"], select {
-    width:60%;
+#publicEventSpan, #rsoSpan {
+    display: none;
 }

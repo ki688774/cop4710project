@@ -29,6 +29,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     let payload = JSON.stringify({current_user: userData.uid, event_id: eventID});
     let returnedResponse = null;
 
+
     try {
         returnedResponse = await fetch("../../php/events/getEvent.php", {
             method: "POST",
@@ -320,7 +321,7 @@ function convertToUserFriendlyTime (inString) {
     let amPm = "AM";
 
     if (hour >= 12) {
-        amPM = "PM";
+        amPm = "PM";
         if (hour > 12)
             hour -= 12;
     }

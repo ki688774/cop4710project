@@ -99,7 +99,7 @@
 
 
     // Return successful result
-    $result = '{"result": "Public event added successfully."}';
+    $result = '{"result": "Public event added successfully.", "event_id": ' . $eventID . '}';
     returnObject($result);
     return;
 ?>

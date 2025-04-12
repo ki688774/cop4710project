@@ -36,6 +36,8 @@
         return;
     }
 
+
+
     // Add RSO.
     try {
         $stmt = $conn->prepare("INSERT INTO rsos (university_id, rso_name, admin_id, active) VALUES (?,?,?,(0))");
@@ -48,6 +50,19 @@
     if (!attemptExecute($stmt, $conn))
         return;
 
+    $rsoID = $conn->insert_id;
+
+    // Make the admin join the RSO.
+    try {
+        $stmt = $conn->prepare("INSERT INTO rso_joins (uid, rso_id) VALUES (?,?)");
+        $stmt->bind_param("ii", $currentUser, $rsoID);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
+
+    if (!attemptExecute($stmt, $conn))
+        return;
 
 
     // Return successful result

@@ -15,7 +15,7 @@
     if (!attemptConnect($conn))
         return;
 
-
+    
 
     // Find user's university (which must exist)
     $stmt = $conn->prepare("SELECT * FROM users WHERE uid=?");
@@ -26,6 +26,7 @@
 
     $universityID = $stmt->get_result()->fetch_assoc()["university_id"];
 
+    
 
 
     // Search events that are still occurring between $minTime and $maxTime that the user has access to.
@@ -44,7 +45,6 @@
         return;
 
     $row = $stmt->get_result()->fetch_assoc();
-
 
 
     // Return events as result

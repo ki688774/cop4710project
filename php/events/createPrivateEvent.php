@@ -79,6 +79,25 @@
 
     $eventID = $conn->insert_id;
     
+    // Find user's university (which must exist).
+    try {
+        $stmt = $conn->prepare("SELECT * FROM users WHERE uid=?");
+        $stmt->bind_param("i", $currentUser);
+    } catch (Exception $error){
+        returnMYSQLErrorAndClose($stmt, $conn);
+        return;
+    }
+
+    if (!attemptExecute($stmt, $conn))
+        return;
+
+    $universityID = $stmt->get_result()->fetch_assoc()["university_id"];
+    
+    if (!$universityID) {
+        returnError("User not found.");
+        return;
+    }
+    
     try {
         $stmt = $conn->prepare("INSERT INTO private_events (event_id, rso_id, university_id) VALUES (?,?,?)");
         $stmt->bind_param("iii", $eventID, $rsoID, $universityID);
@@ -95,7 +114,7 @@
 
 
     // Return successful result
-    $result = '{"result": "Private event added successfully."}';
+    $result = '{"result": "Private event added successfully.", "event_id": ' . $eventID . '}';
     returnObject($result);
     return;
 ?>
