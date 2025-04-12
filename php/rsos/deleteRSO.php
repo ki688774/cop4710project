@@ -37,7 +37,7 @@
     // Delete the RSO.
     try {
         $stmt = $conn->prepare("DELETE FROM rsos WHERE rso_id=?");
-        $stmt->bind_param("i", $rso_id);
+        $stmt->bind_param("i", $rsoID);
     } catch (Exception $error){
         returnMYSQLErrorAndClose($stmt, $conn);
         return;

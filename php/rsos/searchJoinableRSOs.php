@@ -4,8 +4,10 @@
 
     // Proccess input
     $currentUser = $inData["current_user"] ?? null;
+    $searchTerm = "%" . $inData["search"] . "%";
+    $yourRSOsOnly = $inData["your_rsos_only"] ?? 0;
 
-    if (!$currentUser || !$rsoID) {
+    if (!$currentUser) {
         returnError("All fields must be filled.");
         return;
     }
@@ -37,8 +39,8 @@
 
     // Search for RSOs of the user's university.
     try {
-        $stmt = $conn->prepare("SELECT * from rsos WHERE university_id=?");
-        $stmt->bind_param("i", $universityID);
+        $stmt = $conn->prepare("SELECT * from rsos WHERE university_id=? AND rso_name LIKE ? AND ((NOT 1 = ?) OR (admin_id=?))");
+        $stmt->bind_param("isii", $universityID, $searchTerm, $yourRSOsOnly, $currentUser);
     } catch (Exception $error){
         returnMYSQLErrorAndClose($stmt, $conn);
         return;

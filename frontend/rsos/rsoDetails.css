@@ -1,0 +1,176 @@
+.optionsSpan {
+    font-size: x-large;
+    position: absolute;
+    right: 20px;
+    top: -20px;
+}
+
+.eventOptionsSpan {
+    font-size: xx-large;
+    position: absolute;
+    right: 0px;
+    top: -38px;
+}
+
+#submitButtonDiv {
+    height: 60px;
+}
+
+#submitButton {
+    bottom: 20px;
+}
+
+#rsoHeader {
+    position: relative;
+}
+
+textarea {
+    width: 100%;
+}
+
+.commentText {
+    white-space: pre-wrap;
+}
+
+#editRSOForm, .actionButtons {
+    display: none;
+}
+
+.editButtons, .actionButtons {
+    display: block;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 20px;
+    height: 42px;
+    width: 100%;
+    overflow: auto;
+}
+
+.editButton {
+    left: -10px;
+}
+
+.cancelButton {
+    right: -10px;
+}
+
+.forceInline {
+    display: inline;
+}
+
+.timestamp {
+    padding-left: 20px;
+}
+
+.commentID {
+    display: none;
+}
+
+.userID {
+    display: none;
+}
+
+#rsoInformation {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    min-width: 400px;
+    max-width: 800px;
+    overflow-wrap: break-word;
+    padding: 0px 40px 20px 40px;
+    background-color: #0D1B2A;
+    border-radius: 5%;
+}
+
+#rsoName {
+    text-align: left;
+    width: 80%;
+}
+
+#search {
+    width: 35%;
+}
+
+.text-button {
+    color: #E0E1DD;
+}
+
+.text-button:hover {
+    color: #0D1B2A;
+    background: #eee;
+}
+
+.button {
+    position: absolute;
+}
+
+.right-button {
+    right: 20px;
+}
+
+.left-button {
+    left: 20px;
+}
+
+#sort {
+    width: 20%;
+}
+
+#searchForm {
+    padding-top: 20px;
+}
+
+#editEventForm {
+    display: none;
+}
+
+
+.form {
+    margin: 0 auto;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    width: 650px;
+    background-color: #0D1B2A;
+    padding: 10px 20px 20px 20px;
+    border-radius: 5%;
+}
+
+ul {
+    list-style-type: none;
+}
+
+li {
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    width: 550px;
+    background-color: #0D1B2A;
+    padding: 10px 20px 20px 20px;
+    border-radius: 5%;
+}
+
+.results-list {
+    margin-top: 80px;
+}
+
+.eventID {
+    display: none;
+}
+
+.text-button {
+    border: none;
+    background-color: inherit;
+    padding: 4px 4px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.form-element {
+    margin-right: 8px;
+}
+
+.text-button:hover {background: #eee;}

@@ -1,0 +1,71 @@
+.form {
+    margin-left: auto;
+    margin-right: auto;
+    width: 450px;
+    background-color: #0D1B2A;
+    padding: 0px 20px 20px 20px;
+    border-radius: 5%;
+}
+
+ul {
+    list-style-type: none;
+}
+
+#eventSearchForm {
+    width: 800px;
+}
+
+#search {
+    width: 75%;
+}
+
+#sort {
+    width: 20%;
+}
+
+.shortText {
+    width: 30%;
+}
+
+.text-button {
+    color: #E0E1DD;
+}
+
+li {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    width: 600px;
+    background-color: #0D1B2A;
+    padding: 10px 20px 10px 20px;
+    border-radius: 5%;
+}
+
+li:hover {
+    background-color: #415A77;
+}
+
+.results-list {
+    margin-top: 80px;
+}
+
+.rsoID {
+    display: none;
+}
+
+.text-button {
+    border: none;
+    background-color: inherit;
+    padding: 4px 4px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.form-element {
+    margin-right: 8px;
+}
+
+.text-button:hover {
+    color: #0D1B2A;
+    background: #eee;
+}

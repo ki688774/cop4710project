@@ -12,7 +12,7 @@
   <a href="../events/events.php" id="mainPage" class="logo">Event Manager</a>
   <div class="header-right">
     <a href="../events/events.php">Events</a>
-    <a href="">RSOs</a>
+    <a href="../rsos/rsos.php">RSOs</a>
     <a href="../settings/settings.php">Settings</a>
     <a href="" id="signOut">Sign Out</a>
     <a href="../users/login.php" id="login">Log In</a>

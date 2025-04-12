@@ -66,7 +66,7 @@
 
 
     // Return successful result
-    $result = '{"result": "RSO added successfully."}';
+    $result = '{"result": "RSO added successfully.", "rso_id":' . $rsoID . '}';
     returnObject($result);
     return;
 ?>
