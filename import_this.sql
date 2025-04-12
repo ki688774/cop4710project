@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 9.1.0, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.41, for Linux (x86_64)
 --
 -- Host: localhost    Database: cop4710project
 -- ------------------------------------------------------
--- Server version	9.1.0
+-- Server version	8.0.41-0ubuntu0.22.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -75,7 +75,7 @@ CREATE TABLE `events` (
   KEY `events_ibfk_1` (`location_id`),
   CONSTRAINT `events_ibfk_1` FOREIGN KEY (`location_id`) REFERENCES `locations` (`location_id`) ON DELETE RESTRICT ON UPDATE CASCADE,
   CONSTRAINT `EventStartsBeforeEnd` CHECK ((`start_time` < `end_time`))
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -84,7 +84,7 @@ CREATE TABLE `events` (
 
 LOCK TABLES `events` WRITE;
 /*!40000 ALTER TABLE `events` DISABLE KEYS */;
-INSERT INTO `events` VALUES (8,'2025-12-23 00:00:00','2026-01-01 00:00:00','Reindeer Strike and Unionization','No more will Santa hold out on our moss and dental benefits! We organize for a better workshop, now and forevermore!','(555) 123-4567','rudolph.reindeer@proton.me',4.50,3),(12,'2026-01-02 00:00:00','2026-01-03 00:00:00','Relaxing after Reindeer Strike','Stroll on by, grab a cup of hot chocolate and bask in the glory of a successful strike. We got the dental benefits, boys.','(123) 456-7890','rudolph.reindeer@proton.me',NULL,12),(13,'2027-01-02 20:00:00','2027-02-02 00:00:00','Another House Party','I found some moss in the attic. No, it wasn\'t mold: it was genuine attic moss.','(555) 123-4567','rudolph.reindeer@proton.me',4.00,13);
+INSERT INTO `events` VALUES (8,'2025-12-23 00:00:00','2026-01-01 00:00:00','Reindeer Strike and Unionization','No more will Santa hold out on our moss and dental benefits! We organize for a better workshop, now and forevermore!','(555) 123-4567','rudolph.reindeer@proton.me',4.50,3),(12,'2026-01-02 00:00:00','2026-01-03 00:00:00','Relaxing after Reindeer Strike','Stroll on by, grab a cup of hot chocolate and bask in the glory of a successful strike. We got the dental benefits, boys.','(123) 456-7890','rudolph.reindeer@proton.me',NULL,12),(13,'2027-02-01 20:00:00','2027-02-02 00:00:00','Another Party At Rudolph\'s House','I found some moss in the attic. No, it wasn\'t mold: it was genuine attic moss.','(555) 123-4567','rudolph.reindeer@proton.me',NULL,13),(14,'2025-06-14 18:00:00','2025-06-14 21:00:00','The Scoop Behind The Christmas Flights','Ever wanted to learn exactly how us reindeer blast across the entire world in a single night? Well, here\'s your big chance to learn! Join us for a thrilling evening where we discuss near-lightspeed travel, quantum mechanics and zero-friction shields. Trust us when we say half of the audience is gonna be NASA engineers taking notes on how we did it.','(555) 123-4567','rudolph@northpole.org',NULL,14),(17,'2025-10-04 08:00:00','2025-10-04 20:00:00','Santa\'s Workshop Social','You know, we\'re always running to get this and that done before Christmas Eve. What if we actually got to know each other as employees? What if, say, there was a social... here at Santa\'s Workshop?','(555) 123-4567','rudolph@northpole.org',NULL,18),(18,'2025-12-06 21:00:00','2025-12-07 09:00:00','Party At Rudolph\'s House','Hey folks! I figured that I should hold a party at my place to help unwind after the awful mandate that just got passed. To be honest, I don\'t know what\'s gotten into Santa. He\'s never acted like this. Like, ever! He\'s like our cool uncle, I don\'t get why he... anyhow. Santa or not, us reindeer have got each other\'s backs. Remember that I love y\'all. Besides, I\'ve got an idea on how we can get that mandate... un-mandated. ...No, Blitzen, it doesn\'t involve arson.','(555) 123-4567','rudolph.reindeer@proton.me',NULL,19),(19,'2026-01-10 08:00:00','2026-01-10 20:00:00','Another Workshop Social','Here\'s the inside scoop on the ramifications of those protests last Christmas, and what that means for both the Workshop and YOU going forward. Spoiler alert: higher pay and better working hours are in your immediate future!','(555) 123-4567','rudolph@northpole.org',NULL,20);
 /*!40000 ALTER TABLE `events` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -142,7 +142,7 @@ CREATE TABLE `locations` (
   PRIMARY KEY (`location_id`),
   CONSTRAINT `LatitudeClamp` CHECK (((`latitude` >= -(90)) and (`latitude` <= 90))),
   CONSTRAINT `LongitudeClamp` CHECK (((`longitude` >= -(180)) and (`longitude` <= 180)))
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -151,7 +151,7 @@ CREATE TABLE `locations` (
 
 LOCK TABLES `locations` WRITE;
 /*!40000 ALTER TABLE `locations` DISABLE KEYS */;
-INSERT INTO `locations` VALUES (2,'Null Island','???',0.00000000,0.00000000),(3,'Santa\'s Workshop','100 North Pole Rd.',0.00000000,0.00000000),(4,'Krampus HQ','456 North Pole Rd.',0.01204733,89.99723432),(12,'Rudolph\'s House','1009 North Pole Rd.',-0.10340000,89.90213400),(13,'Rudolph\'s House','1009 North Pole Rd.',-0.10340000,89.90213400);
+INSERT INTO `locations` VALUES (2,'Null Island','???',0.00000000,0.00000000),(3,'Santa\'s Workshop','100 North Pole Rd.',0.00000000,0.00000000),(4,'Krampus HQ','456 North Pole Rd.',0.01204733,89.99723432),(12,'Rudolph\'s House','1009 North Pole Rd.',-0.10340000,89.90213400),(13,'Rudolph\'s House','1009 North Pole Rd.',-0.10340000,89.90213400),(14,'Santa\'s Workshop','100 North Pole Rd.',0.00000000,90.00000000),(16,'Santa\'s Workshop','100 North Pole Rd.',0.00000000,90.00000000),(18,'Santa\'s Workshop','100 North Pole Rd.',0.00000000,90.00000000),(19,'Rudolph\'s House','1009 North Pole Rd.',-0.10340000,89.90213400),(20,'Santa\'s Workshop','100 North Pole Rd.',0.00000000,90.00000000);
 /*!40000 ALTER TABLE `locations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -181,6 +181,7 @@ CREATE TABLE `private_events` (
 
 LOCK TABLES `private_events` WRITE;
 /*!40000 ALTER TABLE `private_events` DISABLE KEYS */;
+INSERT INTO `private_events` VALUES (17,5,1),(19,5,1);
 /*!40000 ALTER TABLE `private_events` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -207,7 +208,7 @@ CREATE TABLE `public_events` (
 
 LOCK TABLES `public_events` WRITE;
 /*!40000 ALTER TABLE `public_events` DISABLE KEYS */;
-INSERT INTO `public_events` VALUES (8,1),(12,1),(13,1);
+INSERT INTO `public_events` VALUES (8,1),(12,1),(13,1),(14,1);
 /*!40000 ALTER TABLE `public_events` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -236,7 +237,7 @@ CREATE TABLE `ratings` (
 
 LOCK TABLES `ratings` WRITE;
 /*!40000 ALTER TABLE `ratings` DISABLE KEYS */;
-INSERT INTO `ratings` VALUES (1,13,4),(4,8,4),(6,8,5);
+INSERT INTO `ratings` VALUES (4,8,4),(6,8,5);
 /*!40000 ALTER TABLE `ratings` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -326,6 +327,7 @@ CREATE TABLE `rso_events` (
 
 LOCK TABLES `rso_events` WRITE;
 /*!40000 ALTER TABLE `rso_events` DISABLE KEYS */;
+INSERT INTO `rso_events` VALUES (18,5);
 /*!40000 ALTER TABLE `rso_events` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -352,6 +354,7 @@ CREATE TABLE `rso_joins` (
 
 LOCK TABLES `rso_joins` WRITE;
 /*!40000 ALTER TABLE `rso_joins` DISABLE KEYS */;
+INSERT INTO `rso_joins` VALUES (1,1),(2,1),(4,1),(11,1),(14,1),(1,5),(2,5),(4,5),(10,5),(11,5),(12,5),(13,5),(14,5),(15,5);
 /*!40000 ALTER TABLE `rso_joins` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -413,7 +416,7 @@ CREATE TABLE `rsos` (
   KEY `rsos_ibfk_2` (`university_id`),
   CONSTRAINT `rsos_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `users` (`uid`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `rsos_ibfk_2` FOREIGN KEY (`university_id`) REFERENCES `universities` (`university_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -422,6 +425,7 @@ CREATE TABLE `rsos` (
 
 LOCK TABLES `rsos` WRITE;
 /*!40000 ALTER TABLE `rsos` DISABLE KEYS */;
+INSERT INTO `rsos` VALUES (1,1,'Reindeer With Chill Vibes',2,_binary ''),(5,1,'Ultra-Festive Reindeer!',1,_binary '');
 /*!40000 ALTER TABLE `rsos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -501,7 +505,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,1,'Rudolph','Reindeer','rudolph@northpole.org','RedNose1939','$2y$10$DP.R71h2M7O6NJ/M/foMjOU2gWu837wdvkx5MPOHz4kDd0uCzg1ua'),(2,1,'Prancer','Reindeer','prancer@northpole.org','SnowPrancer','$2y$10$2jSW1yPWAMi4mTsmnv12keBqcTjg6W.e0v.sGYgAxY95IQjWsF.4G'),(4,1,'Donner','Reindeer','donner@northpole.org','KingCaribou','$2y$10$qHMYrANcpdUmicI3RFXpT.VckOmSb/vw5FWfgGI7tMLJFnw/GXntK'),(6,2,'Krampus','Goat','krampus@coal.org','CoalBringer','$2y$10$gjeBqspfJuLnv9afK13l0.sg.a1CvMijP0Uge5hA73lsTkCCTdGG6'),(7,2,'Yule','Cat','yuleeee@coal.org','ClothesCat','$2y$10$8gPK52VVVJnqGMbBG8ybHOMHJSLHjArHAFOwElGrfwWzpBUsdMrG2'),(10,1,'Dasher','Reindeer','dasher@northpole.org','HundredYardDash','$2y$10$DChLJIvGhBg.V.TEFTqPX.QdNG4pCMZT.MXdQD0RmboWjtFLaimXC'),(11,1,'Dancer','Reindeer','dancer@northpole.org','SnowyTango','$2y$10$OaFQmOyz7huxlnQfssxDKOLFj8L1/xvlrDPzGtTTFH9uW.w2l9.ja'),(12,1,'Vixen','Reindeer','vixen@northpole.org','FoxyFrolicker','$2y$10$1CRAKVj.TdCHTi.vY9i4a.lYwZukzCw4cVZ.ho8rgykTYZzG7P.vO'),(13,1,'Comet','Reindeer','comet@northpole.org','StarBound','$2y$10$jS4bKYXhARqb2WmZwJCmr.pyEygeME68bwPa3NZ.uBMdek50w7AQi'),(14,1,'Cupid','Reindeer','cupid@northpole.org','TwelveTwentyfive','$2y$10$rXIcwMMdAV7Bb40DdHSmOuRjiPhe7RHhszy8r8QT.y8NczABT5JQ.'),(15,1,'Blitzen','Reindeer','blitzen@northpole.org','blitzzzzzzz','$2y$10$ro7oudN/shqmbkZW1mN6p.97cII1uyrMEuLGcH4oEIh0YRPSo5wQ6'),(16,1,'Santa','Claus','santa@northpole.org','SaintNick','$2y$10$aM82LKAhMjaPv89B/GLmf.1JMfeHODEgrgncbkConreU9nZ9u5sFW'),(17,1,'Shelf','Elf','shelf@northpole.org','EternalWatcher','$2y$10$7hVE0rYtjdTiPEN5u/DxsOubA11ik1M8y6QBQAmVE5jdbekIhb2kC'),(18,2,'Khool','Miner','khool@coal.org','TheSource','$2y$10$yOnaeHqpAKI9OhIcF5k7iuiS4DZ1284MIE7u5A64PK1vfOQmY32Ny'),(19,2,'Fur','Nace','fur@coal.org','TheDestination','$2y$10$bwLyTXpd.5e4c6SjLcGNT.vu/sPG0dtRjZtjnu0YjB3pboJAPzVp2');
+INSERT INTO `users` VALUES (1,1,'Rudolph','Reindeer','rudolph@northpole.org','RedNose1939','$2y$10$DP.R71h2M7O6NJ/M/foMjOU2gWu837wdvkx5MPOHz4kDd0uCzg1ua'),(2,1,'Prancer','Reindeer','prancer@northpole.org','SnowPrancer','$2y$10$2jSW1yPWAMi4mTsmnv12keBqcTjg6W.e0v.sGYgAxY95IQjWsF.4G'),(4,1,'Donner','Reindeer','donner@northpole.org','KingCaribou','$2y$10$qHMYrANcpdUmicI3RFXpT.VckOmSb/vw5FWfgGI7tMLJFnw/GXntK'),(6,2,'Krampus','Goat','krampus@coal.org','CoalBringer','$2y$10$gjeBqspfJuLnv9afK13l0.sg.a1CvMijP0Uge5hA73lsTkCCTdGG6'),(7,2,'Yule','Cat','yuleeee@coal.org','ClothesCat','$2y$10$8gPK52VVVJnqGMbBG8ybHOMHJSLHjArHAFOwElGrfwWzpBUsdMrG2'),(10,1,'Dasher','Reindeer','dasher@northpole.org','HundredYardDash','$2y$10$DChLJIvGhBg.V.TEFTqPX.QdNG4pCMZT.MXdQD0RmboWjtFLaimXC'),(11,1,'Dancer','Reindeer','dancer@northpole.org','SnowyTango','$2y$10$OaFQmOyz7huxlnQfssxDKOLFj8L1/xvlrDPzGtTTFH9uW.w2l9.ja'),(12,1,'Vixen','Reindeer','vixen@northpole.org','FoxyFrolicker','$2y$10$1CRAKVj.TdCHTi.vY9i4a.lYwZukzCw4cVZ.ho8rgykTYZzG7P.vO'),(13,1,'Comet','Reindeer','comet@northpole.org','StarBound','$2y$10$jS4bKYXhARqb2WmZwJCmr.pyEygeME68bwPa3NZ.uBMdek50w7AQi'),(14,1,'Cupid','Reindeer','cupid@northpole.org','TwelveTwentyfive','$2y$10$rXIcwMMdAV7Bb40DdHSmOuRjiPhe7RHhszy8r8QT.y8NczABT5JQ.'),(15,1,'Blitzen','Reindeer','blitzen@northpole.org','blitzzzzzzz','$2y$10$ro7oudN/shqmbkZW1mN6p.97cII1uyrMEuLGcH4oEIh0YRPSo5wQ6'),(16,1,'Santa','Claus','santa@northpole.org','SaintNick','$2y$10$aM82LKAhMjaPv89B/GLmf.1JMfeHODEgrgncbkConreU9nZ9u5sFW'),(17,1,'Shelf','Elf','shelf@northpole.org','EternalWatcher','$2y$10$7hVE0rYtjdTiPEN5u/DxsOubA11ik1M8y6QBQAmVE5jdbekIhb2kC'),(18,2,'Kohl','Myner','kohl@coal.org','TheSource','$2y$10$yOnaeHqpAKI9OhIcF5k7iuiS4DZ1284MIE7u5A64PK1vfOQmY32Ny'),(19,2,'Fhur','Nayce','fhur@coal.org','TheDestination','$2y$10$bwLyTXpd.5e4c6SjLcGNT.vu/sPG0dtRjZtjnu0YjB3pboJAPzVp2');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -514,4 +518,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-11 16:54:18
+-- Dump completed on 2025-04-11 22:35:17
